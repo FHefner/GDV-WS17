@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Unfolding">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/sketchbook/libraries/Unfolding/library/Unfolding.jar!/" />
+      <root url="jar://$USER_HOME$/sketchbook/libraries/Unfolding/library/log4j-1.2.15.jar!/" />
+      <root url="jar://$USER_HOME$/sketchbook/libraries/Unfolding/library/json4processing.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://unfoldingmaps.org/javadoc/index.html" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
