@@ -5,6 +5,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
+import markers.ColoredPolygonMarker;
 import markers.ImageMarker;
 import models.School;
 import models.SchoolCategory;
@@ -99,19 +100,20 @@ public class InnsbruckEducationApp extends PApplet{
             tmpMarker.setStrokeWeight(5);
             universityLocations.add(tmpMarker);
         }
+        List<Marker> districtAreas = new ArrayList<>();
+        for (UrbanDistrict district : districts) {
+            ColoredPolygonMarker tmpMarker = new ColoredPolygonMarker(district.getLocations(), this);
+            districtAreas.add(tmpMarker);
+        }
         map.addMarkers(schoolLocations);
         map.addMarkers(universityLocations);
+        map.addMarkers(districtAreas);
     }
 
     private void processData() {
         loadSchoolData();
         loadUniversityData();
         loadDistricts();
-        /*
-        for (UrbanDistrict district : districts) {
-            System.out.println(district);
-        }
-        */
         addMarkersToMap();
     }
 
@@ -136,6 +138,7 @@ public class InnsbruckEducationApp extends PApplet{
         map.draw();
         Location location = map.getLocation(mouseX, mouseY);
         fill(0);
+        /*
         for (Marker marker: map.getMarkers()) {
             if (marker.isInside(map, mouseX, mouseY)) {
                 stroke(95, 244, 66);
@@ -145,11 +148,11 @@ public class InnsbruckEducationApp extends PApplet{
                 text("Breite: " + location.getLat() + " || Länge: " + location.getLon(), mouseX, mouseY);
             }
         }
+        */
 
     }
 
     public static void main(String[] args) {
         PApplet.main(InnsbruckEducationApp.class.getName());
-
     }
 }
