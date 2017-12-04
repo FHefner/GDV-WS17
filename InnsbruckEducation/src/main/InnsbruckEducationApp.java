@@ -32,6 +32,8 @@ public class InnsbruckEducationApp extends PApplet{
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
 
+
+
     private void loadDistricts() {
         Table districtData = loadTable(UrbanDistrict.CSV_DATA_PATH, "header");
         districts = new ArrayList<>();
@@ -45,7 +47,20 @@ public class InnsbruckEducationApp extends PApplet{
             UrbanDistrict tmpDistrict = new UrbanDistrict(
                     this, tmpZaehlerSprengel, tmp6to9, tmp10to14,
                     tmp15to19, tmp20to24, tmp25to29);
-            districts.add(tmpDistrict);
+            boolean districtAlreadyExisting = false;
+            for (UrbanDistrict district : districts) {
+                if (district.getName().equals(tmpDistrict.getName())) {
+                    districtAlreadyExisting = true;
+                    district.setAmountInhabitants6To9(district.getAmountInhabitants6To9() + tmpDistrict.getAmountInhabitants6To9());
+                    district.setAmountInhabitants10To14(district.getAmountInhabitants10To14() + tmpDistrict.getAmountInhabitants10To14());
+                    district.setAmountInhabitants15To19(district.getAmountInhabitants15To19() + tmpDistrict.getAmountInhabitants15To19());
+                    district.setAmountInhabitants20To24(district.getAmountInhabitants20To24() + tmpDistrict.getAmountInhabitants20To24());
+                    district.setAmountInhabitants25To29(district.getAmountInhabitants25To29() + tmpDistrict.getAmountInhabitants25To29());
+                }
+            }
+            if (!districtAlreadyExisting) {
+                districts.add(tmpDistrict);
+            }
         }
     }
 
@@ -105,6 +120,7 @@ public class InnsbruckEducationApp extends PApplet{
             ColoredPolygonMarker tmpMarker = new ColoredPolygonMarker(district.getLocations(), this);
             districtAreas.add(tmpMarker);
         }
+        System.out.println("# Area Markers: " + districtAreas.size());
         map.addMarkers(schoolLocations);
         map.addMarkers(universityLocations);
         map.addMarkers(districtAreas);
