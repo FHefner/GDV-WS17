@@ -6,10 +6,10 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import markers.ImageMarker;
-import models.EducationalInstitution;
 import models.School;
 import models.SchoolCategory;
 import models.University;
+import models.UrbanDistrict;
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
@@ -22,6 +22,7 @@ public class InnsbruckEducationApp extends PApplet{
     private UnfoldingMap map;
     private List<School> schools;
     private List<University> universities;
+    private List<UrbanDistrict> districts;
     // The starting location (the center of the map) is Innsbruck
     private Location startingLocation = new Location(47.264874, 11.395907);
 
@@ -29,6 +30,23 @@ public class InnsbruckEducationApp extends PApplet{
     private final static String VERSION = "0.1a";
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
+
+    private void loadDistricts() {
+        Table districtData = loadTable(UrbanDistrict.CSV_DATA_PATH, "header");
+        districts = new ArrayList<>();
+        for (TableRow row : districtData.rows()) {
+            int tmpZaehlerSprengel = row.getInt("ZSPR");
+            int tmp6to9 = row.getInt("6_9");
+            int tmp10to14 = row.getInt("10_14");
+            int tmp15to19 = row.getInt("15_19");
+            int tmp20to24 = row.getInt("20_24");
+            int tmp25to29 = row.getInt("25_29");
+            UrbanDistrict tmpDistrict = new UrbanDistrict(
+                    this, tmpZaehlerSprengel, tmp6to9, tmp10to14,
+                    tmp15to19, tmp20to24, tmp25to29);
+            districts.add(tmpDistrict);
+        }
+    }
 
     private void loadSchoolData() {
         Table schoolData = loadTable(School.CSV_DATA_PATH, "header");
@@ -52,11 +70,11 @@ public class InnsbruckEducationApp extends PApplet{
         universities = new ArrayList<>();
         for (TableRow row : universityData.rows()) {
             Location tmpLocation = new Location(
-                    row.getFloat(School.LOCATION_X_HEADER_FIELD),
-                    row.getFloat(School.LOCATION_Y_HEADER_FIELD));
-            String tmpName = row.getString(School.NAME_HEADER_FIELD);
-            String tmpAddress = row.getString(School.ADDRESS_HEADER_FIELD);
-            String tmpWebsite = row.getString(School.WEBSITE_HEADER_FIELD);
+                    row.getFloat(University.LOCATION_X_HEADER_FIELD),
+                    row.getFloat(University.LOCATION_Y_HEADER_FIELD));
+            String tmpName = row.getString(University.NAME_HEADER_FIELD);
+            String tmpAddress = row.getString(University.ADDRESS_HEADER_FIELD);
+            String tmpWebsite = row.getString(University.WEBSITE_HEADER_FIELD);
             University tmpUniversity = new University(tmpName, tmpAddress, tmpLocation);
             tmpUniversity.setWebsite(tmpWebsite);
             tmpUniversity.setMarkerImage(loadImage(University.MARKER_IMAGE_PATH));
@@ -88,6 +106,12 @@ public class InnsbruckEducationApp extends PApplet{
     private void processData() {
         loadSchoolData();
         loadUniversityData();
+        loadDistricts();
+        /*
+        for (UrbanDistrict district : districts) {
+            System.out.println(district);
+        }
+        */
         addMarkersToMap();
     }
 
