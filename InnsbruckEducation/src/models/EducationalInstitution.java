@@ -1,6 +1,8 @@
 package models;
 
 import de.fhpotsdam.unfolding.geo.Location;
+import de.fhpotsdam.unfolding.marker.Marker;
+import processing.core.PApplet;
 import processing.core.PImage;
 
 public abstract class EducationalInstitution {
@@ -8,9 +10,19 @@ public abstract class EducationalInstitution {
     private String address;
     private String website;
     private Location location;
+    private Marker marker;
     private int capacity = -1;
     private int currentPeopleAmount = -1;
     private PImage markerImage;
+    private PApplet applet;
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
+    }
 
     public PImage getMarkerImage() {
         return markerImage;
@@ -68,7 +80,8 @@ public abstract class EducationalInstitution {
         this.currentPeopleAmount = currentPeopleAmount;
     }
 
-    public EducationalInstitution(String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
+    public EducationalInstitution(PApplet applet, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
+        this.applet = applet;
         this.name = name;
         this.address = address;
         this.website = website;
@@ -77,13 +90,15 @@ public abstract class EducationalInstitution {
         this.currentPeopleAmount = currentPeopleAmount;
     }
 
-    public EducationalInstitution(String name, String address, Location location) {
+    public EducationalInstitution(PApplet applet, String name, String address, Location location) {
+        this.applet = applet;
         this.name = name;
         this.address = address;
         this.location = location;
     }
 
-    public EducationalInstitution(Location location) {
+    public EducationalInstitution(PApplet applet, Location location) {
+        this.applet = applet;
         this.location = location;
     }
 }

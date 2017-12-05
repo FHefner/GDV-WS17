@@ -1,6 +1,7 @@
 package models;
 
 import de.fhpotsdam.unfolding.geo.Location;
+import markers.ColoredPolygonMarker;
 import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -26,6 +27,11 @@ public class UrbanDistrict {
     private int amountInhabitants25To29;
     private int totalAmountInhabitants;
     private List<Location> locations;
+    private ColoredPolygonMarker marker;
+
+    public ColoredPolygonMarker getMarker() {
+        return marker;
+    }
 
     public List<Location> getLocations() {
         return locations;
@@ -75,7 +81,7 @@ public class UrbanDistrict {
         }
     }
 
-    private void extractLocations () {
+    private void extractLocations() {
         locations = new ArrayList<>();
         JSONArray districtJSON = applet.loadJSONArray(GEO_JSON_PATH);
         for (int i = 0; i < districtJSON.size(); i++) {
@@ -87,14 +93,17 @@ public class UrbanDistrict {
                 splitCoordinatesIntoLocations(districtCoordinates);
             }
         }
+    }
 
+    private void createPolygonMarker() {
+        this.marker = new ColoredPolygonMarker(this.applet, this.locations);
     }
 
     public int getTotalAmountInhabitants() {
         return totalAmountInhabitants;
     }
 
-    private void calculateTotalHabitants() {
+    public void calculateTotalInhabitants() {
         this.totalAmountInhabitants = this.amountInhabitants6To9 + this.amountInhabitants10To14
                 + this.amountInhabitants15To19 + this.amountInhabitants20To24 + this.amountInhabitants25To29;
     }
@@ -163,9 +172,9 @@ public class UrbanDistrict {
         this.amountInhabitants15To19 = amountHabitants15To19;
         this.amountInhabitants20To24 = amountHabitants20To24;
         this.amountInhabitants25To29 = amountHabitants25To29;
-        calculateTotalHabitants();
         mapZaehlerSprengelToRegionNumberAndName();
         extractLocations();
+        createPolygonMarker();
     }
 
     @Override

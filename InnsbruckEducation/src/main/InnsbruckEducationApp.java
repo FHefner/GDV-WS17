@@ -5,8 +5,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
-import markers.ColoredPolygonMarker;
-import markers.ImageMarker;
+import markers.MarkerType;
 import models.School;
 import models.SchoolCategory;
 import models.University;
@@ -16,7 +15,9 @@ import processing.data.Table;
 import processing.data.TableRow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InnsbruckEducationApp extends PApplet{
 
@@ -24,6 +25,9 @@ public class InnsbruckEducationApp extends PApplet{
     private List<School> schools;
     private List<University> universities;
     private List<UrbanDistrict> districts;
+    private Map<MarkerType, List<Marker>> markers;
+    private boolean zoomedIntoDistrict;
+
     // The starting location (the center of the map) is Innsbruck
     private Location startingLocation = new Location(47.264874, 11.395907);
 
@@ -47,20 +51,24 @@ public class InnsbruckEducationApp extends PApplet{
             UrbanDistrict tmpDistrict = new UrbanDistrict(
                     this, tmpZaehlerSprengel, tmp6to9, tmp10to14,
                     tmp15to19, tmp20to24, tmp25to29);
+
             boolean districtAlreadyExisting = false;
             for (UrbanDistrict district : districts) {
-                if (district.getName().equals(tmpDistrict.getName())) {
+                if (district.getRegionNumber() == tmpDistrict.getRegionNumber() && !districtAlreadyExisting) {
                     districtAlreadyExisting = true;
-                    district.setAmountInhabitants6To9(district.getAmountInhabitants6To9() + tmpDistrict.getAmountInhabitants6To9());
-                    district.setAmountInhabitants10To14(district.getAmountInhabitants10To14() + tmpDistrict.getAmountInhabitants10To14());
-                    district.setAmountInhabitants15To19(district.getAmountInhabitants15To19() + tmpDistrict.getAmountInhabitants15To19());
-                    district.setAmountInhabitants20To24(district.getAmountInhabitants20To24() + tmpDistrict.getAmountInhabitants20To24());
-                    district.setAmountInhabitants25To29(district.getAmountInhabitants25To29() + tmpDistrict.getAmountInhabitants25To29());
+                    district.setAmountInhabitants6To9(district.getAmountInhabitants6To9() + tmp6to9);
+                    district.setAmountInhabitants10To14(district.getAmountInhabitants10To14() + tmp10to14);
+                    district.setAmountInhabitants15To19(district.getAmountInhabitants15To19() + tmp15to19);
+                    district.setAmountInhabitants20To24(district.getAmountInhabitants20To24() + tmp20to24);
+                    district.setAmountInhabitants25To29(district.getAmountInhabitants25To29() + tmp25to29);
                 }
             }
             if (!districtAlreadyExisting) {
                 districts.add(tmpDistrict);
             }
+        }
+        for (UrbanDistrict district : districts) {
+            district.calculateTotalInhabitants();
         }
     }
 
@@ -74,7 +82,7 @@ public class InnsbruckEducationApp extends PApplet{
             String tmpName = row.getString(School.NAME_HEADER_FIELD);
             String tmpAddress = row.getString(School.ADDRESS_HEADER_FIELD);
             String tmpWebsite = row.getString(School.WEBSITE_HEADER_FIELD);
-            School tmpSchool = new School(SchoolCategory.HIGHER_EDUCATION, tmpName, tmpAddress, tmpLocation);
+            School tmpSchool = new School(this, SchoolCategory.HIGHER_EDUCATION, tmpName, tmpAddress, tmpLocation);
             tmpSchool.setWebsite(tmpWebsite);
             tmpSchool.setMarkerImage(loadImage(School.MARKER_IMAGE_PATH));
             schools.add(tmpSchool);
@@ -91,7 +99,7 @@ public class InnsbruckEducationApp extends PApplet{
             String tmpName = row.getString(University.NAME_HEADER_FIELD);
             String tmpAddress = row.getString(University.ADDRESS_HEADER_FIELD);
             String tmpWebsite = row.getString(University.WEBSITE_HEADER_FIELD);
-            University tmpUniversity = new University(tmpName, tmpAddress, tmpLocation);
+            University tmpUniversity = new University(this, tmpName, tmpAddress, tmpLocation);
             tmpUniversity.setWebsite(tmpWebsite);
             tmpUniversity.setMarkerImage(loadImage(University.MARKER_IMAGE_PATH));
             universities.add(tmpUniversity);
@@ -99,31 +107,28 @@ public class InnsbruckEducationApp extends PApplet{
     }
 
     private void addMarkersToMap() {
-        List<Marker> schoolLocations = new ArrayList<>();
+        markers = new HashMap<>();
+        List<Marker> schoolMarkers = new ArrayList<>();
         for (School s : schools) {
-            ImageMarker tmpMarker = new ImageMarker(s.getLocation(),
-                    s.getMarkerImage());
-            tmpMarker.setStrokeColor(90);
-            tmpMarker.setStrokeWeight(5);
-            schoolLocations.add(tmpMarker);
+            schoolMarkers.add(s.getMarker());
         }
-        List<Marker> universityLocations = new ArrayList<>();
+        markers.put(MarkerType.SCHOOL_MARKER, schoolMarkers);
+
+        List<Marker> universityMarkers = new ArrayList<>();
         for (University u : universities) {
-            ImageMarker tmpMarker = new ImageMarker(u.getLocation(),
-                    u.getMarkerImage());
-            tmpMarker.setStrokeColor(90);
-            tmpMarker.setStrokeWeight(5);
-            universityLocations.add(tmpMarker);
+            universityMarkers.add(u.getMarker());
         }
-        List<Marker> districtAreas = new ArrayList<>();
-        for (UrbanDistrict district : districts) {
-            ColoredPolygonMarker tmpMarker = new ColoredPolygonMarker(district.getLocations(), this);
-            districtAreas.add(tmpMarker);
+        markers.put(MarkerType.UNIVERSITY_MARKER, universityMarkers);
+
+        List<Marker> districtMarkers = new ArrayList<>();
+        for (UrbanDistrict d : districts) {
+            districtMarkers.add(d.getMarker());
         }
-        System.out.println("# Area Markers: " + districtAreas.size());
-        map.addMarkers(schoolLocations);
-        map.addMarkers(universityLocations);
-        map.addMarkers(districtAreas);
+        markers.put(MarkerType.DISTRICT_MARKER, districtMarkers);
+
+        map.addMarkers(markers.get(MarkerType.DISTRICT_MARKER));
+        map.addMarkers(markers.get(MarkerType.SCHOOL_MARKER));
+        map.addMarkers(markers.get(MarkerType.UNIVERSITY_MARKER));
     }
 
     private void processData() {
@@ -133,38 +138,65 @@ public class InnsbruckEducationApp extends PApplet{
         addMarkersToMap();
     }
 
+    private void resetView() {
+        map.zoomAndPanTo(12, startingLocation);
+        map.setZoomRange(10, 20);
+        map.setPanningRestriction(startingLocation, 10);
+        zoomedIntoDistrict = false;
+        for (UrbanDistrict district : districts) {
+            district.getMarker().resetColor();
+        }
+    }
+
+    private void highlightDistrict(String districtName) {
+        List<UrbanDistrict> otherDistricts = new ArrayList<>(districts);
+        for (UrbanDistrict district : districts) {
+            if (district.getName().equals(districtName)) {
+                otherDistricts.remove(district);
+            }
+        }
+        for (UrbanDistrict district : otherDistricts) {
+            district.getMarker().setColor(color(140, 140, 140, 100));
+        }
+    }
+
     public void settings() {
         size(WINDOW_WIDTH, WINDOW_HEIGHT, FX2D);
         map = new UnfoldingMap(this, new OpenStreetMap.PositronMapProvider());
         MapUtils.createDefaultEventDispatcher(this, map);
         processData();
-        map.zoomAndPanTo(14, startingLocation);
-        map.setZoomRange(10, 20);
-        map.setTweening(true);
+        resetView();
+        // map.setTweening(true);
     }
 
     public void keyPressed() {
-        // Kill the app if ESC, 'x' or 'X' is pressed
-        if (key == ESC || keyCode == (int) 'x' || keyCode == (int) 'X') {
+        // Kill the app if ESC is pressed
+        if (key == ESC) {
             exit();
+        }
+        // Go Back to start view if BACKSPACE is pressed
+        if (key == BACKSPACE) {
+            resetView();
+        }
+    }
+
+    public void mouseClicked() {
+        for (UrbanDistrict district : districts) {
+            if (district.getMarker().isInside(map, mouseX, mouseY)) {
+                System.out.println(district);
+                map.zoomAndPanToFit(district.getLocations());
+                zoomedIntoDistrict = true;
+                highlightDistrict(district.getName());
+            }
         }
     }
 
     public void draw() {
         map.draw();
         Location location = map.getLocation(mouseX, mouseY);
-        fill(0);
-        /*
-        for (Marker marker: map.getMarkers()) {
-            if (marker.isInside(map, mouseX, mouseY)) {
-                stroke(95, 244, 66);
-                text("Innerhalb von Marker #" + marker.getId(), mouseX, mouseY);
-            } else {
-                stroke(255, 0, 0);
-                text("Breite: " + location.getLat() + " || Länge: " + location.getLon(), mouseX, mouseY);
-            }
-        }
-        */
+        fill(80, 80);
+        noStroke();
+        // ellipse(mouseX, mouseY, 80, 80);
 
     }
 

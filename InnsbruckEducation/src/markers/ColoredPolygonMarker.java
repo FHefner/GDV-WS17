@@ -3,10 +3,9 @@ package markers;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.SimplePolygonMarker;
 import de.fhpotsdam.unfolding.utils.MapPosition;
-import processing.core.PGraphics;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -16,21 +15,42 @@ import static processing.core.PConstants.CLOSE;
 public class ColoredPolygonMarker extends SimplePolygonMarker {
 
     private PApplet applet;
-    private List<Integer> colors;
+    private Integer color;
+    private Integer initialColor;
 
-    public ColoredPolygonMarker(List<Location> list, PApplet applet) {
-        super(list);
-        this.applet = applet;
-        this.colors = new ArrayList<>();
-        initColors();
+    public Integer getInitialColor() {
+        return initialColor;
     }
 
-    private void initColors() {
-        colors.clear();
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
+    }
+
+    public void resetColor() {
+        this.color = this.initialColor;
+    }
+
+    public ColoredPolygonMarker(PApplet applet, List<Location> list, Integer color) {
+        super(list);
+        this.applet = applet;
+        this.color = color;
+        this.initialColor = color;
+    }
+
+    public ColoredPolygonMarker(PApplet applet, List<Location> list) {
+        super(list);
+        this.applet = applet;
+        generateRandomColor();
+        this.initialColor = this.color;
+    }
+
+    private void generateRandomColor() {
         Random random = new Random();
-        for (int i = 0; i < locations.size(); i++) {
-            colors.add(applet.color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
-        }
+        color = applet.color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
     }
 
     public void draw(PGraphics pg, List<MapPosition> mapPositions) {
@@ -39,11 +59,9 @@ public class ColoredPolygonMarker extends SimplePolygonMarker {
         pg.strokeWeight(2);
         pg.stroke(0, 200);
         pg.beginShape();
-        int i = 0;
         for (MapPosition mapPosition : mapPositions) {
-            pg.fill(colors.get(i), 100);
+            pg.fill(color, 100);
             pg.vertex(mapPosition.x, mapPosition.y);
-            i++;
         }
         pg.endShape(CLOSE);
 
