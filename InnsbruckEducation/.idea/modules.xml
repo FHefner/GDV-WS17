@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/de.hsmannheim.gdv.InnsbruckEducation.iml" filepath="$PROJECT_DIR$/de.hsmannheim.gdv.InnsbruckEducation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InnsbruckEducation.iml" filepath="$PROJECT_DIR$/InnsbruckEducation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/InnsbruckEducation_main.iml" filepath="$PROJECT_DIR$/.idea/modules/InnsbruckEducation_main.iml" group="InnsbruckEducation" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/InnsbruckEducation_test.iml" filepath="$PROJECT_DIR$/.idea/modules/InnsbruckEducation_test.iml" group="InnsbruckEducation" />
     </modules>
   </component>
 </project>
