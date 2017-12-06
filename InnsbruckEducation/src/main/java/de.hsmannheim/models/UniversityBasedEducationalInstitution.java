@@ -7,8 +7,8 @@ import processing.core.PApplet;
 public class UniversityBasedEducationalInstitution extends AbstractEducationalInstitution {
 
     /* Constants */
-    public final static String MARKER_IMAGE_PATH = "res/img/university.png";
-    public final static String CSV_DATA_PATH = "data/universitaet_standorte.csv";
+    public final static String MARKER_IMAGE_PATH = "src/main/resources/img/university.png";
+    public final static String CSV_DATA_PATH = "src/main/resources/data/universitaet_standorte.csv";
     public final static String NAME_HEADER_FIELD = "Bezeichnung";
     public final static String ADDRESS_HEADER_FIELD = "Adresse";
     public final static String WEBSITE_HEADER_FIELD = "Link";

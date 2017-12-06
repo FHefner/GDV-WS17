@@ -13,10 +13,16 @@ public class ZaehnerSpengelMapUtil {
 
     public static void traverseOverTableAndSetResult(UrbanDistrict district, Table mappingTable, ITableTraverseStrategy strategy) {
         for (TableRow row : mappingTable.rows()) {
-            Map<String, Serializable> result = strategy.setRegionNumberAndName(district, row);
-            district.setRegionNumber((Integer) result.get("BZR"));
-            district.setName((String) result.get("Name"));
+            Map result = strategy.setRegionNumberAndName(district, row);
+            if(resultIsNotEmpty(result)) {
+                district.setRegionNumber((Integer) result.get("BZR"));
+                district.setName((String) result.get("Name"));
+            }
         }
 
+    }
+
+    private static boolean resultIsNotEmpty(Map result) {
+        return !result.isEmpty();
     }
 }

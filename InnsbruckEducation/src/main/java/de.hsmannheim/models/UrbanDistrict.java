@@ -13,9 +13,9 @@ import java.util.List;
 
 public class UrbanDistrict {
 
-    private final static String GEO_JSON_PATH = "data/statistischeStadtteile_headless.geo.json";
-    private final static String MAPPING_CSV_PATH = "data/zaehlersprengel_filtered.csv";
-    public final static String CSV_DATA_PATH = "data/bevoelkerung_2017.csv";
+    private final static String GEO_JSON_PATH = "src/main/resources/data/statistischeStadtteile_headless.geo.json";
+    private final static String MAPPING_CSV_PATH = "src/main/resources/data/zaehlersprengel_filtered.csv";
+    public final static String CSV_DATA_PATH = "src/main/resources/data/bevoelkerung_2017.csv";
     private PApplet applet;
     private int zaehlerSprengel = -1;
     private int regionNumber = -1;
@@ -33,7 +33,7 @@ public class UrbanDistrict {
         return marker;
     }
 
-    public List<Location> getLocations() {
+    public List<Location> getLocationsFromJSONArray() {
         return locations;
     }
 
@@ -53,27 +53,32 @@ public class UrbanDistrict {
         ZaehnerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(MAPPING_CSV_PATH, "header"), new ZaehnerSprengelBasedStrategy());
     }
 
-    private void splitCoordinatesIntoLocations(JSONArray coordinates) {
+    private List<Location> getLocationsFromJSONArray(JSONArray coordinates) {
+        List<Location> locations = new ArrayList<>();
         for (int i = 0; i < coordinates.size(); i++) {
             JSONArray coordinate = coordinates.getJSONArray(i);
             float lat = coordinate.getFloat(1);
             float lon = coordinate.getFloat(0);
             locations.add(new Location(lat, lon));
         }
+        return locations;
     }
 
     private void extractLocations() {
         locations = new ArrayList<>();
         JSONArray districtJSON = applet.loadJSONArray(GEO_JSON_PATH);
         for (int i = 0; i < districtJSON.size(); i++) {
-            JSONObject districtObject = districtJSON.getJSONObject(i);
-            JSONObject districtProperties = districtObject.getJSONObject("properties");
-            if (districtProperties.getInt("NR") == this.regionNumber) {
-                JSONObject districtGeometry = districtObject.getJSONObject("geometry");
-                JSONArray districtCoordinates = districtGeometry.getJSONArray("coordinates").getJSONArray(0);
-                splitCoordinatesIntoLocations(districtCoordinates);
-            }
+            if (regionNumberIsEqualToNR(districtJSON,i))
+                locations.addAll(getLocationsFromJSONArray(getDistrictGeometry(districtJSON.getJSONObject(i))));
         }
+    }
+
+    private boolean regionNumberIsEqualToNR(JSONArray districtJSON, int index) {
+        return districtJSON.getJSONObject(index).getJSONObject("properties").getInt("NR") == this.regionNumber;
+    }
+
+    private JSONArray getDistrictGeometry(JSONObject districtObject) {
+        return districtObject.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0);
     }
 
     private void createPolygonMarker() {

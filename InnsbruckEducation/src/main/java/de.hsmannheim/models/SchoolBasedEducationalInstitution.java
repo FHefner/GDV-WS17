@@ -8,8 +8,8 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
     private SchoolCategory category;
 
     /* Constants */
-    public final static String MARKER_IMAGE_PATH = "res/img/school.png";
-    public final static String CSV_DATA_PATH = "data/hoeher_bildende_schulen.csv";
+    public final static String MARKER_IMAGE_PATH = "src/main/resources/img/school.png";
+    public final static String CSV_DATA_PATH = "src/main/resources/data/hoeher_bildende_schulen.csv";
     public final static String NAME_HEADER_FIELD = "Bezeichnung";
     public final static String ADDRESS_HEADER_FIELD = "Adresse";
     public final static String WEBSITE_HEADER_FIELD = "Link";

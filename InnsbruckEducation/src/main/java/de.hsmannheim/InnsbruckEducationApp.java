@@ -185,7 +185,7 @@ public class InnsbruckEducationApp extends PApplet{
         for (UrbanDistrict district : districts) {
             if (district.getMarker().isInside(map, mouseX, mouseY)) {
                 System.out.println(district);
-                map.zoomAndPanToFit(district.getLocations());
+                map.zoomAndPanToFit(district.getLocationsFromJSONArray());
                 zoomedIntoDistrict = true;
                 highlightDistrict(district.getName());
             }
