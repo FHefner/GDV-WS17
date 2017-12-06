@@ -2,11 +2,11 @@ package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
 import de.hsmannheim.markers.ColoredPolygonMarker;
+import de.hsmannheim.util.map.zaehnersprengel.ZaehnerSpengelMapUtil;
+import de.hsmannheim.util.map.zaehnersprengel.ZaehnerSprengelBasedStrategy;
 import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
-import processing.data.Table;
-import processing.data.TableRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,27 +49,8 @@ public class UrbanDistrict {
         this.regionNumber = regionNumber;
     }
 
-    private void mapZaehlerSprengelToRegionNumberAndName() {
-        Table mappingTable = applet.loadTable(MAPPING_CSV_PATH, "header");
-        for (TableRow row : mappingTable.rows()) {
-            String zsprlRange = row.getString("ZSPRL");
-            if (!zsprlRange.contains("-")) {
-                if (Integer.valueOf(zsprlRange) == this.zaehlerSprengel) {
-                    this.regionNumber = row.getInt("BZR");
-                    this.name = row.getString("Name");
-                }
-            }
-            else {
-                int startValue = Integer.valueOf(zsprlRange.split("-")[0]);
-                int endValue = Integer.valueOf(zsprlRange.split("-")[1]);
-                for (int i = startValue; i < (endValue + 1); i++) {
-                    if (i == this.zaehlerSprengel) {
-                        this.regionNumber = row.getInt("BZR");
-                        this.name = row.getString("Name");
-                    }
-                }
-            }
-        }
+    private void setMapZaehlerSprengelToRegionNumberAndName() {
+        ZaehnerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(MAPPING_CSV_PATH, "header"), new ZaehnerSprengelBasedStrategy());
     }
 
     private void splitCoordinatesIntoLocations(JSONArray coordinates) {
@@ -172,7 +153,7 @@ public class UrbanDistrict {
         this.amountInhabitants15To19 = amountHabitants15To19;
         this.amountInhabitants20To24 = amountHabitants20To24;
         this.amountInhabitants25To29 = amountHabitants25To29;
-        mapZaehlerSprengelToRegionNumberAndName();
+        setMapZaehlerSprengelToRegionNumberAndName();
         extractLocations();
         createPolygonMarker();
     }

@@ -7,9 +7,9 @@ import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 
 import de.hsmannheim.markers.MarkerType;
-import de.hsmannheim.models.School;
+import de.hsmannheim.models.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.SchoolCategory;
-import de.hsmannheim.models.University;
+import de.hsmannheim.models.UniversityBasedEducationalInstitution;
 import de.hsmannheim.models.UrbanDistrict;
 import processing.core.PApplet;
 import processing.data.Table;
@@ -23,8 +23,8 @@ import java.util.Map;
 public class InnsbruckEducationApp extends PApplet{
 
     private UnfoldingMap map;
-    private List<School> schools;
-    private List<University> universities;
+    private List<SchoolBasedEducationalInstitution> schools;
+    private List<UniversityBasedEducationalInstitution> universities;
     private List<UrbanDistrict> districts;
     private Map<MarkerType, List<Marker>> markers;
     private boolean zoomedIntoDistrict;
@@ -74,35 +74,35 @@ public class InnsbruckEducationApp extends PApplet{
     }
 
     private void loadSchoolData() {
-        Table schoolData = loadTable(School.CSV_DATA_PATH, "header");
+        Table schoolData = loadTable(SchoolBasedEducationalInstitution.CSV_DATA_PATH, "header");
         schools = new ArrayList<>();
         for (TableRow row : schoolData.rows()) {
             Location tmpLocation = new Location(
-                    row.getFloat(School.LOCATION_X_HEADER_FIELD),
-                    row.getFloat(School.LOCATION_Y_HEADER_FIELD));
-            String tmpName = row.getString(School.NAME_HEADER_FIELD);
-            String tmpAddress = row.getString(School.ADDRESS_HEADER_FIELD);
-            String tmpWebsite = row.getString(School.WEBSITE_HEADER_FIELD);
-            School tmpSchool = new School(this, SchoolCategory.HIGHER_EDUCATION, tmpName, tmpAddress, tmpLocation);
+                    row.getFloat(SchoolBasedEducationalInstitution.LOCATION_X_HEADER_FIELD),
+                    row.getFloat(SchoolBasedEducationalInstitution.LOCATION_Y_HEADER_FIELD));
+            String tmpName = row.getString(SchoolBasedEducationalInstitution.NAME_HEADER_FIELD);
+            String tmpAddress = row.getString(SchoolBasedEducationalInstitution.ADDRESS_HEADER_FIELD);
+            String tmpWebsite = row.getString(SchoolBasedEducationalInstitution.WEBSITE_HEADER_FIELD);
+            SchoolBasedEducationalInstitution tmpSchool = new SchoolBasedEducationalInstitution(this, SchoolCategory.HIGHER_EDUCATION, tmpName, tmpAddress, tmpLocation);
             tmpSchool.setWebsite(tmpWebsite);
-            tmpSchool.setMarkerImage(loadImage(School.MARKER_IMAGE_PATH));
+            tmpSchool.setMarkerImage(loadImage(SchoolBasedEducationalInstitution.MARKER_IMAGE_PATH));
             schools.add(tmpSchool);
         }
     }
 
     private void loadUniversityData() {
-        Table universityData = loadTable(University.CSV_DATA_PATH, "header");
+        Table universityData = loadTable(UniversityBasedEducationalInstitution.CSV_DATA_PATH, "header");
         universities = new ArrayList<>();
         for (TableRow row : universityData.rows()) {
             Location tmpLocation = new Location(
-                    row.getFloat(University.LOCATION_X_HEADER_FIELD),
-                    row.getFloat(University.LOCATION_Y_HEADER_FIELD));
-            String tmpName = row.getString(University.NAME_HEADER_FIELD);
-            String tmpAddress = row.getString(University.ADDRESS_HEADER_FIELD);
-            String tmpWebsite = row.getString(University.WEBSITE_HEADER_FIELD);
-            University tmpUniversity = new University(this, tmpName, tmpAddress, tmpLocation);
+                    row.getFloat(UniversityBasedEducationalInstitution.LOCATION_X_HEADER_FIELD),
+                    row.getFloat(UniversityBasedEducationalInstitution.LOCATION_Y_HEADER_FIELD));
+            String tmpName = row.getString(UniversityBasedEducationalInstitution.NAME_HEADER_FIELD);
+            String tmpAddress = row.getString(UniversityBasedEducationalInstitution.ADDRESS_HEADER_FIELD);
+            String tmpWebsite = row.getString(UniversityBasedEducationalInstitution.WEBSITE_HEADER_FIELD);
+            UniversityBasedEducationalInstitution tmpUniversity = new UniversityBasedEducationalInstitution(this, tmpName, tmpAddress, tmpLocation);
             tmpUniversity.setWebsite(tmpWebsite);
-            tmpUniversity.setMarkerImage(loadImage(University.MARKER_IMAGE_PATH));
+            tmpUniversity.setMarkerImage(loadImage(UniversityBasedEducationalInstitution.MARKER_IMAGE_PATH));
             universities.add(tmpUniversity);
         }
     }
@@ -110,13 +110,13 @@ public class InnsbruckEducationApp extends PApplet{
     private void addMarkersToMap() {
         markers = new HashMap<>();
         List<Marker> schoolMarkers = new ArrayList<>();
-        for (School s : schools) {
+        for (SchoolBasedEducationalInstitution s : schools) {
             schoolMarkers.add(s.getMarker());
         }
         markers.put(MarkerType.SCHOOL_MARKER, schoolMarkers);
 
         List<Marker> universityMarkers = new ArrayList<>();
-        for (University u : universities) {
+        for (UniversityBasedEducationalInstitution u : universities) {
             universityMarkers.add(u.getMarker());
         }
         markers.put(MarkerType.UNIVERSITY_MARKER, universityMarkers);

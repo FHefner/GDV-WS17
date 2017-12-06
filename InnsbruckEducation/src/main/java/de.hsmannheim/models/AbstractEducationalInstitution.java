@@ -5,7 +5,8 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public abstract class EducationalInstitution {
+public abstract class AbstractEducationalInstitution implements IEducationalInstitution {
+
     private String name;
     private String address;
     private String website;
@@ -15,6 +16,8 @@ public abstract class EducationalInstitution {
     private int currentPeopleAmount = -1;
     private PImage markerImage;
     private PApplet applet;
+
+    public abstract void createMarker();
 
     public Marker getMarker() {
         return marker;
@@ -80,7 +83,7 @@ public abstract class EducationalInstitution {
         this.currentPeopleAmount = currentPeopleAmount;
     }
 
-    public EducationalInstitution(PApplet applet, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
+    public AbstractEducationalInstitution(PApplet applet, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
         this.applet = applet;
         this.name = name;
         this.address = address;
@@ -90,14 +93,14 @@ public abstract class EducationalInstitution {
         this.currentPeopleAmount = currentPeopleAmount;
     }
 
-    public EducationalInstitution(PApplet applet, String name, String address, Location location) {
+    public AbstractEducationalInstitution(PApplet applet, String name, String address, Location location) {
         this.applet = applet;
         this.name = name;
         this.address = address;
         this.location = location;
     }
 
-    public EducationalInstitution(PApplet applet, Location location) {
+    public AbstractEducationalInstitution(PApplet applet, Location location) {
         this.applet = applet;
         this.location = location;
     }

@@ -4,7 +4,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.hsmannheim.markers.ImageMarker;
 import processing.core.PApplet;
 
-public class University extends EducationalInstitution implements IEducationalInstitution {
+public class UniversityBasedEducationalInstitution extends AbstractEducationalInstitution {
 
     /* Constants */
     public final static String MARKER_IMAGE_PATH = "res/img/university.png";
@@ -15,19 +15,19 @@ public class University extends EducationalInstitution implements IEducationalIn
     public final static String LOCATION_X_HEADER_FIELD = "Lat";
     public final static String LOCATION_Y_HEADER_FIELD = "Lon";
 
-    public University(PApplet applet, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
+    public UniversityBasedEducationalInstitution(PApplet applet, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
         super(applet, name, address, website, location, capacity, currentPeopleAmount);
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
         createMarker();
     }
 
-    public University(PApplet applet, String name, String address, Location location) {
+    public UniversityBasedEducationalInstitution(PApplet applet, String name, String address, Location location) {
         super(applet, name, address, location);
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
         createMarker();
     }
 
-    public University(PApplet applet, Location location) {
+    public UniversityBasedEducationalInstitution(PApplet applet, Location location) {
         super(applet, location);
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
         createMarker();
