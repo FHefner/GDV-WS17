@@ -1,4 +1,4 @@
-package de.hsmannheim.util.map.zaehnersprengel;
+package de.hsmannheim.util.map.zaehlersprengel;
 
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.util.map.ITableTraverseStrategy;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ZaehnerSprengelBasedStrategy implements ITableTraverseStrategy {
+public class ZaehlerSprengelBasedStrategy implements ITableTraverseStrategy {
 
     final static String ZSPRL_TEXT = "ZSPRL";
 
@@ -16,12 +16,12 @@ public class ZaehnerSprengelBasedStrategy implements ITableTraverseStrategy {
     public Map<String, Serializable> setRegionNumberAndName(UrbanDistrict district, TableRow row) {
         String zsprlTextFromRow = row.getString(ZSPRL_TEXT);
         if (zsprlIsGivenAsRange(zsprlTextFromRow))
-            return setZaehnerSprengelBasedOnRange(district, row, zsprlTextFromRow);
+            return setZaehlerSprengelBasedOnRange(district, row, zsprlTextFromRow);
          else
-           return  setZaehnerSprengelBasedOnBezirk(district, row , zsprlTextFromRow);
+           return  setZaehlerSprengelBasedOnBezirk(district, row , zsprlTextFromRow);
     }
 
-    protected Map<String, Serializable> setZaehnerSprengelBasedOnBezirk(UrbanDistrict district, TableRow row, String zsprlTextFromRow) {
+    protected Map<String, Serializable> setZaehlerSprengelBasedOnBezirk(UrbanDistrict district, TableRow row, String zsprlTextFromRow) {
         Map<String, Serializable> result = new LinkedHashMap<>();
         if (Integer.valueOf(zsprlTextFromRow) == district.getZaehlerSprengel()) {
             putBzrAndNameOnMap(row);
@@ -29,7 +29,7 @@ public class ZaehnerSprengelBasedStrategy implements ITableTraverseStrategy {
         return result;
     }
 
-    protected Map<String, Serializable> setZaehnerSprengelBasedOnRange(UrbanDistrict district, TableRow row, String zsprlTextFromRow) {
+    protected Map<String, Serializable> setZaehlerSprengelBasedOnRange(UrbanDistrict district, TableRow row, String zsprlTextFromRow) {
         int startValue = Integer.valueOf(zsprlTextFromRow.split("-")[0]);
         int endValue = Integer.valueOf(zsprlTextFromRow.split("-")[1]);
         return traverseOverZsprlRange(district, row, startValue, endValue);

@@ -52,7 +52,6 @@ public class InnsbruckEducationApp extends PApplet{
             UrbanDistrict tmpDistrict = new UrbanDistrict(
                     this, tmpZaehlerSprengel, tmp6to9, tmp10to14,
                     tmp15to19, tmp20to24, tmp25to29);
-
             boolean districtAlreadyExisting = false;
             for (UrbanDistrict district : districts) {
                 if (district.getRegionNumber() == tmpDistrict.getRegionNumber() && !districtAlreadyExisting) {

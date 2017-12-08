@@ -2,8 +2,8 @@ package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
 import de.hsmannheim.markers.ColoredPolygonMarker;
-import de.hsmannheim.util.map.zaehnersprengel.ZaehnerSpengelMapUtil;
-import de.hsmannheim.util.map.zaehnersprengel.ZaehnerSprengelBasedStrategy;
+import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSpengelMapUtil;
+import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSprengelBasedStrategy;
 import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -50,7 +50,7 @@ public class UrbanDistrict {
     }
 
     private void setMapZaehlerSprengelToRegionNumberAndName() {
-        ZaehnerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(MAPPING_CSV_PATH, "header"), new ZaehnerSprengelBasedStrategy());
+        ZaehlerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(MAPPING_CSV_PATH, "header"), new ZaehlerSprengelBasedStrategy());
     }
 
     private List<Location> getLocationsFromJSONArray(JSONArray coordinates) {

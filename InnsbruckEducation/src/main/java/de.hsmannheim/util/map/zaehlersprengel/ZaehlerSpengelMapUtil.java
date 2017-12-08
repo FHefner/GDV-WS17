@@ -1,14 +1,13 @@
-package de.hsmannheim.util.map.zaehnersprengel;
+package de.hsmannheim.util.map.zaehlersprengel;
 
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.util.map.ITableTraverseStrategy;
 import processing.data.Table;
 import processing.data.TableRow;
 
-import java.io.Serializable;
 import java.util.Map;
 
-public class ZaehnerSpengelMapUtil {
+public class ZaehlerSpengelMapUtil {
 
 
     public static void traverseOverTableAndSetResult(UrbanDistrict district, Table mappingTable, ITableTraverseStrategy strategy) {
