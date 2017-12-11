@@ -1,6 +1,7 @@
 package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
+import de.hsmannheim.helper.DistrictColorCalc;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSpengelMapUtil;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSprengelBasedStrategy;
@@ -29,9 +30,18 @@ public class UrbanDistrict {
     private List<Location> locations;
     private ColoredPolygonMarker marker;
     private  boolean isSelected;
+    private Integer color;
 
     public boolean getIsSelected() {
         return isSelected;
+    }
+
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
     }
 
     public void setSelected(boolean selected) {
@@ -90,8 +100,8 @@ public class UrbanDistrict {
         return districtObject.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0);
     }
 
-    private void createPolygonMarker() {
-        this.marker = new ColoredPolygonMarker(this.applet, this.locations);
+    public void createPolygonMarker() {
+        this.marker = new ColoredPolygonMarker(this.applet, this.locations, this.color);
     }
 
     public int getTotalAmountInhabitants() {
@@ -169,8 +179,9 @@ public class UrbanDistrict {
         this.amountInhabitants25To29 = amountHabitants25To29;
         setMapZaehlerSprengelToRegionNumberAndName();
         extractLocations();
-        createPolygonMarker();
     }
+
+
 
     @Override
     public String toString() {
@@ -185,4 +196,5 @@ public class UrbanDistrict {
         output.append("Gesamteinwohner: ").append(String.valueOf(this.totalAmountInhabitants)).append("\n");
         return output.toString();
     }
+
 }

@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff2680fb-38fe-4b4c-8975-23be6824ef9c" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/de.hsmannheim/helper/DistrictColorCalc.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/de/hsmannheim/InnsbruckEducationApp.class" afterPath="$PROJECT_DIR$/out/production/classes/de/hsmannheim/InnsbruckEducationApp.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java" afterPath="$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/de.hsmannheim/models/UrbanDistrict.java" afterPath="$PROJECT_DIR$/src/main/java/de.hsmannheim/models/UrbanDistrict.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -94,25 +98,14 @@
       <file leaf-file-name="InnsbruckEducationApp.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state relative-caret-position="252">
+              <caret line="215" column="50" lean-forward="true" selection-start-line="215" selection-start-column="50" selection-end-line="215" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#9386#9387#0" expanded="true" />
-                <element signature="e#9422#9423#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ColoredPolygonMarker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/markers/ColoredPolygonMarker.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="28" column="22" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
-              <folding>
-                <element signature="e#708#709#0" expanded="true" />
-                <element signature="e#749#750#0" expanded="true" />
+                <element signature="e#1644#1645#0" expanded="true" />
+                <element signature="e#1711#1712#0" expanded="true" />
+                <element signature="e#9491#9492#0" expanded="true" />
+                <element signature="e#9529#9530#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -121,27 +114,15 @@
       <file leaf-file-name="UrbanDistrict.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/models/UrbanDistrict.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="32" column="24" lean-forward="false" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
+            <state relative-caret-position="2167">
+              <caret line="181" column="0" lean-forward="false" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
               <folding>
-                <element signature="e#1387#1388#0" expanded="true" />
-                <element signature="e#1424#1425#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DistrictHelper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/helper/DistrictHelper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="24" column="16" lean-forward="false" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#316#317#0" expanded="true" />
-                <element signature="e#355#356#0" expanded="true" />
-                <element signature="e#460#461#0" expanded="true" />
-                <element signature="e#500#501#0" expanded="true" />
+                <element signature="e#1379#1380#0" expanded="true" />
+                <element signature="e#1412#1413#0" expanded="true" />
+                <element signature="e#1445#1446#0" expanded="true" />
+                <element signature="e#1473#1474#0" expanded="true" />
+                <element signature="e#1516#1517#0" expanded="true" />
+                <element signature="e#1550#1551#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -185,6 +166,10 @@
       <find>NR&quot;: 19</find>
       <find>districtList</find>
       <find>package de\.hsmannheim\;\n\nimport de\.fhpotsdam\.unfolding\.UnfoldingMap\;\nimport de\.fhpotsdam\.unfolding\.geo\.Location\;\nimport de\.fhpotsdam\.unfolding\.marker\.Marker\;\nimport de\.fhpotsdam\.unfolding\.providers\.OpenStreetMap\;\nimport de\.fhpotsdam\.unfolding\.utils\.MapUtils\;\n\nimport de\.hsmannheim\.markers\.MarkerType\;\nimport de\.hsmannheim\.models\.SchoolBasedEducationalInstitution\;\nimport de\.hsmannheim\.models\.SchoolCategory\;\nimport de\.hsmannheim\.models\.UniversityBasedEducationalInstitution\;\nimport de\.hsmannheim\.models\.UrbanDistrict\;\nimport de\.hsmannheim\.helper\.DistrictHelper\;\n\nimport processing\.core\.PApplet\;\nimport processing\.data\.Table\;\nimport processing\.data\.TableRow\;\n\nimport java\.util\.ArrayList\;\nimport java\.util\.HashMap\;\nimport java\.util\.List\;\nimport java\.util\.Map\;\n\npublic class InnsbruckEducationApp extends PApplet\{\n\n    private UnfoldingMap map\;\n    private List\&lt;SchoolBasedEducationalInstitution\&gt; schools\;\n    private List\&lt;UniversityBasedEducationalInstitution\&gt; universities\;\n    private List\&lt;UrbanDistrict\&gt; districts\;\n    private Map\&lt;MarkerType\, List\&lt;Marker\&gt;\&gt; markers\;\n    private boolean zoomedIntoDistrict\;\n    private DistrictHelper districtHelper\;\n\n    \/\/ The starting location \(the center of the map\) is Innsbruck\n    private Location startingLocation \= new Location\(47\.264874\, 11\.395907\)\;\n\n    private final static String WINDOW_NAME \= \&quot;Innsbruck Education\&quot;\;\n    private final static String VERSION \= \&quot;0\.1a\&quot;\;\n    private final static int WINDOW_WIDTH \= 1280\;\n    private final static int WINDOW_HEIGHT \= 720\;\n\n\n    private void initDistrictHelper\(\)\{\n        this\.districtHelper\=new DistrictHelper\(districts\)\;\n    \}\n\n\n    private void loadDistricts\(\) \{\n        Table districtData \= loadTable\(UrbanDistrict\.CSV_DATA_PATH\, \&quot;header\&quot;\)\;\n        districts \= new ArrayList\&lt;\&gt;\(\)\;\n        for \(TableRow row \: districtData\.rows\(\)\) \{\n            int tmpZaehlerSprengel \= row\.getInt\(\&quot;ZSPR\&quot;\)\;\n            int tmp6to9 \= row\.getInt\(\&quot;6_9\&quot;\)\;\n            int tmp10to14 \= row\.getInt\(\&quot;10_14\&quot;\)\;\n            int tmp15to19 \= row\.getInt\(\&quot;15_19\&quot;\)\;\n            int tmp20to24 \= row\.getInt\(\&quot;20_24\&quot;\)\;\n            int tmp25to29 \= row\.getInt\(\&quot;25_29\&quot;\)\;\n            UrbanDistrict tmpDistrict \= new UrbanDistrict\(\n                    this\, tmpZaehlerSprengel\, tmp6to9\, tmp10to14\,\n                    tmp15to19\, tmp20to24\, tmp25to29\)\;\n            boolean districtAlreadyExisting \= false\;\n            for \(UrbanDistrict district \: districts\) \{\n                if \(district\.getRegionNumber\(\) \=\= tmpDistrict\.getRegionNumber\(\) \&amp;\&amp; \!districtAlreadyExisting\) \{\n                    districtAlreadyExisting \= true\;\n                    district\.setAmountInhabitants6To9\(district\.getAmountInhabitants6To9\(\) \+ tmp6to9\)\;\n                    district\.setAmountInhabitants10To14\(district\.getAmountInhabitants10To14\(\) \+ tmp10to14\)\;\n                    district\.setAmountInhabitants15To19\(district\.getAmountInhabitants15To19\(\) \+ tmp15to19\)\;\n                    district\.setAmountInhabitants20To24\(district\.getAmountInhabitants20To24\(\) \+ tmp20to24\)\;\n                    district\.setAmountInhabitants25To29\(district\.getAmountInhabitants25To29\(\) \+ tmp25to29\)\;\n                \}\n            \}\n            if \(\!districtAlreadyExisting\) \{\n                districts\.add\(tmpDistrict\)\;\n            \}\n        \}\n        for \(UrbanDistrict district \: districts\) \{\n            district\.calculateTotalInhabitants\(\)\;\n        \}\n        initDistrictHelper\(\)\;\n    \}\n\n    private void loadSchoolData\(\) \{\n        Table schoolData \= loadTable\(SchoolBasedEducationalInstitution\.CSV_DATA_PATH\, \&quot;header\&quot;\)\;\n        schools \= new ArrayList\&lt;\&gt;\(\)\;\n        for \(TableRow row \: schoolData\.rows\(\)\) \{\n            Location tmpLocation \= new Location\(\n                    row\.getFloat\(SchoolBasedEducationalInstitution\.LOCATION_X_HEADER_FIELD\)\,\n                    row\.getFloat\(SchoolBasedEducationalInstitution\.LOCATION_Y_HEADER_FIELD\)\)\;\n            String tmpName \= row\.getString\(SchoolBasedEducationalInstitution\.NAME_HEADER_FIELD\)\;\n            String tmpAddress \= row\.getString\(SchoolBasedEducationalInstitution\.ADDRESS_HEADER_FIELD\)\;\n            String tmpWebsite \= row\.getString\(SchoolBasedEducationalInstitution\.WEBSITE_HEADER_FIELD\)\;\n            SchoolBasedEducationalInstitution tmpSchool \= new SchoolBasedEducationalInstitution\(this\, SchoolCategory\.HIGHER_EDUCATION\, tmpName\, tmpAddress\, tmpLocation\)\;\n            tmpSchool\.setWebsite\(tmpWebsite\)\;\n            tmpSchool\.setMarkerImage\(loadImage\(SchoolBasedEducationalInstitution\.MARKER_IMAGE_PATH\)\)\;\n            schools\.add\(tmpSchool\)\;\n        \}\n    \}\n\n    private void loadUniversityData\(\) \{\n        Table universityData \= loadTable\(UniversityBasedEducationalInstitution\.CSV_DATA_PATH\, \&quot;header\&quot;\)\;\n        universities \= new ArrayList\&lt;\&gt;\(\)\;\n        for \(TableRow row \: universityData\.rows\(\)\) \{\n            Location tmpLocation \= new Location\(\n                    row\.getFloat\(UniversityBasedEducationalInstitution\.LOCATION_X_HEADER_FIELD\)\,\n                    row\.getFloat\(UniversityBasedEducationalInstitution\.LOCATION_Y_HEADER_FIELD\)\)\;\n            String tmpName \= row\.getString\(UniversityBasedEducationalInstitution\.NAME_HEADER_FIELD\)\;\n            String tmpAddress \= row\.getString\(UniversityBasedEducationalInstitution\.ADDRESS_HEADER_FIELD\)\;\n            String tmpWebsite \= row\.getString\(UniversityBasedEducationalInstitution\.WEBSITE_HEADER_FIELD\)\;\n            UniversityBasedEducationalInstitution tmpUniversity \= new UniversityBasedEducationalInstitution\(this\, tmpName\, tmpAddress\, tmpLocation\)\;\n            tmpUniversity\.setWebsite\(tmpWebsite\)\;\n            tmpUniversity\.setMarkerImage\(loadImage\(UniversityBasedEducationalInstitution\.MARKER_IMAGE_PATH\)\)\;\n            universities\.add\(tmpUniversity\)\;\n        \}\n    \}\n\n    private void addMarkersToMap\(\) \{\n        markers \= new HashMap\&lt;\&gt;\(\)\;\n        List\&lt;Marker\&gt; schoolMarkers \= new ArrayList\&lt;\&gt;\(\)\;\n        for \(SchoolBasedEducationalInstitution s \: schools\) \{\n            schoolMarkers\.add\(s\.getMarker\(\)\)\;\n        \}\n        markers\.put\(MarkerType\.SCHOOL_MARKER\, schoolMarkers\)\;\n\n        List\&lt;Marker\&gt; universityMarkers \= new ArrayList\&lt;\&gt;\(\)\;\n        for \(UniversityBasedEducationalInstitution u \: universities\) \{\n            universityMarkers\.add\(u\.getMarker\(\)\)\;\n        \}\n        markers\.put\(MarkerType\.UNIVERSITY_MARKER\, universityMarkers\)\;\n\n        List\&lt;Marker\&gt; districtMarkers \= new ArrayList\&lt;\&gt;\(\)\;\n        for \(UrbanDistrict d \: districts\) \{\n            districtMarkers\.add\(d\.getMarker\(\)\)\;\n        \}\n        markers\.put\(MarkerType\.DISTRICT_MARKER\, districtMarkers\)\;\n\n        map\.addMarkers\(markers\.get\(MarkerType\.DISTRICT_MARKER\)\)\;\n        map\.addMarkers\(markers\.get\(MarkerType\.SCHOOL_MARKER\)\)\;\n        map\.addMarkers\(markers\.get\(MarkerType\.UNIVERSITY_MARKER\)\)\;\n    \}\n\n    private void processData\(\) \{\n        loadSchoolData\(\)\;\n        loadUniversityData\(\)\;\n        loadDistricts\(\)\;\n        addMarkersToMap\(\)\;\n    \}\n\n    private void resetView\(\) \{\n        map\.zoomAndPanTo\(12\, startingLocation\)\;\n        map\.setZoomRange\(10\, 20\)\;\n        map\.setPanningRestriction\(startingLocation\, 10\)\;\n        zoomedIntoDistrict \= false\;\n        resetColorDistricts\(\)\;\n    \}\n\n    \/\*\*\n     \* Iterates over the existing Districts\n     \* and resets the color of the areas to their initial color\n     \*\/\n    private void resetColorDistricts\(\)\{\n        for \(UrbanDistrict district \: districts\) \{\n            district\.getMarker\(\)\.resetColor\(\)\;\n        \}\n    \}\n\n    private void highlightDistrict\(String districtName\) \{\n        List\&lt;UrbanDistrict\&gt; otherDistricts \= new ArrayList\&lt;\&gt;\(districts\)\;\n        for \(UrbanDistrict district \: districts\) \{\n            if \(district\.getName\(\)\.equals\(districtName\)\) \{\n                otherDistricts\.remove\(district\)\;\n            \}\n        \}\n        for \(UrbanDistrict district \: otherDistricts\) \{\n            district\.getMarker\(\)\.setColor\(color\(140\, 140\, 140\, 100\)\)\;\n        \}\n    \}\n\n    public void settings\(\) \{\n        size\(WINDOW_WIDTH\, WINDOW_HEIGHT\, FX2D\)\;\n        map \= new UnfoldingMap\(this\, new OpenStreetMap\.PositronMapProvider\(\)\)\;\n        MapUtils\.createDefaultEventDispatcher\(this\, map\)\;\n        processData\(\)\;\n        resetView\(\)\;\n        \/\/ map\.setTweening\(true\)\;\n    \}\n\n    public void keyPressed\(\) \{\n        \/\/ Kill the app if ESC is pressed\n        if \(key \=\= ESC\) \{\n            exit\(\)\;\n        \}\n        \/\/ Go Back to start view if BACKSPACE is pressed\n        if \(key \=\= BACKSPACE\) \{\n            resetView\(\)\;\n        \}\n    \}\n\n    public void mouseClicked\(\) \{\n        districtHelper\.checkIfDistrictIsSelected\(map\, mouseX\, mouseY\)\;\n        if\(districtHelper\.isDistrictSelected\(\)\)\{\n            for \(UrbanDistrict district \: districts\) \{\n                changeColorOfSelectedDistrict\(district\)\;\n            \}\n        \}\n    \}\n\n    void changeColorOfSelectedDistrict\(UrbanDistrict district\)\{\n        if \(district\.getIsSelected\(\)\) \{\n            System\.out\.println\(district\)\;\n            map\.zoomAndPanToFit\(district\.getLocationsFromJSONArray\(\)\)\;\n            zoomedIntoDistrict \= true\;\n            highlightDistrict\(district\.getName\(\)\)\;\n            \/\/TODO\-Heatmap If Heatmap implemented delete this line\n            district\.getMarker\(\)\.setPolygonColor\(district\.getMarker\(\)\.getInitialColor\(\)\)\;\n        \}else \{\n            district\.getMarker\(\)\.setPolygonColor\(color\(90\, 90\, 90\)\)\;\n        \}\n    \}\n\n\n    public void draw\(\) \{\n        map\.draw\(\)\;\n        Location location \= map\.getLocation\(mouseX\, mouseY\)\;\n        fill\(80\, 80\)\;\n        noStroke\(\)\;\n        \/\/ ellipse\(mouseX\, mouseY\, 80\, 80\)\;\n\n    \}\n\n    public static void main\(String\[\] args\) \{\n        PApplet\.main\(InnsbruckEducationApp\.class\.getName\(\)\)\;\n    \}\n\}\n</find>
+      <find>urbanDistr</find>
+      <find>Urban</find>
+      <find>create</find>
+      <find>addMarkers</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -497,8 +482,9 @@
         <option value="$PROJECT_DIR$/src/main/java/de.hsmannheim/util/map/zaehlersprengel/ZaehlerSprengelBasedStrategy.java" />
         <option value="$PROJECT_DIR$/src/main/resources/data/zaehlersprengel_filtered.csv" />
         <option value="$PROJECT_DIR$/src/main/java/de.hsmannheim/markers/ColoredPolygonMarker.java" />
-        <option value="$PROJECT_DIR$/src/main/java/de.hsmannheim/models/UrbanDistrict.java" />
         <option value="$PROJECT_DIR$/src/main/java/de.hsmannheim/helper/DistrictHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/de.hsmannheim/models/UrbanDistrict.java" />
+        <option value="$PROJECT_DIR$/src/main/java/de.hsmannheim/helper/DistrictColorCalc.java" />
         <option value="$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java" />
       </list>
     </option>
@@ -575,35 +561,7 @@
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="de.hsmannheim" type="462c0819:PsiDirectoryNode" />
-              <item name="markers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="InnsbruckEducation" type="b2602c69:ProjectViewProjectNode" />
-              <item name="InnsbruckEducation" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="de.hsmannheim" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="InnsbruckEducation" type="b2602c69:ProjectViewProjectNode" />
-              <item name="InnsbruckEducation" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="de.hsmannheim" type="462c0819:PsiDirectoryNode" />
-              <item name="map" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="InnsbruckEducation" type="b2602c69:ProjectViewProjectNode" />
-              <item name="InnsbruckEducation" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="de.hsmannheim" type="462c0819:PsiDirectoryNode" />
-              <item name="map" type="462c0819:PsiDirectoryNode" />
-              <item name="zaehlersprengel" type="462c0819:PsiDirectoryNode" />
+              <item name="helper" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="InnsbruckEducation" type="b2602c69:ProjectViewProjectNode" />
@@ -797,12 +755,12 @@
       <workItem from="1512737380879" duration="10288000" />
       <workItem from="1512988985269" duration="4384000" />
       <workItem from="1512996881588" duration="4647000" />
-      <workItem from="1513001596283" duration="295000" />
+      <workItem from="1513001596283" duration="6816000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26051000" />
+    <option name="totallyTimeSpent" value="32572000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="749" extended-state="6" />
@@ -823,6 +781,7 @@
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25183553" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921174" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960597" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -838,7 +797,6 @@
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32885906" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -859,8 +817,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9386#9387#0" expanded="true" />
-            <element signature="e#9422#9423#0" expanded="true" />
+            <element signature="e#1644#1645#0" expanded="true" />
+            <element signature="e#1711#1712#0" expanded="true" />
+            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#9529#9530#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -881,8 +841,12 @@
         <state relative-caret-position="576">
           <caret line="32" column="24" lean-forward="true" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
           <folding>
-            <element signature="e#1387#1388#0" expanded="true" />
-            <element signature="e#1424#1425#0" expanded="true" />
+            <element signature="e#1379#1380#0" expanded="true" />
+            <element signature="e#1412#1413#0" expanded="true" />
+            <element signature="e#1445#1446#0" expanded="true" />
+            <element signature="e#1473#1474#0" expanded="true" />
+            <element signature="e#1516#1517#0" expanded="true" />
+            <element signature="e#1550#1551#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -893,10 +857,6 @@
           <caret line="24" column="16" lean-forward="false" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#316#317#0" expanded="true" />
-            <element signature="e#355#356#0" expanded="true" />
-            <element signature="e#460#461#0" expanded="true" />
-            <element signature="e#500#501#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -907,8 +867,10 @@
           <caret line="190" column="28" lean-forward="false" selection-start-line="190" selection-start-column="16" selection-end-line="190" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9386#9387#0" expanded="true" />
-            <element signature="e#9422#9423#0" expanded="true" />
+            <element signature="e#1644#1645#0" expanded="true" />
+            <element signature="e#1711#1712#0" expanded="true" />
+            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#9529#9530#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -929,8 +891,12 @@
         <state relative-caret-position="450">
           <caret line="38" column="5" lean-forward="false" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
           <folding>
-            <element signature="e#1387#1388#0" expanded="true" />
-            <element signature="e#1424#1425#0" expanded="true" />
+            <element signature="e#1379#1380#0" expanded="true" />
+            <element signature="e#1412#1413#0" expanded="true" />
+            <element signature="e#1445#1446#0" expanded="true" />
+            <element signature="e#1473#1474#0" expanded="true" />
+            <element signature="e#1516#1517#0" expanded="true" />
+            <element signature="e#1550#1551#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -941,8 +907,10 @@
           <caret line="53" column="53" lean-forward="false" selection-start-line="53" selection-start-column="53" selection-end-line="53" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9386#9387#0" expanded="true" />
-            <element signature="e#9422#9423#0" expanded="true" />
+            <element signature="e#1644#1645#0" expanded="true" />
+            <element signature="e#1711#1712#0" expanded="true" />
+            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#9529#9530#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -959,8 +927,12 @@
         <state relative-caret-position="666">
           <caret line="56" column="53" lean-forward="false" selection-start-line="56" selection-start-column="53" selection-end-line="56" selection-end-column="53" />
           <folding>
-            <element signature="e#1387#1388#0" expanded="true" />
-            <element signature="e#1424#1425#0" expanded="true" />
+            <element signature="e#1379#1380#0" expanded="true" />
+            <element signature="e#1412#1413#0" expanded="true" />
+            <element signature="e#1445#1446#0" expanded="true" />
+            <element signature="e#1473#1474#0" expanded="true" />
+            <element signature="e#1516#1517#0" expanded="true" />
+            <element signature="e#1550#1551#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -990,8 +962,10 @@
           <caret line="180" column="9" lean-forward="true" selection-start-line="180" selection-start-column="9" selection-end-line="180" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9386#9387#0" expanded="true" />
-            <element signature="e#9422#9423#0" expanded="true" />
+            <element signature="e#1644#1645#0" expanded="true" />
+            <element signature="e#1711#1712#0" expanded="true" />
+            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#9529#9530#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1028,7 +1002,7 @@
         <state relative-caret-position="68">
           <caret line="7" column="41" lean-forward="false" selection-start-line="7" selection-start-column="41" selection-end-line="7" selection-end-column="41" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1061,16 +1035,13 @@
         <state relative-caret-position="765">
           <caret line="64" column="5" lean-forward="true" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
           <folding>
-            <element signature="e#1387#1388#0" expanded="true" />
-            <element signature="e#1424#1425#0" expanded="true" />
+            <element signature="e#1379#1380#0" expanded="true" />
+            <element signature="e#1412#1413#0" expanded="true" />
+            <element signature="e#1445#1446#0" expanded="true" />
+            <element signature="e#1473#1474#0" expanded="true" />
+            <element signature="e#1516#1517#0" expanded="true" />
+            <element signature="e#1550#1551#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/markers/MarkerType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="12" lean-forward="false" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -1132,7 +1103,7 @@
         <state relative-caret-position="119">
           <caret line="7" column="41" lean-forward="false" selection-start-line="7" selection-start-column="41" selection-end-line="7" selection-end-column="41" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1207,57 +1178,73 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/markers/ColoredPolygonMarker.java">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.processing/core/3.2.3/8f7ce4dd9d89f29a6a6c6b60410263bf28c6a5ca/core-3.2.3-sources.jar!/processing/core/PApplet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="28" column="22" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
-          <folding>
-            <element signature="e#708#709#0" expanded="true" />
-            <element signature="e#749#750#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/models/UrbanDistrict.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="32" column="24" lean-forward="false" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
-          <folding>
-            <element signature="e#1387#1388#0" expanded="true" />
-            <element signature="e#1424#1425#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="125">
+          <caret line="398" column="13" lean-forward="false" selection-start-line="398" selection-start-column="13" selection-end-line="398" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/helper/DistrictHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="24" column="16" lean-forward="false" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
+        <state relative-caret-position="198">
+          <caret line="11" column="28" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#316#317#0" expanded="true" />
-            <element signature="e#355#356#0" expanded="true" />
-            <element signature="e#460#461#0" expanded="true" />
-            <element signature="e#500#501#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.processing/core/3.2.3/8f7ce4dd9d89f29a6a6c6b60410263bf28c6a5ca/core-3.2.3-sources.jar!/processing/core/PApplet.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/markers/MarkerType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="398" column="13" lean-forward="false" selection-start-line="398" selection-start-column="13" selection-end-line="398" selection-end-column="13" />
+        <state relative-caret-position="90">
+          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/models/UrbanDistrict.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2167">
+          <caret line="181" column="0" lean-forward="false" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
+          <folding>
+            <element signature="e#1379#1380#0" expanded="true" />
+            <element signature="e#1412#1413#0" expanded="true" />
+            <element signature="e#1445#1446#0" expanded="true" />
+            <element signature="e#1473#1474#0" expanded="true" />
+            <element signature="e#1516#1517#0" expanded="true" />
+            <element signature="e#1550#1551#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/helper/DistrictColorCalc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="42" lean-forward="true" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/markers/ColoredPolygonMarker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="40" column="23" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        <state relative-caret-position="252">
+          <caret line="215" column="50" lean-forward="true" selection-start-line="215" selection-start-column="50" selection-end-line="215" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9386#9387#0" expanded="true" />
-            <element signature="e#9422#9423#0" expanded="true" />
+            <element signature="e#1644#1645#0" expanded="true" />
+            <element signature="e#1711#1712#0" expanded="true" />
+            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#9529#9530#0" expanded="true" />
           </folding>
         </state>
       </provider>

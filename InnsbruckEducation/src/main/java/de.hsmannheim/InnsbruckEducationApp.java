@@ -6,6 +6,7 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 
+import de.hsmannheim.helper.DistrictColorCalc;
 import de.hsmannheim.markers.MarkerType;
 import de.hsmannheim.models.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.SchoolCategory;
@@ -33,7 +34,6 @@ public class InnsbruckEducationApp extends PApplet {
     private DistrictHelper districtHelper;
     private boolean mouseWasDragged = false;
 
-
     // The starting location (the center of the map) is Innsbruck
     private Location startingLocation = new Location(47.264874, 11.395907);
 
@@ -42,11 +42,9 @@ public class InnsbruckEducationApp extends PApplet {
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
 
-
     private void initDistrictHelper() {
         this.districtHelper = new DistrictHelper(districts);
     }
-
 
     private void loadDistricts() {
         Table districtData = loadTable(UrbanDistrict.CSV_DATA_PATH, "header");
@@ -78,6 +76,8 @@ public class InnsbruckEducationApp extends PApplet {
         }
         for (UrbanDistrict district : districts) {
             district.calculateTotalInhabitants();
+            district.setColor(DistrictColorCalc.calcDistrictColor(district, this));
+            district.createPolygonMarker();
         }
         initDistrictHelper();
     }
@@ -214,7 +214,6 @@ public class InnsbruckEducationApp extends PApplet {
             map.zoomAndPanToFit(district.getLocationsFromJSONArray());
             zoomedIntoDistrict = true;
             highlightDistrict(district.getName());
-            //TODO-Heatmap If Heatmap implemented delete this line
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
         } else {
             district.getMarker().setPolygonColor(color(90, 90, 90));
@@ -222,10 +221,7 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     public void mouseDragged() {
-        mouseWasDragged=true;
-    }
-
-    public void mouseReleased() {
+        mouseWasDragged = true;
     }
 
     public void draw() {
