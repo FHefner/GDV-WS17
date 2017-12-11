@@ -11,6 +11,8 @@ import de.hsmannheim.models.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.SchoolCategory;
 import de.hsmannheim.models.UniversityBasedEducationalInstitution;
 import de.hsmannheim.models.UrbanDistrict;
+import de.hsmannheim.helper.DistrictHelper;
+
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
@@ -20,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InnsbruckEducationApp extends PApplet{
+public class InnsbruckEducationApp extends PApplet {
 
     private UnfoldingMap map;
     private List<SchoolBasedEducationalInstitution> schools;
@@ -28,6 +30,10 @@ public class InnsbruckEducationApp extends PApplet{
     private List<UrbanDistrict> districts;
     private Map<MarkerType, List<Marker>> markers;
     private boolean zoomedIntoDistrict;
+    private DistrictHelper districtHelper;
+    private boolean mouseWasDragged = false;
+    private int[] savedMousePositions = {-1, -1};
+
 
     // The starting location (the center of the map) is Innsbruck
     private Location startingLocation = new Location(47.264874, 11.395907);
@@ -37,6 +43,10 @@ public class InnsbruckEducationApp extends PApplet{
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
 
+
+    private void initDistrictHelper() {
+        this.districtHelper = new DistrictHelper(districts);
+    }
 
 
     private void loadDistricts() {
@@ -70,6 +80,7 @@ public class InnsbruckEducationApp extends PApplet{
         for (UrbanDistrict district : districts) {
             district.calculateTotalInhabitants();
         }
+        initDistrictHelper();
     }
 
     private void loadSchoolData() {
@@ -143,6 +154,14 @@ public class InnsbruckEducationApp extends PApplet{
         map.setZoomRange(10, 20);
         map.setPanningRestriction(startingLocation, 10);
         zoomedIntoDistrict = false;
+        resetColorDistricts();
+    }
+
+    /**
+     * Iterates over the existing Districts
+     * and resets the color of the areas to their initial color
+     */
+    private void resetColorDistricts() {
         for (UrbanDistrict district : districts) {
             district.getMarker().resetColor();
         }
@@ -181,14 +200,54 @@ public class InnsbruckEducationApp extends PApplet{
     }
 
     public void mouseClicked() {
-        for (UrbanDistrict district : districts) {
-            if (district.getMarker().isInside(map, mouseX, mouseY)) {
-                System.out.println(district);
-                map.zoomAndPanToFit(district.getLocationsFromJSONArray());
-                zoomedIntoDistrict = true;
-                highlightDistrict(district.getName());
+        districtHelper.checkIfDistrictIsSelected(map, mouseX, mouseY);
+        System.out.println("called Mouse Clicked");
+        if (!mouseWasDragged)
+            System.out.println("not Dragged");
+        if (districtHelper.isDistrictSelected() && !mouseWasDragged) {
+            for (UrbanDistrict district : districts) {
+                changeColorOfSelectedDistrict(district);
             }
         }
+        mouseWasDragged = false;
+    }
+
+
+    void changeColorOfSelectedDistrict(UrbanDistrict district) {
+        if (district.getIsSelected()) {
+            System.out.println(district);
+            map.zoomAndPanToFit(district.getLocationsFromJSONArray());
+            zoomedIntoDistrict = true;
+            highlightDistrict(district.getName());
+            //TODO-Heatmap If Heatmap implemented delete this line
+            district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
+        } else {
+            district.getMarker().setPolygonColor(color(90, 90, 90));
+        }
+    }
+
+    public void mouseDragged() {
+        mouseWasDragged=true;
+      /*  if (savedMousePositions[0] == -1 && savedMousePositions[1] == -1) {
+            setSavedMousePositions(mouseX, mouseY);
+            System.out.println("dragged");
+        }*/
+    }
+
+    public void mouseReleased() {
+      /*  if (mouseX != savedMousePositions[0] && mouseY != savedMousePositions[1]) {
+            mouseWasDragged = true;
+        } else {
+            System.out.println("False");
+            mouseWasDragged = false;
+        }
+        System.out.println("Released");
+        setSavedMousePositions(-1, -1);*/
+    }
+
+    private void setSavedMousePositions(int mousePX, int mousePY) {
+        savedMousePositions[0] = mousePX;
+        savedMousePositions[1] = mousePY;
     }
 
     public void draw() {

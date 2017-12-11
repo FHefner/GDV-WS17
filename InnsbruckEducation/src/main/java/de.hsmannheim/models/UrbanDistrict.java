@@ -28,6 +28,15 @@ public class UrbanDistrict {
     private int totalAmountInhabitants;
     private List<Location> locations;
     private ColoredPolygonMarker marker;
+    private  boolean isSelected;
+
+    public boolean getIsSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public ColoredPolygonMarker getMarker() {
         return marker;
