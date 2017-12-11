@@ -201,9 +201,6 @@ public class InnsbruckEducationApp extends PApplet {
 
     public void mouseClicked() {
         districtHelper.checkIfDistrictIsSelected(map, mouseX, mouseY);
-        System.out.println("called Mouse Clicked");
-        if (!mouseWasDragged)
-            System.out.println("not Dragged");
         if (districtHelper.isDistrictSelected() && !mouseWasDragged) {
             for (UrbanDistrict district : districts) {
                 changeColorOfSelectedDistrict(district);
@@ -228,21 +225,9 @@ public class InnsbruckEducationApp extends PApplet {
 
     public void mouseDragged() {
         mouseWasDragged=true;
-      /*  if (savedMousePositions[0] == -1 && savedMousePositions[1] == -1) {
-            setSavedMousePositions(mouseX, mouseY);
-            System.out.println("dragged");
-        }*/
     }
 
     public void mouseReleased() {
-      /*  if (mouseX != savedMousePositions[0] && mouseY != savedMousePositions[1]) {
-            mouseWasDragged = true;
-        } else {
-            System.out.println("False");
-            mouseWasDragged = false;
-        }
-        System.out.println("Released");
-        setSavedMousePositions(-1, -1);*/
     }
 
     private void setSavedMousePositions(int mousePX, int mousePY) {
