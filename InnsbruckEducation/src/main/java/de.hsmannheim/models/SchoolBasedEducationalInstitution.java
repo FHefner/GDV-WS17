@@ -1,7 +1,7 @@
 package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
-import de.hsmannheim.markers.ImageMarker;
+import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import processing.core.PApplet;
 
 public class SchoolBasedEducationalInstitution extends AbstractEducationalInstitution {
@@ -16,12 +16,23 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
     public final static String LOCATION_X_HEADER_FIELD = "Lat";
     public final static String LOCATION_Y_HEADER_FIELD = "Lon";
 
+    private Integer color;
+
     public SchoolCategory getCategory() {
         return category;
     }
 
     public void setCategory(SchoolCategory category) {
         this.category = category;
+    }
+
+    private void setSchoolColorBasedOnCategory(PApplet applet) {
+        switch (this.category) {
+            case HIGHER_EDUCATION: {
+                this.color = applet.color(15, 132, 0);
+                break;
+            }
+        }
     }
 
     public SchoolBasedEducationalInstitution(PApplet applet, SchoolCategory category, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
@@ -36,6 +47,7 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
         super(applet, name, address, location);
         this.category = category;
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        setSchoolColorBasedOnCategory(applet);
         createMarker();
     }
 
@@ -43,7 +55,12 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
         super(applet, location);
         this.category = category;
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        setSchoolColorBasedOnCategory(applet);
         createMarker();
+    }
+
+    public void setShownOnMap(boolean shownOnMap) {
+        this.getMarker().setHidden(!shownOnMap);
     }
 
     @Override
@@ -67,9 +84,11 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
 
     @Override
     public void createMarker() {
-        ImageMarker marker = new ImageMarker(getLocation(), getMarkerImage());
+        SimplePointMarker marker = new SimplePointMarker(this.getLocation());
+        marker.setColor(this.color);
         marker.setStrokeColor(90);
         marker.setStrokeWeight(5);
+        marker.setHidden(false);
         setMarker(marker);
     }
 }

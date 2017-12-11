@@ -1,7 +1,7 @@
 package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
-import de.hsmannheim.markers.ImageMarker;
+import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import processing.core.PApplet;
 
 public class UniversityBasedEducationalInstitution extends AbstractEducationalInstitution {
@@ -15,29 +15,40 @@ public class UniversityBasedEducationalInstitution extends AbstractEducationalIn
     public final static String LOCATION_X_HEADER_FIELD = "Lat";
     public final static String LOCATION_Y_HEADER_FIELD = "Lon";
 
+    private Integer color;
+
     public UniversityBasedEducationalInstitution(PApplet applet, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
         super(applet, name, address, website, location, capacity, currentPeopleAmount);
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        this.color = applet.color(161, 0, 255);
         createMarker();
     }
 
     public UniversityBasedEducationalInstitution(PApplet applet, String name, String address, Location location) {
         super(applet, name, address, location);
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        this.color = applet.color(161, 0, 255);
         createMarker();
     }
 
     public UniversityBasedEducationalInstitution(PApplet applet, Location location) {
         super(applet, location);
         setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        this.color = applet.color(161, 0, 255);
         createMarker();
+    }
+
+    public void setShownOnMap(boolean shownOnMap) {
+        this.getMarker().setHidden(!shownOnMap);
     }
 
     @Override
     public void createMarker() {
-        ImageMarker marker = new ImageMarker(getLocation(), getMarkerImage());
+        SimplePointMarker marker = new SimplePointMarker(this.getLocation());
+        marker.setColor(this.color);
         marker.setStrokeColor(90);
         marker.setStrokeWeight(5);
+        marker.setHidden(false);
         setMarker(marker);
     }
 }
