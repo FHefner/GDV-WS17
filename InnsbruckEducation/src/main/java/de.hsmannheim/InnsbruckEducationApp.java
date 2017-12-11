@@ -32,7 +32,6 @@ public class InnsbruckEducationApp extends PApplet {
     private boolean zoomedIntoDistrict;
     private DistrictHelper districtHelper;
     private boolean mouseWasDragged = false;
-    private int[] savedMousePositions = {-1, -1};
 
 
     // The starting location (the center of the map) is Innsbruck
@@ -209,7 +208,6 @@ public class InnsbruckEducationApp extends PApplet {
         mouseWasDragged = false;
     }
 
-
     void changeColorOfSelectedDistrict(UrbanDistrict district) {
         if (district.getIsSelected()) {
             System.out.println(district);
@@ -228,11 +226,6 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     public void mouseReleased() {
-    }
-
-    private void setSavedMousePositions(int mousePX, int mousePY) {
-        savedMousePositions[0] = mousePX;
-        savedMousePositions[1] = mousePY;
     }
 
     public void draw() {

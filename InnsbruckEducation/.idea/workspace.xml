@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff2680fb-38fe-4b4c-8975-23be6824ef9c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java" afterPath="$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -95,12 +94,12 @@
       <file leaf-file-name="InnsbruckEducationApp.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="202" column="70" lean-forward="false" selection-start-line="202" selection-start-column="70" selection-end-line="202" selection-end-column="70" />
+            <state relative-caret-position="231">
+              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#9437#9438#0" expanded="true" />
-                <element signature="e#9473#9474#0" expanded="true" />
+                <element signature="e#9386#9387#0" expanded="true" />
+                <element signature="e#9422#9423#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -798,12 +797,12 @@
       <workItem from="1512737380879" duration="10288000" />
       <workItem from="1512988985269" duration="4384000" />
       <workItem from="1512996881588" duration="4647000" />
-      <workItem from="1513001596283" duration="101000" />
+      <workItem from="1513001596283" duration="295000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25857000" />
+    <option name="totallyTimeSpent" value="26051000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="749" extended-state="6" />
@@ -860,8 +859,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9437#9438#0" expanded="true" />
-            <element signature="e#9473#9474#0" expanded="true" />
+            <element signature="e#9386#9387#0" expanded="true" />
+            <element signature="e#9422#9423#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -908,8 +907,8 @@
           <caret line="190" column="28" lean-forward="false" selection-start-line="190" selection-start-column="16" selection-end-line="190" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9437#9438#0" expanded="true" />
-            <element signature="e#9473#9474#0" expanded="true" />
+            <element signature="e#9386#9387#0" expanded="true" />
+            <element signature="e#9422#9423#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -942,8 +941,8 @@
           <caret line="53" column="53" lean-forward="false" selection-start-line="53" selection-start-column="53" selection-end-line="53" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9437#9438#0" expanded="true" />
-            <element signature="e#9473#9474#0" expanded="true" />
+            <element signature="e#9386#9387#0" expanded="true" />
+            <element signature="e#9422#9423#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -991,8 +990,8 @@
           <caret line="180" column="9" lean-forward="true" selection-start-line="180" selection-start-column="9" selection-end-line="180" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9437#9438#0" expanded="true" />
-            <element signature="e#9473#9474#0" expanded="true" />
+            <element signature="e#9386#9387#0" expanded="true" />
+            <element signature="e#9422#9423#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1253,12 +1252,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/de.hsmannheim/InnsbruckEducationApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="202" column="70" lean-forward="false" selection-start-line="202" selection-start-column="70" selection-end-line="202" selection-end-column="70" />
+        <state relative-caret-position="231">
+          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9437#9438#0" expanded="true" />
-            <element signature="e#9473#9474#0" expanded="true" />
+            <element signature="e#9386#9387#0" expanded="true" />
+            <element signature="e#9422#9423#0" expanded="true" />
           </folding>
         </state>
       </provider>
