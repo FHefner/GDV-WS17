@@ -5,6 +5,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
+import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.MarkerType;
 import de.hsmannheim.models.SchoolBasedEducationalInstitution;
@@ -24,12 +25,7 @@ import java.util.Map;
 
 public class InnsbruckEducationApp extends PApplet {
 
-    private final static String WINDOW_NAME = "Innsbruck Education";
-    private final static String VERSION = "0.1a";
-    private final static int WINDOW_WIDTH = 1280;
-    private final static int WINDOW_HEIGHT = 720;
-    private final static float MAP_X_WINDOW_OFFSET = 0;
-    private final static float MAP_Y_WINDOW_OFFSET = 0;
+
     private UnfoldingMap map;
     private List<SchoolBasedEducationalInstitution> schools;
     private List<UniversityBasedEducationalInstitution> universities;
@@ -40,7 +36,7 @@ public class InnsbruckEducationApp extends PApplet {
     private DistrictUtil districtUtil;
     private boolean mouseWasDragged = false;
     // The starting location (the center of the map) is Innsbruck
-    private Location startingLocation = new Location(47.286526, 11.389389);
+    private Location startingLocation = new Location(FormConfig.XValue, FormConfig.YValue);
     private Location currentMapLocation;
 
     public static void main(String[] args) {
@@ -189,15 +185,15 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private void applyMapSettings() {
-        map = new UnfoldingMap(this, "MAIN_MAP", MAP_X_WINDOW_OFFSET, MAP_Y_WINDOW_OFFSET,
-                WINDOW_WIDTH - MAP_X_WINDOW_OFFSET, WINDOW_HEIGHT - MAP_Y_WINDOW_OFFSET,
+        map = new UnfoldingMap(this, "MAIN_MAP", FormConfig.MAP_X_WINDOW_OFFSET, FormConfig.MAP_Y_WINDOW_OFFSET,
+                FormConfig.WINDOW_WIDTH - FormConfig.MAP_X_WINDOW_OFFSET, FormConfig.WINDOW_HEIGHT - FormConfig.MAP_Y_WINDOW_OFFSET,
                 false, false, new OpenStreetMap.PositronMapProvider());
         MapUtils.createDefaultEventDispatcher(this, map);
         // map.setTweening(true);
     }
 
     public void settings() {
-        size(WINDOW_WIDTH, WINDOW_HEIGHT, FX2D);
+        size(FormConfig.WINDOW_WIDTH, FormConfig.WINDOW_HEIGHT, FX2D);
         applyMapSettings();
         processData();
         resetView();
