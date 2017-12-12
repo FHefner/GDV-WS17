@@ -9,8 +9,7 @@ import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class UrbanDistrict {
 
@@ -19,16 +18,18 @@ public class UrbanDistrict {
     private int zaehlerSprengel = -1;
     private int regionNumber = -1;
     private String name = "undefined";
-    private int amountInhabitants6To9;
-    private int amountInhabitants10To14;
-    private int amountInhabitants15To19;
-    private int amountInhabitants20To24;
-    private int amountInhabitants25To29;
-    private int totalAmountInhabitants;
     private List<Location> locations;
     private ColoredPolygonMarker marker;
     private  boolean isSelected;
     private Integer color;
+
+
+    protected Map<String, Integer> inhabitansBetween6And29 = new HashMap<>();
+
+
+    public Map<String, Integer> getInhabitansBetween6And29(){
+        return this.inhabitansBetween6And29;
+    }
 
     public boolean getIsSelected() {
         return isSelected;
@@ -102,13 +103,21 @@ public class UrbanDistrict {
         this.marker = new ColoredPolygonMarker(this.applet, this.locations, this.color);
     }
 
-    public int getTotalAmountInhabitants() {
-        return totalAmountInhabitants;
-    }
 
     public void calculateTotalInhabitants() {
-        this.totalAmountInhabitants = this.amountInhabitants6To9 + this.amountInhabitants10To14
-                + this.amountInhabitants15To19 + this.amountInhabitants20To24 + this.amountInhabitants25To29;
+        this.inhabitansBetween6And29.put("totalAmountInhabitants", calculateInhabitanSum());
+    }
+
+    protected int calculateInhabitanSum() {
+        return sumAll(this.inhabitansBetween6And29.values());
+    }
+
+    protected int sumAll(Collection<Integer> values) {
+        int result = 0;
+        for(Integer value: values){
+            result+=value;
+        }
+        return result;
     }
 
     public int getZaehlerSprengel() {
@@ -127,54 +136,14 @@ public class UrbanDistrict {
         this.name = name;
     }
 
-    public int getAmountInhabitants6To9() {
-        return amountInhabitants6To9;
-    }
-
-    public void setAmountInhabitants6To9(int amountInhabitants6To9) {
-        this.amountInhabitants6To9 = amountInhabitants6To9;
-    }
-
-    public int getAmountInhabitants10To14() {
-        return amountInhabitants10To14;
-    }
-
-    public void setAmountInhabitants10To14(int amountInhabitants10To14) {
-        this.amountInhabitants10To14 = amountInhabitants10To14;
-    }
-
-    public int getAmountInhabitants15To19() {
-        return amountInhabitants15To19;
-    }
-
-    public void setAmountInhabitants15To19(int amountInhabitants15To19) {
-        this.amountInhabitants15To19 = amountInhabitants15To19;
-    }
-
-    public int getAmountInhabitants20To24() {
-        return amountInhabitants20To24;
-    }
-
-    public void setAmountInhabitants20To24(int amountInhabitants20To24) {
-        this.amountInhabitants20To24 = amountInhabitants20To24;
-    }
-
-    public int getAmountInhabitants25To29() {
-        return amountInhabitants25To29;
-    }
-
-    public void setAmountInhabitants25To29(int amountInhabitants25To29) {
-        this.amountInhabitants25To29 = amountInhabitants25To29;
-    }
-
     public UrbanDistrict(PApplet applet, int zaehlerSprengel, int amountHabitants6To9, int amountHabitants10To14, int amountHabitants15To19, int amountHabitants20To24, int amountHabitants25To29) {
         this.applet = applet;
         this.zaehlerSprengel = zaehlerSprengel;
-        this.amountInhabitants6To9 = amountHabitants6To9;
-        this.amountInhabitants10To14 = amountHabitants10To14;
-        this.amountInhabitants15To19 = amountHabitants15To19;
-        this.amountInhabitants20To24 = amountHabitants20To24;
-        this.amountInhabitants25To29 = amountHabitants25To29;
+        this.inhabitansBetween6And29.put("amountInhabitants6To9", amountHabitants6To9);
+        this.inhabitansBetween6And29.put("amountInhabitants10To14", amountHabitants10To14);
+        this.inhabitansBetween6And29.put("amountInhabitants15To19", amountHabitants15To19);
+        this.inhabitansBetween6And29.put("amountInhabitants20To24", amountHabitants20To24);
+        this.inhabitansBetween6And29.put("amountInhabitants25To29", amountHabitants25To29);
         setMapZaehlerSprengelToRegionNumberAndName();
         extractLocations();
     }
@@ -186,12 +155,12 @@ public class UrbanDistrict {
         StringBuilder output = new StringBuilder();
         output.append(this.zaehlerSprengel);
         output.append(" ").append(this.name).append("\n");
-        output.append("Einwohner 6-9: ").append(String.valueOf(this.amountInhabitants6To9)).append("\n");
-        output.append("Einwohner 10-14: ").append(String.valueOf(this.amountInhabitants10To14)).append("\n");
-        output.append("Einwohner 15-19: ").append(String.valueOf(this.amountInhabitants15To19)).append("\n");
-        output.append("Einwohner 20-24: ").append(String.valueOf(this.amountInhabitants20To24)).append("\n");
-        output.append("Einwohner 25-29: ").append(String.valueOf(this.amountInhabitants25To29)).append("\n");
-        output.append("Gesamteinwohner: ").append(String.valueOf(this.totalAmountInhabitants)).append("\n");
+        output.append("Einwohner 6-9: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants6To9"))).append("\n");
+        output.append("Einwohner 10-14: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants10To14"))).append("\n");
+        output.append("Einwohner 15-19: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants15To19"))).append("\n");
+        output.append("Einwohner 20-24: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants20To24"))).append("\n");
+        output.append("Einwohner 25-29: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants25To29"))).append("\n");
+        output.append("Gesamteinwohner: ").append(String.valueOf(inhabitansBetween6And29.get("totalAmountInhabitants"))).append("\n");
         return output.toString();
     }
 
