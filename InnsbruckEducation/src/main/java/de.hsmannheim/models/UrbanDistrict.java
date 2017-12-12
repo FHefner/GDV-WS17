@@ -14,20 +14,31 @@ import java.util.*;
 public class UrbanDistrict {
 
 
+    protected Map<String, Integer> inhabitansBetween6And29;
     private PApplet applet;
     private int zaehlerSprengel = -1;
     private int regionNumber = -1;
     private String name = "undefined";
     private List<Location> locations;
     private ColoredPolygonMarker marker;
-    private  boolean isSelected;
+    private boolean isSelected;
     private Integer color;
 
 
-    protected Map<String, Integer> inhabitansBetween6And29 = new HashMap<>();
+    public UrbanDistrict(PApplet applet, int zaehlerSprengel, int amountHabitants6To9, int amountHabitants10To14, int amountHabitants15To19, int amountHabitants20To24, int amountHabitants25To29) {
+        this.applet = applet;
+        this.zaehlerSprengel = zaehlerSprengel;
+        this.inhabitansBetween6And29 = new HashMap<>();
+        this.inhabitansBetween6And29.put("amountInhabitants6To9", amountHabitants6To9);
+        this.inhabitansBetween6And29.put("amountInhabitants10To14", amountHabitants10To14);
+        this.inhabitansBetween6And29.put("amountInhabitants15To19", amountHabitants15To19);
+        this.inhabitansBetween6And29.put("amountInhabitants20To24", amountHabitants20To24);
+        this.inhabitansBetween6And29.put("amountInhabitants25To29", amountHabitants25To29);
+        setMapZaehlerSprengelToRegionNumberAndName();
+        extractLocations();
+    }
 
-
-    public Map<String, Integer> getInhabitansBetween6And29(){
+    public Map<String, Integer> getInhabitansBetween6And29() {
         return this.inhabitansBetween6And29;
     }
 
@@ -86,7 +97,7 @@ public class UrbanDistrict {
         locations = new ArrayList<>();
         JSONArray districtJSON = applet.loadJSONArray(PathConfig.GEO_STADTTEILE_JSON_PATH);
         for (int i = 0; i < districtJSON.size(); i++) {
-            if (regionNumberIsEqualToNR(districtJSON,i))
+            if (regionNumberIsEqualToNR(districtJSON, i))
                 locations.addAll(getLocationsFromJSONArray(getDistrictGeometry(districtJSON.getJSONObject(i))));
         }
     }
@@ -103,7 +114,6 @@ public class UrbanDistrict {
         this.marker = new ColoredPolygonMarker(this.applet, this.locations, this.color);
     }
 
-
     public void calculateTotalInhabitants() {
         this.inhabitansBetween6And29.put("totalAmountInhabitants", calculateInhabitanSum());
     }
@@ -114,8 +124,8 @@ public class UrbanDistrict {
 
     protected int sumAll(Collection<Integer> values) {
         int result = 0;
-        for(Integer value: values){
-            result+=value;
+        for (Integer value : values) {
+            result += value;
         }
         return result;
     }
@@ -136,20 +146,6 @@ public class UrbanDistrict {
         this.name = name;
     }
 
-    public UrbanDistrict(PApplet applet, int zaehlerSprengel, int amountHabitants6To9, int amountHabitants10To14, int amountHabitants15To19, int amountHabitants20To24, int amountHabitants25To29) {
-        this.applet = applet;
-        this.zaehlerSprengel = zaehlerSprengel;
-        this.inhabitansBetween6And29.put("amountInhabitants6To9", amountHabitants6To9);
-        this.inhabitansBetween6And29.put("amountInhabitants10To14", amountHabitants10To14);
-        this.inhabitansBetween6And29.put("amountInhabitants15To19", amountHabitants15To19);
-        this.inhabitansBetween6And29.put("amountInhabitants20To24", amountHabitants20To24);
-        this.inhabitansBetween6And29.put("amountInhabitants25To29", amountHabitants25To29);
-        setMapZaehlerSprengelToRegionNumberAndName();
-        extractLocations();
-    }
-
-
-
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
@@ -164,4 +160,7 @@ public class UrbanDistrict {
         return output.toString();
     }
 
+    public void addSpecificInhabitans(String specificInhabitansKey, int value) {
+        this.getInhabitansBetween6And29().put(specificInhabitansKey, this.getInhabitansBetween6And29().get(specificInhabitansKey) + value);
+    }
 }
