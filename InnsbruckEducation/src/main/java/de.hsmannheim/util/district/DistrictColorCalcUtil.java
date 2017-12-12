@@ -1,9 +1,9 @@
-package de.hsmannheim.helper;
+package de.hsmannheim.util.district;
 
 import de.hsmannheim.models.UrbanDistrict;
 import processing.core.PApplet;
 
-public class DistrictColorCalc {
+public class DistrictColorCalcUtil {
 
     public static int calcDistrictColor(UrbanDistrict district, PApplet applet) {
         int populationRange = district.getTotalAmountInhabitants() / 300;

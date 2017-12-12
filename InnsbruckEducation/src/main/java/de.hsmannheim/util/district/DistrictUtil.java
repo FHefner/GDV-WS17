@@ -1,4 +1,4 @@
-package de.hsmannheim.helper;
+package de.hsmannheim.util.district;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.hsmannheim.markers.ColoredPolygonMarker;
@@ -6,7 +6,7 @@ import de.hsmannheim.models.UrbanDistrict;
 
 import java.util.List;
 
-public class DistrictHelper {
+public class DistrictUtil {
 
 
     private final List<UrbanDistrict> districts;
@@ -17,7 +17,7 @@ public class DistrictHelper {
 
     private boolean districtSelected=false;
 
-    public DistrictHelper(List<UrbanDistrict> districts) {
+    public DistrictUtil(List<UrbanDistrict> districts) {
         this.districts=districts;
     }
 

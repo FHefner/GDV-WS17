@@ -1,7 +1,7 @@
 package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
-import de.hsmannheim.helper.DistrictColorCalc;
+import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSpengelMapUtil;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSprengelBasedStrategy;
@@ -14,9 +14,7 @@ import java.util.List;
 
 public class UrbanDistrict {
 
-    private final static String GEO_JSON_PATH = "src/main/resources/data/statistischeStadtteile_headless.geo.json";
-    private final static String MAPPING_CSV_PATH = "src/main/resources/data/zaehlersprengel_filtered.csv";
-    public final static String CSV_DATA_PATH = "src/main/resources/data/bevoelkerung_2017.csv";
+
     private PApplet applet;
     private int zaehlerSprengel = -1;
     private int regionNumber = -1;
@@ -69,7 +67,7 @@ public class UrbanDistrict {
     }
 
     private void setMapZaehlerSprengelToRegionNumberAndName() {
-        ZaehlerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(MAPPING_CSV_PATH, "header"), new ZaehlerSprengelBasedStrategy());
+        ZaehlerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(PathConfig.MAPPING_ZSPRL_CSV_PATH, "header"), new ZaehlerSprengelBasedStrategy());
     }
 
     private List<Location> getLocationsFromJSONArray(JSONArray coordinates) {
@@ -85,7 +83,7 @@ public class UrbanDistrict {
 
     private void extractLocations() {
         locations = new ArrayList<>();
-        JSONArray districtJSON = applet.loadJSONArray(GEO_JSON_PATH);
+        JSONArray districtJSON = applet.loadJSONArray(PathConfig.GEO_STADTTEILE_JSON_PATH);
         for (int i = 0; i < districtJSON.size(); i++) {
             if (regionNumberIsEqualToNR(districtJSON,i))
                 locations.addAll(getLocationsFromJSONArray(getDistrictGeometry(districtJSON.getJSONObject(i))));

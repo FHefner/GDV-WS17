@@ -6,13 +6,14 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 
-import de.hsmannheim.helper.DistrictColorCalc;
+import de.hsmannheim.config.PathConfig;
+import de.hsmannheim.util.district.DistrictColorCalcUtil;
 import de.hsmannheim.markers.MarkerType;
 import de.hsmannheim.models.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.SchoolCategory;
 import de.hsmannheim.models.UniversityBasedEducationalInstitution;
 import de.hsmannheim.models.UrbanDistrict;
-import de.hsmannheim.helper.DistrictHelper;
+import de.hsmannheim.util.district.DistrictUtil;
 
 import processing.core.PApplet;
 import processing.data.Table;
@@ -32,7 +33,7 @@ public class InnsbruckEducationApp extends PApplet {
     private UrbanDistrict selectedDistrict;
     private Map<MarkerType, List<Marker>> markers = new HashMap<>();
     private boolean zoomedIntoDistrict = false;
-    private DistrictHelper districtHelper;
+    private DistrictUtil districtUtil;
     private boolean mouseWasDragged = false;
 
     // The starting location (the center of the map) is Innsbruck
@@ -48,11 +49,11 @@ public class InnsbruckEducationApp extends PApplet {
 
 
     private void initDistrictHelper() {
-        this.districtHelper = new DistrictHelper(districts);
+        this.districtUtil = new DistrictUtil(districts);
     }
 
     private void loadDistricts() {
-        Table districtData = loadTable(UrbanDistrict.CSV_DATA_PATH, "header");
+        Table districtData = loadTable(PathConfig.BEVOELKERUNG_CSV_DATA_PATH, "header");
         districts = new ArrayList<>();
         for (TableRow row : districtData.rows()) {
             int tmpZaehlerSprengel = row.getInt("ZSPR");
@@ -81,14 +82,14 @@ public class InnsbruckEducationApp extends PApplet {
         }
         for (UrbanDistrict district : districts) {
             district.calculateTotalInhabitants();
-            district.setColor(DistrictColorCalc.calcDistrictColor(district, this));
+            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district, this));
             district.createPolygonMarker();
         }
         initDistrictHelper();
     }
 
     private void loadSchoolData() {
-        Table schoolData = loadTable(SchoolBasedEducationalInstitution.CSV_DATA_PATH, "header");
+        Table schoolData = loadTable(PathConfig.HIGHSCHOOL_CSV_DATA_PATH, "header");
         schools = new ArrayList<>();
         for (TableRow row : schoolData.rows()) {
             Location tmpLocation = new Location(
@@ -99,13 +100,13 @@ public class InnsbruckEducationApp extends PApplet {
             String tmpWebsite = row.getString(SchoolBasedEducationalInstitution.WEBSITE_HEADER_FIELD);
             SchoolBasedEducationalInstitution tmpSchool = new SchoolBasedEducationalInstitution(this, SchoolCategory.HIGHER_EDUCATION, tmpName, tmpAddress, tmpLocation);
             tmpSchool.setWebsite(tmpWebsite);
-            tmpSchool.setMarkerImage(loadImage(SchoolBasedEducationalInstitution.MARKER_IMAGE_PATH));
+            tmpSchool.setMarkerImage(loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
             schools.add(tmpSchool);
         }
     }
 
     private void loadUniversityData() {
-        Table universityData = loadTable(UniversityBasedEducationalInstitution.CSV_DATA_PATH, "header");
+        Table universityData = loadTable(PathConfig.UNIVERSITY_CSV_DATA_PATH, "header");
         universities = new ArrayList<>();
         for (TableRow row : universityData.rows()) {
             Location tmpLocation = new Location(
@@ -116,7 +117,7 @@ public class InnsbruckEducationApp extends PApplet {
             String tmpWebsite = row.getString(UniversityBasedEducationalInstitution.WEBSITE_HEADER_FIELD);
             UniversityBasedEducationalInstitution tmpUniversity = new UniversityBasedEducationalInstitution(this, tmpName, tmpAddress, tmpLocation);
             tmpUniversity.setWebsite(tmpWebsite);
-            tmpUniversity.setMarkerImage(loadImage(UniversityBasedEducationalInstitution.MARKER_IMAGE_PATH));
+            tmpUniversity.setMarkerImage(loadImage(PathConfig.UNIVERSITY_MARKER_IMAGE_PATH));
             universities.add(tmpUniversity);
         }
     }
@@ -217,8 +218,8 @@ public class InnsbruckEducationApp extends PApplet {
 
     public void mouseClicked() {
         System.out.println(currentMapLocation.getLat() + ", " + currentMapLocation.getLon());
-        districtHelper.checkIfDistrictIsSelected(map, mouseX, mouseY);
-        if (districtHelper.isDistrictSelected() && !mouseWasDragged) {
+        districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
+        if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
             for (UrbanDistrict district : districts) {
                 changeColorOfSelectedDistrict(district);
             }

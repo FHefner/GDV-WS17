@@ -2,21 +2,13 @@ package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
+import de.hsmannheim.config.PathConfig;
 import processing.core.PApplet;
 
 public class SchoolBasedEducationalInstitution extends AbstractEducationalInstitution {
+
     private SchoolCategory category;
 
-    /* Constants */
-    public final static String MARKER_IMAGE_PATH = "src/main/resources/img/school.png";
-    public final static String CSV_DATA_PATH = "src/main/resources/data/hoeher_bildende_schulen.csv";
-    public final static String NAME_HEADER_FIELD = "Bezeichnung";
-    public final static String ADDRESS_HEADER_FIELD = "Adresse";
-    public final static String WEBSITE_HEADER_FIELD = "Link";
-    public final static String LOCATION_X_HEADER_FIELD = "Lat";
-    public final static String LOCATION_Y_HEADER_FIELD = "Lon";
-
-    private Integer color;
 
     public SchoolCategory getCategory() {
         return category;
@@ -38,7 +30,7 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
     public SchoolBasedEducationalInstitution(PApplet applet, SchoolCategory category, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
         super(applet, name, address, website, location, capacity, currentPeopleAmount);
         this.category = category;
-        setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        setMarkerImage(applet.loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
         createMarker();
 
     }
@@ -46,7 +38,7 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
     public SchoolBasedEducationalInstitution(PApplet applet, SchoolCategory category, String name, String address, Location location) {
         super(applet, name, address, location);
         this.category = category;
-        setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        setMarkerImage(applet.loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
         setSchoolColorBasedOnCategory(applet);
         createMarker();
     }
@@ -54,7 +46,7 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
     public SchoolBasedEducationalInstitution(PApplet applet, SchoolCategory category, Location location) {
         super(applet, location);
         this.category = category;
-        setMarkerImage(applet.loadImage(MARKER_IMAGE_PATH));
+        setMarkerImage(applet.loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
         setSchoolColorBasedOnCategory(applet);
         createMarker();
     }

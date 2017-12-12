@@ -17,6 +17,16 @@ public abstract class AbstractEducationalInstitution implements IEducationalInst
     private PImage markerImage;
     private PApplet applet;
 
+    Integer color;
+
+
+    public final static String NAME_HEADER_FIELD = "Bezeichnung";
+    public final static String ADDRESS_HEADER_FIELD = "Adresse";
+    public final static String WEBSITE_HEADER_FIELD = "Link";
+    public final static String LOCATION_X_HEADER_FIELD = "Lat";
+    public final static String LOCATION_Y_HEADER_FIELD = "Lon";
+
+
     public abstract void createMarker();
 
     public Marker getMarker() {
