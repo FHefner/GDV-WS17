@@ -8,18 +8,20 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.MarkerType;
+import de.hsmannheim.models.ColorMarker;
+import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
+import de.hsmannheim.models.education.school.SchoolBasedCategory;
 import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.education.university.UniversityBasedCategory;
 import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
-import de.hsmannheim.models.UrbanDistrict;
-import de.hsmannheim.models.education.school.SchoolBasedCategory;
 import de.hsmannheim.util.district.DistrictColorCalcUtil;
 import de.hsmannheim.util.district.DistrictUtil;
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,25 +105,13 @@ public class InnsbruckEducationApp extends PApplet {
 
     private List<Marker> getMarkersForMakerType(MarkerType markerType) {
         List<Marker> markerList = new ArrayList<>();
-        switch (markerType) {
-            case DISTRICT_MARKER: {
-                for (UrbanDistrict d : districts) {
-                    markerList.add(d.getMarker());
-                }
-                break;
+        Field objects = MarkerType.markerTypeToStrategy.get(markerType.name());
+        try {
+            for (ColorMarker entry : (List<ColorMarker>) objects.get(this)) {
+                markerList.add(entry.getMarker());
             }
-            case SCHOOL_MARKER: {
-                for (AbstractEducationalInstitution s : schools) {
-                    markerList.add(s.getMarker());
-                }
-                break;
-            }
-            case UNIVERSITY_MARKER: {
-                for (AbstractEducationalInstitution u : universities) {
-                    markerList.add(u.getMarker());
-                }
-                break;
-            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
         return markerList;
     }

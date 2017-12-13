@@ -9,9 +9,11 @@ import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
-public class UrbanDistrict {
+public class UrbanDistrict implements ColorMarker {
 
 
     protected Map<String, Integer> inhabitansBetween6And29;
