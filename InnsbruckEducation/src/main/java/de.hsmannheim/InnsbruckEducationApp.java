@@ -8,10 +8,12 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.MarkerType;
-import de.hsmannheim.models.SchoolBasedEducationalInstitution;
-import de.hsmannheim.models.SchoolCategory;
-import de.hsmannheim.models.UniversityBasedEducationalInstitution;
+import de.hsmannheim.models.education.AbstractEducationalInstitution;
+import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
+import de.hsmannheim.models.education.university.UniversityBasedCategory;
+import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
 import de.hsmannheim.models.UrbanDistrict;
+import de.hsmannheim.models.education.school.SchoolBasedCategory;
 import de.hsmannheim.util.district.DistrictColorCalcUtil;
 import de.hsmannheim.util.district.DistrictUtil;
 import processing.core.PApplet;
@@ -27,8 +29,8 @@ public class InnsbruckEducationApp extends PApplet {
 
 
     private UnfoldingMap map;
-    private List<SchoolBasedEducationalInstitution> schools;
-    private List<UniversityBasedEducationalInstitution> universities;
+    private List<AbstractEducationalInstitution> schools;
+    private List<AbstractEducationalInstitution> universities;
     private List<UrbanDistrict> districts;
     private UrbanDistrict selectedDistrict;
     private Map<MarkerType, List<Marker>> markers = new HashMap<>();
@@ -87,16 +89,7 @@ public class InnsbruckEducationApp extends PApplet {
         Table schoolData = loadTable(PathConfig.HIGHSCHOOL_CSV_DATA_PATH, "header");
         schools = new ArrayList<>();
         for (TableRow row : schoolData.rows()) {
-            Location tmpLocation = new Location(
-                    row.getFloat(SchoolBasedEducationalInstitution.LOCATION_X_HEADER_FIELD),
-                    row.getFloat(SchoolBasedEducationalInstitution.LOCATION_Y_HEADER_FIELD));
-            String tmpName = row.getString(SchoolBasedEducationalInstitution.NAME_HEADER_FIELD);
-            String tmpAddress = row.getString(SchoolBasedEducationalInstitution.ADDRESS_HEADER_FIELD);
-            String tmpWebsite = row.getString(SchoolBasedEducationalInstitution.WEBSITE_HEADER_FIELD);
-            SchoolBasedEducationalInstitution tmpSchool = new SchoolBasedEducationalInstitution(this, SchoolCategory.HIGHER_EDUCATION, tmpName, tmpAddress, tmpLocation);
-            tmpSchool.setWebsite(tmpWebsite);
-            tmpSchool.setMarkerImage(loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
-            schools.add(tmpSchool);
+            schools.add(new SchoolBasedEducationalInstitution().buildDefaultEducationalInstitution(this, row, SchoolBasedCategory.HIGHER_EDUCATION));
         }
     }
 
@@ -104,16 +97,7 @@ public class InnsbruckEducationApp extends PApplet {
         Table universityData = loadTable(PathConfig.UNIVERSITY_CSV_DATA_PATH, "header");
         universities = new ArrayList<>();
         for (TableRow row : universityData.rows()) {
-            Location tmpLocation = new Location(
-                    row.getFloat(UniversityBasedEducationalInstitution.LOCATION_X_HEADER_FIELD),
-                    row.getFloat(UniversityBasedEducationalInstitution.LOCATION_Y_HEADER_FIELD));
-            String tmpName = row.getString(UniversityBasedEducationalInstitution.NAME_HEADER_FIELD);
-            String tmpAddress = row.getString(UniversityBasedEducationalInstitution.ADDRESS_HEADER_FIELD);
-            String tmpWebsite = row.getString(UniversityBasedEducationalInstitution.WEBSITE_HEADER_FIELD);
-            UniversityBasedEducationalInstitution tmpUniversity = new UniversityBasedEducationalInstitution(this, tmpName, tmpAddress, tmpLocation);
-            tmpUniversity.setWebsite(tmpWebsite);
-            tmpUniversity.setMarkerImage(loadImage(PathConfig.UNIVERSITY_MARKER_IMAGE_PATH));
-            universities.add(tmpUniversity);
+            universities.add(new UniversityBasedEducationalInstitution().buildDefaultEducationalInstitution(this, row, UniversityBasedCategory.DEFAULT));
         }
     }
 
@@ -127,13 +111,13 @@ public class InnsbruckEducationApp extends PApplet {
                 break;
             }
             case SCHOOL_MARKER: {
-                for (SchoolBasedEducationalInstitution s : schools) {
+                for (AbstractEducationalInstitution s : schools) {
                     markerList.add(s.getMarker());
                 }
                 break;
             }
             case UNIVERSITY_MARKER: {
-                for (UniversityBasedEducationalInstitution u : universities) {
+                for (AbstractEducationalInstitution u : universities) {
                     markerList.add(u.getMarker());
                 }
                 break;

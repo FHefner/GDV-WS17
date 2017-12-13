@@ -1,4 +1,4 @@
-package de.hsmannheim.models;
+package de.hsmannheim.models.education;
 
 public enum EducationType {
     SCHOOL,

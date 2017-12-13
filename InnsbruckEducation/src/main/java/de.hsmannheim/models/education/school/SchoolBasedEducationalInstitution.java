@@ -1,20 +1,24 @@
-package de.hsmannheim.models;
+package de.hsmannheim.models.education.school;
 
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.hsmannheim.config.PathConfig;
+import de.hsmannheim.models.education.AbstractEducationalInstitution;
 import processing.core.PApplet;
 
 public class SchoolBasedEducationalInstitution extends AbstractEducationalInstitution {
 
-    private SchoolCategory category;
+    private SchoolBasedCategory category;
 
+    protected final String GET_MARKER_IMAGE_PATH() {
+        return PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH;
+    }
 
-    public SchoolCategory getCategory() {
+    public SchoolBasedCategory getCategory() {
         return category;
     }
 
-    public void setCategory(SchoolCategory category) {
+    public void setCategory(SchoolBasedCategory category) {
         this.category = category;
     }
 
@@ -25,30 +29,6 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
                 break;
             }
         }
-    }
-
-    public SchoolBasedEducationalInstitution(PApplet applet, SchoolCategory category, String name, String address, String website, Location location, int capacity, int currentPeopleAmount) {
-        super(applet, name, address, website, location, capacity, currentPeopleAmount);
-        this.category = category;
-        setMarkerImage(applet.loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
-        createMarker();
-
-    }
-
-    public SchoolBasedEducationalInstitution(PApplet applet, SchoolCategory category, String name, String address, Location location) {
-        super(applet, name, address, location);
-        this.category = category;
-        setMarkerImage(applet.loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
-        setSchoolColorBasedOnCategory(applet);
-        createMarker();
-    }
-
-    public SchoolBasedEducationalInstitution(PApplet applet, SchoolCategory category, Location location) {
-        super(applet, location);
-        this.category = category;
-        setMarkerImage(applet.loadImage(PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH));
-        setSchoolColorBasedOnCategory(applet);
-        createMarker();
     }
 
     public void setShownOnMap(boolean shownOnMap) {
