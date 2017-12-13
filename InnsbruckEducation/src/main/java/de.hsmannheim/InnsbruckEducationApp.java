@@ -8,7 +8,6 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.MarkerType;
-import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
 import de.hsmannheim.models.education.school.SchoolBasedCategory;
@@ -17,11 +16,12 @@ import de.hsmannheim.models.education.university.UniversityBasedCategory;
 import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
 import de.hsmannheim.util.district.DistrictColorCalcUtil;
 import de.hsmannheim.util.district.DistrictUtil;
+import de.hsmannheim.util.marker.MarkerTypeUtil;
+import de.hsmannheim.util.unfoldingMap.UnfoldingMapUtil;
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +30,10 @@ import java.util.Map;
 public class InnsbruckEducationApp extends PApplet {
 
 
+    public List<AbstractEducationalInstitution> schools;
+    public List<AbstractEducationalInstitution> universities;
+    public List<UrbanDistrict> districts;
     private UnfoldingMap map;
-    private List<AbstractEducationalInstitution> schools;
-    private List<AbstractEducationalInstitution> universities;
-    private List<UrbanDistrict> districts;
     private UrbanDistrict selectedDistrict;
     private Map<MarkerType, List<Marker>> markers = new HashMap<>();
     private boolean zoomedIntoDistrict = false;
@@ -55,24 +55,12 @@ public class InnsbruckEducationApp extends PApplet {
         Table districtData = loadTable(PathConfig.BEVOELKERUNG_CSV_DATA_PATH, "header");
         districts = new ArrayList<>();
         for (TableRow row : districtData.rows()) {
-            int tmpZaehlerSprengel = row.getInt("ZSPR");
-            int tmp6to9 = row.getInt("6_9");
-            int tmp10to14 = row.getInt("10_14");
-            int tmp15to19 = row.getInt("15_19");
-            int tmp20to24 = row.getInt("20_24");
-            int tmp25to29 = row.getInt("25_29");
-            UrbanDistrict tmpDistrict = new UrbanDistrict(
-                    this, tmpZaehlerSprengel, tmp6to9, tmp10to14,
-                    tmp15to19, tmp20to24, tmp25to29);
+            UrbanDistrict tmpDistrict = UrbanDistrict.buildDefaultDistrict(this, row);
             boolean districtAlreadyExisting = false;
             for (UrbanDistrict district : districts) {
                 if (district.getRegionNumber() == tmpDistrict.getRegionNumber() && !districtAlreadyExisting) {
                     districtAlreadyExisting = true;
-                    district.addSpecificInhabitans("amountInhabitants6To9", tmp6to9);
-                    district.addSpecificInhabitans("amountInhabitants10To14", tmp10to14);
-                    district.addSpecificInhabitans("amountInhabitants15To19", tmp15to19);
-                    district.addSpecificInhabitans("amountInhabitants20To24", tmp20to24);
-                    district.addSpecificInhabitans("amountInhabitants25To29", tmp25to29);
+                    DistrictUtil.addSpecificInhabitans(district, tmpDistrict);
                 }
             }
             if (!districtAlreadyExisting) {
@@ -103,28 +91,10 @@ public class InnsbruckEducationApp extends PApplet {
         }
     }
 
-    private List<Marker> getMarkersForMakerType(MarkerType markerType) {
-        List<Marker> markerList = new ArrayList<>();
-        Field objects = MarkerType.markerTypeToStrategy.get(markerType.name());
-        try {
-            for (ColorMarker entry : (List<ColorMarker>) objects.get(this)) {
-                markerList.add(entry.getMarker());
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return markerList;
-    }
 
     private void addMarkersToMap() {
-
-        markers.put(MarkerType.SCHOOL_MARKER, getMarkersForMakerType(MarkerType.SCHOOL_MARKER));
-        markers.put(MarkerType.UNIVERSITY_MARKER, getMarkersForMakerType(MarkerType.UNIVERSITY_MARKER));
-        markers.put(MarkerType.DISTRICT_MARKER, getMarkersForMakerType(MarkerType.DISTRICT_MARKER));
-
-        map.addMarkers(markers.get(MarkerType.DISTRICT_MARKER));
-        map.addMarkers(markers.get(MarkerType.SCHOOL_MARKER));
-        map.addMarkers(markers.get(MarkerType.UNIVERSITY_MARKER));
+        markers = MarkerTypeUtil.getAllMarkersForAllMarkerType(this);
+        map = UnfoldingMapUtil.addMarkersToUnfoldingMap(map, markers);
     }
 
     private void processData() {

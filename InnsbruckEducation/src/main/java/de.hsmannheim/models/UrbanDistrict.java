@@ -4,19 +4,19 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.markers.ColoredPolygonMarker;
+import de.hsmannheim.util.district.DistrictUtil;
+import de.hsmannheim.util.location.LocationUtil;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSpengelMapUtil;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSprengelBasedStrategy;
 import processing.core.PApplet;
-import processing.data.JSONArray;
-import processing.data.JSONObject;
+import processing.data.TableRow;
 
 import java.util.*;
-import java.util.List;
 
 public class UrbanDistrict implements ColorMarker {
 
 
-    protected Map<String, Integer> inhabitansBetween6And29;
+    protected Map<String, Integer> inhabitansBetween6And29 = new HashMap<>();
     private PApplet applet;
     private int zaehlerSprengel = -1;
     private int regionNumber = -1;
@@ -26,18 +26,73 @@ public class UrbanDistrict implements ColorMarker {
     private boolean isSelected;
     private Integer color;
 
+    private UrbanDistrict() {
 
-    public UrbanDistrict(PApplet applet, int zaehlerSprengel, int amountHabitants6To9, int amountHabitants10To14, int amountHabitants15To19, int amountHabitants20To24, int amountHabitants25To29) {
+    }
+
+    public static UrbanDistrict buildDefaultDistrict(PApplet applet, TableRow row) {
+        return new UrbanDistrict()
+                .withApplet(applet)
+                .withZaehlerSprengel(row.getInt("ZSPR"))
+                .withKeyValuePairs(new LinkedHashMap<String, String>() {{
+                    put("amountInhabitants6To9", "6_9");
+                    put("amountInhabitants10To14", "10_14");
+                    put("amountInhabitants15To19", "15_19");
+                    put("amountInhabitants20To24", "20_24");
+                    put("amountInhabitants25To29", "25_29");
+
+                }}, row)
+                .withZaehlerSprengelToRegionNumberAndName()
+                .withLocations(applet);
+
+    }
+
+    private UrbanDistrict withZaehlerSprengel(int zspr) {
+        this.zaehlerSprengel = zspr;
+        return this;
+    }
+
+    private UrbanDistrict withApplet(PApplet applet) {
         this.applet = applet;
-        this.zaehlerSprengel = zaehlerSprengel;
-        this.inhabitansBetween6And29 = new HashMap<>();
-        this.inhabitansBetween6And29.put("amountInhabitants6To9", amountHabitants6To9);
-        this.inhabitansBetween6And29.put("amountInhabitants10To14", amountHabitants10To14);
-        this.inhabitansBetween6And29.put("amountInhabitants15To19", amountHabitants15To19);
-        this.inhabitansBetween6And29.put("amountInhabitants20To24", amountHabitants20To24);
-        this.inhabitansBetween6And29.put("amountInhabitants25To29", amountHabitants25To29);
-        setMapZaehlerSprengelToRegionNumberAndName();
-        extractLocations();
+        return this;
+    }
+
+    private UrbanDistrict withKeyValuePairs(LinkedHashMap<String, String> inhabitantsMap, TableRow row) {
+        for (Map.Entry<String, String> entry : inhabitantsMap.entrySet()) {
+            this.inhabitansBetween6And29.put(entry.getKey(), row.getInt(entry.getValue()));
+        }
+        return this;
+    }
+
+    private UrbanDistrict withZaehlerSprengelToRegionNumberAndName() {
+        ZaehlerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(PathConfig.MAPPING_ZSPRL_CSV_PATH, "header"), new ZaehlerSprengelBasedStrategy());
+        return this;
+    }
+
+    private UrbanDistrict withLocations(PApplet applet) {
+        locations = LocationUtil.extractLocations(applet, this);
+        return this;
+    }
+
+    public void createPolygonMarker() {
+        this.marker = new ColoredPolygonMarker(this.applet, this.locations, this.color);
+    }
+
+    public void calculateTotalInhabitants() {
+        this.inhabitansBetween6And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitanSum(this));
+    }
+
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.zaehlerSprengel) +
+                " " + this.name + "\n" +
+                "Einwohner 6-9: " + String.valueOf(inhabitansBetween6And29.get("amountInhabitants6To9")) + "\n" +
+                "Einwohner 10-14: " + String.valueOf(inhabitansBetween6And29.get("amountInhabitants10To14")) + "\n" +
+                "Einwohner 15-19: " + String.valueOf(inhabitansBetween6And29.get("amountInhabitants15To19")) + "\n" +
+                "Einwohner 20-24: " + String.valueOf(inhabitansBetween6And29.get("amountInhabitants20To24")) + "\n" +
+                "Einwohner 25-29: " + String.valueOf(inhabitansBetween6And29.get("amountInhabitants25To29")) + "\n" +
+                "Gesamteinwohner: " + String.valueOf(inhabitansBetween6And29.get("totalAmountInhabitants")) + "\n";
     }
 
     public Map<String, Integer> getInhabitansBetween6And29() {
@@ -80,58 +135,6 @@ public class UrbanDistrict implements ColorMarker {
         this.regionNumber = regionNumber;
     }
 
-    private void setMapZaehlerSprengelToRegionNumberAndName() {
-        ZaehlerSpengelMapUtil.traverseOverTableAndSetResult(this, applet.loadTable(PathConfig.MAPPING_ZSPRL_CSV_PATH, "header"), new ZaehlerSprengelBasedStrategy());
-    }
-
-    private List<Location> getLocationsFromJSONArray(JSONArray coordinates) {
-        List<Location> locations = new ArrayList<>();
-        for (int i = 0; i < coordinates.size(); i++) {
-            JSONArray coordinate = coordinates.getJSONArray(i);
-            float lat = coordinate.getFloat(1);
-            float lon = coordinate.getFloat(0);
-            locations.add(new Location(lat, lon));
-        }
-        return locations;
-    }
-
-    private void extractLocations() {
-        locations = new ArrayList<>();
-        JSONArray districtJSON = applet.loadJSONArray(PathConfig.GEO_STADTTEILE_JSON_PATH);
-        for (int i = 0; i < districtJSON.size(); i++) {
-            if (regionNumberIsEqualToNR(districtJSON, i))
-                locations.addAll(getLocationsFromJSONArray(getDistrictGeometry(districtJSON.getJSONObject(i))));
-        }
-    }
-
-    private boolean regionNumberIsEqualToNR(JSONArray districtJSON, int index) {
-        return districtJSON.getJSONObject(index).getJSONObject("properties").getInt("NR") == this.regionNumber;
-    }
-
-    private JSONArray getDistrictGeometry(JSONObject districtObject) {
-        return districtObject.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0);
-    }
-
-    public void createPolygonMarker() {
-        this.marker = new ColoredPolygonMarker(this.applet, this.locations, this.color);
-    }
-
-    public void calculateTotalInhabitants() {
-        this.inhabitansBetween6And29.put("totalAmountInhabitants", calculateInhabitanSum());
-    }
-
-    protected int calculateInhabitanSum() {
-        return sumAll(this.inhabitansBetween6And29.values());
-    }
-
-    protected int sumAll(Collection<Integer> values) {
-        int result = 0;
-        for (Integer value : values) {
-            result += value;
-        }
-        return result;
-    }
-
     public int getZaehlerSprengel() {
         return zaehlerSprengel;
     }
@@ -146,23 +149,5 @@ public class UrbanDistrict implements ColorMarker {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder output = new StringBuilder();
-        output.append(this.zaehlerSprengel);
-        output.append(" ").append(this.name).append("\n");
-        output.append("Einwohner 6-9: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants6To9"))).append("\n");
-        output.append("Einwohner 10-14: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants10To14"))).append("\n");
-        output.append("Einwohner 15-19: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants15To19"))).append("\n");
-        output.append("Einwohner 20-24: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants20To24"))).append("\n");
-        output.append("Einwohner 25-29: ").append(String.valueOf(inhabitansBetween6And29.get("amountInhabitants25To29"))).append("\n");
-        output.append("Gesamteinwohner: ").append(String.valueOf(inhabitansBetween6And29.get("totalAmountInhabitants"))).append("\n");
-        return output.toString();
-    }
-
-    public void addSpecificInhabitans(String specificInhabitansKey, int value) {
-        this.getInhabitansBetween6And29().put(specificInhabitansKey, this.getInhabitansBetween6And29().get(specificInhabitansKey) + value);
     }
 }
