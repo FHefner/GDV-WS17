@@ -8,7 +8,7 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.MarkerType;
-import de.hsmannheim.models.ColorMarker;
+import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
 import de.hsmannheim.models.education.school.SchoolBasedCategory;

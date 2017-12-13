@@ -1,4 +1,4 @@
-package de.hsmannheim.models;
+package de.hsmannheim.markers;
 
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.hsmannheim.markers.ColoredPolygonMarker;

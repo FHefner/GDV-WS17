@@ -2,14 +2,11 @@ package de.hsmannheim.models.education;
 
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
-import de.hsmannheim.config.PathConfig;
-import de.hsmannheim.models.ColorMarker;
+import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.TableRow;
-
-import java.util.Arrays;
 
 public abstract class AbstractEducationalInstitution implements ColorMarker{
 
