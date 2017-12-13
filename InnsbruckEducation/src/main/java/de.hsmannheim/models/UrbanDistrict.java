@@ -79,7 +79,7 @@ public class UrbanDistrict implements ColorMarker {
     }
 
     public void calculateTotalInhabitants() {
-        this.inhabitansBetween6And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitanSum(this));
+        this.inhabitansBetween6And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitansSum(this));
     }
 
 
