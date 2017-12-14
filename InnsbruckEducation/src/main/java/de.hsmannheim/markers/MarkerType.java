@@ -16,7 +16,7 @@ public enum MarkerType {
         try {
             put(SCHOOL_MARKER.name(), InnsbruckEducationApp.class.getDeclaredField("schools"));
             put(UNIVERSITY_MARKER.name(), InnsbruckEducationApp.class.getDeclaredField("universities"));
-            put(DISTRICT_MARKER.name(), InnsbruckEducationApp.class.getDeclaredField("districts"));
+            put(DISTRICT_MARKER.name(), InnsbruckEducationApp.class.getDeclaredField("allDistricts"));
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
