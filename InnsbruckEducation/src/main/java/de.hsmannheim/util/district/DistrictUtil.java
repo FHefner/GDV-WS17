@@ -33,7 +33,7 @@ public class DistrictUtil {
         return key.contains("amountInhabitants");
     }
 
-    public static Integer calculateInhabitanSum(UrbanDistrict urbanDistrict) {
+    public static Integer calculateInhabitansSum(UrbanDistrict urbanDistrict) {
         return sumAll(urbanDistrict.getInhabitansBetween6And29().values());
     }
 
