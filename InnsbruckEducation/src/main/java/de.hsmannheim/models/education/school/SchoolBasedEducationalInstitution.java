@@ -1,6 +1,5 @@
 package de.hsmannheim.models.education.school;
 
-import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
@@ -11,7 +10,7 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
     private SchoolBasedCategory category;
 
     protected final String GET_MARKER_IMAGE_PATH() {
-        return PathConfig.HIGHSCHOOL_MARKER_IMAGE_PATH;
+        return PathConfig.HIGHER_EDUCATION_MARKER_IMAGE_PATH;
     }
 
     public SchoolBasedCategory getCategory() {

@@ -15,6 +15,6 @@ public class FormConfig {
     public final static float MAP_Y_WINDOW_OFFSET = 0;
 
 
-    public final static float XValue=47.286526f;
-    public final static float YValue=11.389389f;
+    public final static float XStartLocation =47.286526f;
+    public final static float YStartLocation =11.389389f;
 }

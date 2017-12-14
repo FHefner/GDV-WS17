@@ -40,7 +40,7 @@ public class InnsbruckEducationApp extends PApplet {
     private DistrictUtil districtUtil;
     private boolean mouseWasDragged = false;
     // The starting location (the center of the map) is Innsbruck
-    private Location startingLocation = new Location(FormConfig.XValue, FormConfig.YValue);
+    private Location startingLocation = new Location(FormConfig.XStartLocation, FormConfig.YStartLocation);
     private Location currentMapLocation;
 
     public static void main(String[] args) {
@@ -75,12 +75,22 @@ public class InnsbruckEducationApp extends PApplet {
         initDistrictHelper();
     }
 
-    private void loadSchoolData() {
-        Table schoolData = loadTable(PathConfig.HIGHSCHOOL_CSV_DATA_PATH, "header");
-        schools = new ArrayList<>();
+    private  void loadSchoolCategoryFromCSV (String path, SchoolBasedCategory schoolBasedCategory) {
+        Table schoolData = loadTable(path, "header");
+        if (schools == null) schools = new ArrayList<>();
         for (TableRow row : schoolData.rows()) {
-            schools.add(new SchoolBasedEducationalInstitution().buildDefaultEducationalInstitution(this, row, SchoolBasedCategory.HIGHER_EDUCATION));
+            schools.add(new SchoolBasedEducationalInstitution().buildDefaultEducationalInstitution(this, row, schoolBasedCategory));
         }
+    }
+
+    private void loadSchoolData() {
+        loadSchoolCategoryFromCSV(PathConfig.HIGHER_EDUCATION_CSV_DATA_PATH, SchoolBasedCategory.HIGHER_EDUCATION);
+        System.out.println("School Size 1: " +schools.size());
+        loadSchoolCategoryFromCSV(PathConfig.SPECIAL_SCHOOLS_CSV_DATA_PATH, SchoolBasedCategory.SPECIAL);
+        System.out.println("School Size 2: " +schools.size());
+        loadSchoolCategoryFromCSV(PathConfig.ELEMENTARY_SCHOOLS_CSV_DATA_PATH, SchoolBasedCategory.PRIMARY);
+        System.out.println("School Size 3: " +schools.size());
+
     }
 
     private void loadUniversityData() {
@@ -156,7 +166,6 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     public void mouseClicked() {
-        System.out.println(currentMapLocation.getLat() + ", " + currentMapLocation.getLon());
         districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
         if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
             for (UrbanDistrict district : districts) {

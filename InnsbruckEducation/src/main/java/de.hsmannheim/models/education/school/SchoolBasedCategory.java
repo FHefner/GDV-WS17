@@ -17,9 +17,9 @@ public enum SchoolBasedCategory implements ICategory {
     }};
 
     protected static Map<String, int[]> schoolCategoryNameToColor = new HashMap<String, int[]>() {{
-        put(HIGHER_EDUCATION.name(), new int[]{15, 132, 0});
-        put(PRIMARY.name(), new int[]{15, 132, 0});
-        put(SPECIAL.name(), new int[]{15, 132, 0});
+        put(HIGHER_EDUCATION.name(), new int[]{115, 134, 52});
+        put(PRIMARY.name(), new int[]{156,194,34});
+        put(SPECIAL.name(), new int[]{192,247,12});
     }};
 
     public Map<String, String> getCategoryNameToString() {
