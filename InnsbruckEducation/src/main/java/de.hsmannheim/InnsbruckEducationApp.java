@@ -14,7 +14,6 @@ import de.hsmannheim.models.education.school.SchoolBasedCategory;
 import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.education.university.UniversityBasedCategory;
 import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
-import de.hsmannheim.util.district.DistrictColorCalcUtil;
 import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import de.hsmannheim.util.marker.MarkerTypeUtil;
@@ -33,7 +32,7 @@ public class InnsbruckEducationApp extends PApplet {
 
     public List<AbstractEducationalInstitution> schools;
     public List<AbstractEducationalInstitution> universities;
-    public List<UrbanDistrict> allDistricts = new ArrayList<>();
+    public List<UrbanDistrict> allDistrictsList= new ArrayList<>();
     private UnfoldingMap map;
     private UrbanDistrict selectedDistrict;
     private Map<MarkerType, List<Marker>> markers = new HashMap<>();
@@ -46,34 +45,19 @@ public class InnsbruckEducationApp extends PApplet {
         PApplet.main(InnsbruckEducationApp.class.getName());
     }
 
-    private void setDistrictColorsBasedOnPopulation() {
-        for (UrbanDistrict district : allDistricts) {
-            district.calculateTotalInhabitants();
-            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district, this));
-            district.createPolygonMarker();
-        }
-    }
+    private void initDistrictUtil(){districtUtil=new DistrictUtil(allDistrictsList); }
 
-    private void loadDistricts() {
+    private void loadDistrictColorAndInhabitantInformation() {
         Table districtData = loadTable(PathConfig.BEVOELKERUNG_CSV_DATA_PATH, "header");
+        initDistrictUtil();
         for (TableRow row : districtData.rows()) {
             UrbanDistrict tmpDistrict = UrbanDistrict.buildDefaultDistrict(this, row);
-            boolean districtAlreadyExisting = false;
-            for (int i = 0; i < allDistricts.size(); i++) {
-                if (allDistricts.get(i).getRegionNumber() == tmpDistrict.getRegionNumber() && !districtAlreadyExisting) {
-                    districtAlreadyExisting = true;
-                    allDistricts.set(i, DistrictUtil.addSpecificInhabitans(allDistricts.get(i), tmpDistrict));
-                }
-            }
-            if (!districtAlreadyExisting) {
-                allDistricts.add(tmpDistrict);
-            }
+            districtUtil.setDistrictInhabitantsInformation(tmpDistrict);
         }
-        setDistrictColorsBasedOnPopulation();
-        this.districtUtil = new DistrictUtil(allDistricts);
+        districtUtil.setDistrictColorsBasedOnPopulation(this);
     }
 
-    private  void loadSchoolCategoryFromCSV (String path, SchoolBasedCategory schoolBasedCategory) {
+    private void loadSchoolCategoryFromCSV(String path, SchoolBasedCategory schoolBasedCategory) {
         Table schoolData = loadTable(path, "header");
         if (schools == null) schools = new ArrayList<>();
         for (TableRow row : schoolData.rows()) {
@@ -103,7 +87,7 @@ public class InnsbruckEducationApp extends PApplet {
     private void processData() {
         loadSchoolData();
         loadUniversityData();
-        loadDistricts();
+        loadDistrictColorAndInhabitantInformation();
         addMarkersToMap();
     }
 
@@ -117,7 +101,7 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private void resetDistrictColors() {
-        for (UrbanDistrict district : allDistricts) {
+        for (UrbanDistrict district : allDistrictsList) {
             district.getMarker().resetColor();
         }
     }
@@ -160,7 +144,7 @@ public class InnsbruckEducationApp extends PApplet {
     public void mouseClicked() {
         districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
         if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
-            for (UrbanDistrict district : allDistricts) {
+            for (UrbanDistrict district : allDistrictsList) {
                 changeColorOfSelectedDistrict(district);
             }
         }
@@ -171,7 +155,7 @@ public class InnsbruckEducationApp extends PApplet {
         for (Marker marker : markers.get(markerType)) {
             float markerXPosition = MarkerScreenLocationUtil.getScreenXPositionFromMarker(map, marker);
             float markerYPosition = MarkerScreenLocationUtil.getScreenYPositionFromMarker(map, marker);
-            if (selectedDistrict.getMarker().isInside(map,markerXPosition, markerYPosition)) {
+            if (selectedDistrict.getMarker().isInside(map, markerXPosition, markerYPosition)) {
                 marker.setHidden(false);
             }
         }
