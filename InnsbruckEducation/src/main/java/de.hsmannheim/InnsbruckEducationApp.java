@@ -57,10 +57,10 @@ public class InnsbruckEducationApp extends PApplet {
         for (TableRow row : districtData.rows()) {
             UrbanDistrict tmpDistrict = UrbanDistrict.buildDefaultDistrict(this, row);
             boolean districtAlreadyExisting = false;
-            for (UrbanDistrict district : districts) {
-                if (district.getRegionNumber() == tmpDistrict.getRegionNumber() && !districtAlreadyExisting) {
+            for (int districtStelle=0; districtStelle < districts.size(); districtStelle++) {
+                if (districts.get(districtStelle).getRegionNumber() == tmpDistrict.getRegionNumber() && !districtAlreadyExisting) {
                     districtAlreadyExisting = true;
-                    DistrictUtil.addSpecificInhabitans(district, tmpDistrict);
+                    districts.set(districtStelle, DistrictUtil.addSpecificInhabitans(districts.get(districtStelle), tmpDistrict));
                 }
             }
             if (!districtAlreadyExisting) {

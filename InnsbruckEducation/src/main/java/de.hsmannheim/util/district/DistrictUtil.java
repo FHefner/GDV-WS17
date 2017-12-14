@@ -17,15 +17,16 @@ public class DistrictUtil {
         this.districts = districts;
     }
 
-    public static void addSpecificInhabitans(UrbanDistrict district, UrbanDistrict tmpDistrict) {
+    public static UrbanDistrict addSpecificInhabitans(UrbanDistrict district, UrbanDistrict tmpDistrict) {
         for (Map.Entry<String, Integer> mapEntry : district.getInhabitansBetween6And29().entrySet()) {
-            if (keyIsInhabitant(mapEntry.getKey()))
-                district.getInhabitansBetween6And29().put(mapEntry.getKey(),
-                        district.getInhabitansBetween6And29().put(
-                                mapEntry.getKey(),
-                                mapEntry.getValue() + tmpDistrict.getInhabitansBetween6And29().get(mapEntry.getKey())));
+            if (keyIsInhabitant(mapEntry.getKey())) {
+                district.getInhabitansBetween6And29().put(
+                        mapEntry.getKey(),
+                        (mapEntry.getValue() + tmpDistrict.getInhabitansBetween6And29().get(mapEntry.getKey()))
+                );
+            }
         }
-
+        return district;
     }
 
     protected static boolean keyIsInhabitant(String key) {
