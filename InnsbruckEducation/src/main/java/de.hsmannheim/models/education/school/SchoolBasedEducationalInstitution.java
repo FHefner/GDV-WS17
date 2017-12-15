@@ -17,23 +17,6 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
         return category;
     }
 
-    public void setCategory(SchoolBasedCategory category) {
-        this.category = category;
-    }
-
-    private void setSchoolColorBasedOnCategory(PApplet applet) {
-        switch (this.category) {
-            case HIGHER_EDUCATION: {
-                this.color = applet.color(15, 132, 0);
-                break;
-            }
-        }
-    }
-
-    public void setShownOnMap(boolean shownOnMap) {
-        this.getMarker().setHidden(!shownOnMap);
-    }
-
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();

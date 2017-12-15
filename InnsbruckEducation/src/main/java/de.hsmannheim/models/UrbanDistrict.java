@@ -43,6 +43,7 @@ public class UrbanDistrict implements ColorMarker {
                 }}, row)
                 .withZaehlerSprengelToRegionNumberAndName()
                 .withLocations(applet);
+
     }
 
     private UrbanDistrict withZaehlerSprengel(int zspr) {
