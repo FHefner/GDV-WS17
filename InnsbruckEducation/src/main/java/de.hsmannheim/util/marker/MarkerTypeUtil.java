@@ -38,4 +38,13 @@ public class MarkerTypeUtil {
         }
         return markerList;
     }
+
+    public static void resetEducationMarkers(Map<MarkerType, List<Marker>> markers) {
+        for (Marker marker : markers.get(MarkerType.UNIVERSITY_MARKER)) {
+            marker.setHidden(false);
+        }
+        for (Marker marker : markers.get(MarkerType.SCHOOL_MARKER)) {
+            marker.setHidden(false);
+        }
+    }
 }

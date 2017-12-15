@@ -47,6 +47,11 @@ public class DistrictUtil {
         return result;
     }
 
+    public static void resetDistrictColors(List<UrbanDistrict> allDistrictsList) {
+        for (UrbanDistrict district : allDistrictsList)
+            district.getMarker().resetColor();
+    }
+
     public boolean isDistrictSelected() {
         return districtSelected;
     }

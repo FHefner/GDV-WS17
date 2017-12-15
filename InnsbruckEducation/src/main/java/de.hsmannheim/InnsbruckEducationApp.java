@@ -15,6 +15,7 @@ import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.education.university.UniversityBasedCategory;
 import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
 import de.hsmannheim.util.district.DistrictUtil;
+import de.hsmannheim.util.innsbruckEducation.InnsbruckEducationAppUtil;
 import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import de.hsmannheim.util.marker.MarkerTypeUtil;
 import de.hsmannheim.util.unfoldingMap.UnfoldingMapUtil;
@@ -39,7 +40,6 @@ public class InnsbruckEducationApp extends PApplet {
     private boolean zoomedIntoDistrict = false;
     private DistrictUtil districtUtil;
     private boolean mouseWasDragged = false;
-    private Location startingLocation = new Location(FormConfig.XStartLocation, FormConfig.YStartLocation);
 
     public static void main(String[] args) {
         PApplet.main(InnsbruckEducationApp.class.getName());
@@ -99,28 +99,14 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private void resetView() {
-        map.zoomAndPanTo(12, startingLocation);
-        map.setZoomRange(10, 20);
-        map.setPanningRestriction(startingLocation, 10);
+        UnfoldingMapUtil.setPropertiesToMap(map);
         zoomedIntoDistrict = false;
-        resetDistrictColors();
-        resetEducationMarkers();
+        InnsbruckEducationAppUtil.setStartingDistrictsAndMarkers(markers, allDistrictsList);
     }
 
-    private void resetDistrictColors() {
-        for (UrbanDistrict district : allDistrictsList) {
-            district.getMarker().resetColor();
-        }
-    }
 
-    private void resetEducationMarkers() {
-        for (Marker marker : markers.get(MarkerType.UNIVERSITY_MARKER)) {
-            marker.setHidden(true);
-        }
-        for (Marker marker : markers.get(MarkerType.SCHOOL_MARKER)) {
-            marker.setHidden(true);
-        }
-    }
+
+
 
     private void applyMapSettings() {
         map = new UnfoldingMap(this, "MAIN_MAP", FormConfig.MAP_X_WINDOW_OFFSET, FormConfig.MAP_Y_WINDOW_OFFSET,
