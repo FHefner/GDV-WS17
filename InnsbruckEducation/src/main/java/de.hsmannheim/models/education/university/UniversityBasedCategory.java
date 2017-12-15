@@ -10,14 +10,16 @@ import java.util.Map;
  */
 public enum UniversityBasedCategory implements ICategory {
 
-    DEFAULT;
+    UNIVERSITY, UAS;
 
     protected static Map<String, String> universityCategoryNameToString = new HashMap<String, String>() {{
-        put(DEFAULT.name(), "Universität");
+        put(UNIVERSITY.name(), "Universität");
+        put(UAS.name(), "Hochschule");
     }};
 
     protected static Map<String, int[]> schoolCategoryNameToColor = new HashMap<String, int[]>() {{
-        put(DEFAULT.name(), new int[]{56, 121, 226});
+        put(UNIVERSITY.name(), new int[]{56, 121, 226});
+        put(UAS.name(), new int[]{204, 255, 204});
     }};
 
     @Override
