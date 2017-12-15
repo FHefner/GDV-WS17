@@ -47,7 +47,7 @@ public class InnsbruckEducationApp extends PApplet {
 
     private void initDistrictUtil(){districtUtil=new DistrictUtil(allDistrictsList); }
 
-    private void loadDistrictColorAndInhabitantInformation() {
+    private void loadDistrictsData() {
         Table districtData = loadTable(PathConfig.BEVOELKERUNG_CSV_DATA_PATH, "header");
         initDistrictUtil();
         for (TableRow row : districtData.rows()) {
@@ -61,7 +61,17 @@ public class InnsbruckEducationApp extends PApplet {
         Table schoolData = loadTable(path, "header");
         if (schools == null) schools = new ArrayList<>();
         for (TableRow row : schoolData.rows()) {
-            schools.add(new SchoolBasedEducationalInstitution().buildDefaultEducationalInstitution(this, row, schoolBasedCategory));
+            schools.add(new SchoolBasedEducationalInstitution().
+                    buildDefaultEducationalInstitution(this, row, schoolBasedCategory));
+        }
+    }
+
+    private void loadUniversityCategoryFromCSV(String path, UniversityBasedCategory universityBasedCategory) {
+        Table universityData = loadTable(path, "header");
+        if (universities == null) universities = new ArrayList<>();
+        for (TableRow row : universityData.rows()) {
+            universities.add(new UniversityBasedEducationalInstitution().
+                    buildDefaultEducationalInstitution(this, row, universityBasedCategory));
         }
     }
 
@@ -72,11 +82,8 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private void loadUniversityData() {
-        Table universityData = loadTable(PathConfig.UNIVERSITY_CSV_DATA_PATH, "header");
-        universities = new ArrayList<>();
-        for (TableRow row : universityData.rows()) {
-            universities.add(new UniversityBasedEducationalInstitution().buildDefaultEducationalInstitution(this, row, UniversityBasedCategory.DEFAULT));
-        }
+        loadUniversityCategoryFromCSV(PathConfig.UNIVERSITY_CSV_DATA_PATH, UniversityBasedCategory.UNIVERSITY);
+        loadUniversityCategoryFromCSV(PathConfig.UAS_CSV_DATA_PATH, UniversityBasedCategory.UAS);
     }
 
     private void addMarkersToMap() {
@@ -87,7 +94,7 @@ public class InnsbruckEducationApp extends PApplet {
     private void processData() {
         loadSchoolData();
         loadUniversityData();
-        loadDistrictColorAndInhabitantInformation();
+        loadDistrictsData();
         addMarkersToMap();
     }
 
