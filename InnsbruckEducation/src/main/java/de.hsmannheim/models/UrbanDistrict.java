@@ -40,11 +40,9 @@ public class UrbanDistrict implements ColorMarker {
                     put("amountInhabitants15To19", "15_19");
                     put("amountInhabitants20To24", "20_24");
                     put("amountInhabitants25To29", "25_29");
-
                 }}, row)
                 .withZaehlerSprengelToRegionNumberAndName()
                 .withLocations(applet);
-
     }
 
     private UrbanDistrict withZaehlerSprengel(int zspr) {
@@ -79,7 +77,7 @@ public class UrbanDistrict implements ColorMarker {
     }
 
     public void calculateTotalInhabitants() {
-        this.inhabitansBetween6And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitansSum(this));
+        this.inhabitansBetween6And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum(this));
     }
 
 

@@ -10,8 +10,12 @@ public class PathConfig {
     public final static String BEVOELKERUNG_CSV_DATA_PATH = "src/main/resources/data/bevoelkerung_2017.csv";
 
 
-    public final static String HIGHSCHOOL_MARKER_IMAGE_PATH = "src/main/resources/img/school.png";
-    public final static String HIGHSCHOOL_CSV_DATA_PATH = "src/main/resources/data/hoeher_bildende_schulen.csv";
+    public final static String HIGHER_EDUCATION_MARKER_IMAGE_PATH = "src/main/resources/img/school.png";
+    public final static String HIGHER_EDUCATION_CSV_DATA_PATH = "src/main/resources/data/hoeher_bildende_schulen.csv";
+
+    public final static String ELEMENTARY_SCHOOLS_CSV_DATA_PATH = "src/main/resources/data/volksschulen.csv";
+
+    public final static String SPECIAL_SCHOOLS_CSV_DATA_PATH = "src/main/resources/data/sonderschulen.csv";
 
 
     public final static String UNIVERSITY_MARKER_IMAGE_PATH = "src/main/resources/img/university.png";
