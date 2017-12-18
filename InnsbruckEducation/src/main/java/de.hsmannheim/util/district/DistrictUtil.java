@@ -100,7 +100,6 @@ public class DistrictUtil {
         if (!districtAlreadyExisting)
             allDistrictsList.add(tmpDistrict);
     }
-
 }
 
 
