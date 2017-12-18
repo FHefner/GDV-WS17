@@ -15,13 +15,13 @@ public abstract class ScatterPlotAbstract {
     public ScatterPlotAbstract(String educationType, String ageGroup){
         this.educationType=educationType;
         this.ageGroup=ageGroup;
-        this.series= new XYSeries("Stadteile");
+        this.series= new XYSeries("Stadtteile");
     }
 
     public XYSeriesCollection createDataset(List<UrbanDistrict> allDistrictsList) {
         double educationalInstitutions=0;
         XYSeriesCollection result = new XYSeriesCollection();
-        this.series = new XYSeries("Stadteile");
+        this.series = new XYSeries("Stadtteile");
         for(UrbanDistrict district: allDistrictsList){
           addDistrcitToPlot(district);
         }

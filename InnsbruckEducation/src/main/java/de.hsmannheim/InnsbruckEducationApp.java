@@ -20,18 +20,21 @@ import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import de.hsmannheim.util.marker.MarkerTypeUtil;
 import de.hsmannheim.util.plots.ScatterPlotAbstract;
 import de.hsmannheim.util.plots.Strategies.ScatterPlotAll;
-import de.hsmannheim.util.plots.Strategies.ScatterPlotSchools;
 import de.hsmannheim.util.unfoldingMap.UnfoldingMapUtil;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.Table;
 import processing.data.TableRow;
 
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -144,9 +147,9 @@ public class InnsbruckEducationApp extends PApplet {
         createScatterPlot();
     }
 
-    public void createScatterPlot(){
+    private void createScatterPlot(){
         JFreeChart scatterPlot = ChartFactory.createScatterPlot(
-                "Bevölkerung und Bildungseinrichtungen pro (Stadteil)", // chart title
+                "Bevölkerung und Bildungseinrichtungen pro (Stadtteil)", // chart title
                 getScatterPlotAgeBand(), // x axis label
                 getScatterPlotEducationType(), // y axis label
                 getScatterPlotData(), // data
@@ -155,18 +158,20 @@ public class InnsbruckEducationApp extends PApplet {
                 true, // tooltips
                 false // urls
         );
-        chartImage = new PImage(scatterPlot.createBufferedImage(450,300));
+
+        scatterPlot.getPlot().setBackgroundPaint( Color.WHITE );
+        chartImage = new PImage(scatterPlot.createBufferedImage(460,300));
     }
 
-    public XYSeriesCollection getScatterPlotData(){
+    private XYSeriesCollection getScatterPlotData(){
         return this.scatterPlot.createDataset(allDistrictsList);
     }
 
-    public String getScatterPlotEducationType(){
+    private String getScatterPlotEducationType(){
         return this.scatterPlot.getEducationType();
     }
 
-    public String getScatterPlotAgeBand(){
+    private String getScatterPlotAgeBand(){
         return this.scatterPlot.getAgeBand();
     }
 
@@ -228,8 +233,8 @@ public class InnsbruckEducationApp extends PApplet {
 
         map.draw();
         //      x       y    width  height
-        rect(908, 0, 500, 730);
+        rect(800, -1, 500, 730);
         //generates the Scatterplot
-        image(chartImage, 909, 245);
+        image(chartImage, 810, 245);
     }
 }
