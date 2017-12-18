@@ -96,7 +96,7 @@ public class DistrictUtil {
     public void setDistrictColorsBasedOnPopulation(PApplet papplet) {
         for (UrbanDistrict district : allDistrictsList) {
             district.calculateTotalInhabitants();
-            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district, papplet));
+            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district));
             district.createPolygonMarker();
         }
     }
