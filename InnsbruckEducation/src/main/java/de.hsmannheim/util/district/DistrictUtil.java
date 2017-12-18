@@ -3,8 +3,11 @@ package de.hsmannheim.util.district;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.models.UrbanDistrict;
+import de.hsmannheim.models.education.AbstractEducationalInstitution;
+import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import processing.core.PApplet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -19,12 +22,12 @@ public class DistrictUtil {
         this.allDistrictsList = districts;
     }
 
-    public static UrbanDistrict addSpecificInhabitans(UrbanDistrict district, UrbanDistrict tmpDistrict) {
-        for (Map.Entry<String, Integer> mapEntry : district.getInhabitansBetween6And29().entrySet()) {
+    public static UrbanDistrict addSpecificInhabitants(UrbanDistrict district, UrbanDistrict tmpDistrict) {
+        for (Map.Entry<String, Integer> mapEntry : district.getInhabitantsBetween6And29().entrySet()) {
             if (keyIsInhabitant(mapEntry.getKey())) {
-                district.getInhabitansBetween6And29().put(
+                district.getInhabitantsBetween6And29().put(
                         mapEntry.getKey(),
-                        (mapEntry.getValue() + tmpDistrict.getInhabitansBetween6And29().get(mapEntry.getKey()))
+                        (mapEntry.getValue() + tmpDistrict.getInhabitantsBetween6And29().get(mapEntry.getKey()))
                 );
             }
         }
@@ -36,7 +39,7 @@ public class DistrictUtil {
     }
 
     public static Integer calculateInhabitantsSum(UrbanDistrict urbanDistrict) {
-        return sumAll(urbanDistrict.getInhabitansBetween6And29().values());
+        return sumAll(urbanDistrict.getInhabitantsBetween6And29().values());
     }
 
     protected static int sumAll(Collection<Integer> values) {
@@ -80,7 +83,7 @@ public class DistrictUtil {
     }
 
     private void setInhabitants(int districtIndex, UrbanDistrict tmpDistrict) {
-        allDistrictsList.set(districtIndex, addSpecificInhabitans(allDistrictsList.get(districtIndex), tmpDistrict));
+        allDistrictsList.set(districtIndex, addSpecificInhabitants(allDistrictsList.get(districtIndex), tmpDistrict));
         districtAlreadyExisting = true;
     }
 
@@ -96,9 +99,48 @@ public class DistrictUtil {
     public void setDistrictColorsBasedOnPopulation(PApplet papplet) {
         for (UrbanDistrict district : allDistrictsList) {
             district.calculateTotalInhabitants();
-            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district, papplet));
+            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district));
             district.createPolygonMarker();
         }
+    }
+
+    public static Integer calculateInhabitantsSum6to29(UrbanDistrict district) {
+        int sum = 0;
+        for (String key : district.getInhabitantsBetween6And29().keySet()) {
+            sum += district.getInhabitantsBetween6And29().get(key);
+        }
+        return sum;
+    }
+
+    public static Object calculateInhabitantsSum6to19(UrbanDistrict district) {
+        int sum = 0;
+        for (String key : district.getInhabitantsBetween6And19().keySet()) {
+            sum += district.getInhabitantsBetween6And19().get(key);
+        }
+        return sum;
+    }
+
+    private static List<AbstractEducationalInstitution> getDistrictEdus(UnfoldingMap map, UrbanDistrict district, List<AbstractEducationalInstitution> institutions) {
+        List<AbstractEducationalInstitution> institutionList = new ArrayList<>();
+        for (AbstractEducationalInstitution institution : institutions) {
+            float markerXPosition = MarkerScreenLocationUtil.getScreenXPositionFromMarker(map, institution.getMarker());
+            float markerYPosition = MarkerScreenLocationUtil.getScreenYPositionFromMarker(map, institution.getMarker());
+            if (district.getMarker().isInside(map, markerXPosition, markerYPosition)) {
+                institutionList.add(institution);
+            }
+        }
+        return institutionList;
+    }
+
+    public static List<UrbanDistrict> addEducationalInstitutionsToDistricts(UnfoldingMap map, List<AbstractEducationalInstitution> schools, List<AbstractEducationalInstitution> universities, List<UrbanDistrict> allDistrictsList) {
+        List<AbstractEducationalInstitution> schoolsAndUniversities = new ArrayList<>(schools);
+        schoolsAndUniversities.addAll(universities);
+        List<UrbanDistrict> modifiedDistricts = new ArrayList<>();
+        for (UrbanDistrict district : allDistrictsList) {
+            district.getSchools().addAll(getDistrictEdus(map, district, schoolsAndUniversities));
+            modifiedDistricts.add(district);
+        }
+        return modifiedDistricts;
     }
 }
 

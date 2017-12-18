@@ -9,11 +9,15 @@ public class FormConfig {
 
     public final static String WINDOW_NAME = "Innsbruck Education";
     public final static String VERSION = "0.1a";
+
     public final static int WINDOW_WIDTH = 1280;
     public final static int WINDOW_HEIGHT = 720;
+
+    public final static int SIDE_PANEL_WIDTH = 700;
+
     public final static float MAP_X_WINDOW_OFFSET = 0;
     public final static float MAP_Y_WINDOW_OFFSET = 0;
 
     public final static float XStartLocation =47.286526f;
-    public final static float YStartLocation =11.389389f;
+    public final static float YStartLocation =11.329389f;
 }

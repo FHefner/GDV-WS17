@@ -16,7 +16,7 @@ public class ScatterPlotAll extends ScatterPlotAbstract {
     }
 
     @Override
-    public void addDistrcitToPlot(UrbanDistrict district) {
+    public void addDistrictToPlot(UrbanDistrict district) {
         series.add(r.nextDouble(), (double) DistrictUtil.calculateInhabitantsSum6to29(district));
     }
 
