@@ -73,7 +73,7 @@ public class InnsbruckEducationApp extends PApplet {
     public void setDistrictColorsBasedOnPopulation() {
         for (UrbanDistrict district : allDistrictsList) {
             district.calculateTotalInhabitants();
-            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district, this));
+            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district));
             district.createPolygonMarker();
         }
     }
