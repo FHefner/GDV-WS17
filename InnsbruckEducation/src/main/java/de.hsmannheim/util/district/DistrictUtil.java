@@ -3,7 +3,6 @@ package de.hsmannheim.util.district;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.models.UrbanDistrict;
-import processing.core.PApplet;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,11 +19,11 @@ public class DistrictUtil {
     }
 
     public static UrbanDistrict addSpecificInhabitans(UrbanDistrict district, UrbanDistrict tmpDistrict) {
-        for (Map.Entry<String, Integer> mapEntry : district.getInhabitansBetween6And29().entrySet()) {
+        for (Map.Entry<String, Integer> mapEntry : district.getInhabitantsBetween6And29().entrySet()) {
             if (keyIsInhabitant(mapEntry.getKey())) {
-                district.getInhabitansBetween6And29().put(
+                district.getInhabitantsBetween6And29().put(
                         mapEntry.getKey(),
-                        (mapEntry.getValue() + tmpDistrict.getInhabitansBetween6And29().get(mapEntry.getKey()))
+                        (mapEntry.getValue() + tmpDistrict.getInhabitantsBetween6And29().get(mapEntry.getKey()))
                 );
             }
         }
@@ -35,9 +34,18 @@ public class DistrictUtil {
         return key.contains("amountInhabitants");
     }
 
-    public static Integer calculateInhabitantsSum(UrbanDistrict urbanDistrict) {
-        return sumAll(urbanDistrict.getInhabitansBetween6And29().values());
+    public static Integer calculateInhabitantsSum6to29(UrbanDistrict urbanDistrict) {
+        return sumAll(urbanDistrict.getInhabitantsBetween6And29().values());
     }
+
+   public static Integer calculateInhabitantsSum6to19(UrbanDistrict urbanDistrict) {
+        return sumAll(urbanDistrict.getInhabitantsBetween6And19().values());
+    }
+    public static Integer calculateInhabitantsSum20to29(UrbanDistrict urbanDistrict) {
+        return sumAll(urbanDistrict.getInhabitantsBetween20And29().values());
+    }
+
+
 
     protected static int sumAll(Collection<Integer> values) {
         int result = 0;
@@ -93,13 +101,6 @@ public class DistrictUtil {
             allDistrictsList.add(tmpDistrict);
     }
 
-    public void setDistrictColorsBasedOnPopulation(PApplet papplet) {
-        for (UrbanDistrict district : allDistrictsList) {
-            district.calculateTotalInhabitants();
-            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district, papplet));
-            district.createPolygonMarker();
-        }
-    }
 }
 
 

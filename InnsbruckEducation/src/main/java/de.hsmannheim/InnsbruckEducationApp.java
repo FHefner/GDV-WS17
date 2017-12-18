@@ -1,7 +1,6 @@
 package de.hsmannheim;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
-import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
@@ -14,12 +13,22 @@ import de.hsmannheim.models.education.school.SchoolBasedCategory;
 import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.education.university.UniversityBasedCategory;
 import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
+import de.hsmannheim.util.district.DistrictColorCalcUtil;
 import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.innsbruckEducation.InnsbruckEducationAppUtil;
 import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import de.hsmannheim.util.marker.MarkerTypeUtil;
+import de.hsmannheim.util.plots.ScatterPlotAbstract;
+import de.hsmannheim.util.plots.Strategies.ScatterPlotAll;
+import de.hsmannheim.util.plots.Strategies.ScatterPlotSchools;
 import de.hsmannheim.util.unfoldingMap.UnfoldingMapUtil;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeriesCollection;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.data.Table;
 import processing.data.TableRow;
 
@@ -28,24 +37,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class InnsbruckEducationApp extends PApplet {
 
-
+    private PImage chartImage;
     public List<AbstractEducationalInstitution> schools;
     public List<AbstractEducationalInstitution> universities;
-    public List<UrbanDistrict> allDistrictsList= new ArrayList<>();
+    public List<UrbanDistrict> allDistrictsList = new ArrayList<>();
     private UnfoldingMap map;
     private UrbanDistrict selectedDistrict;
     private Map<MarkerType, List<Marker>> markers = new HashMap<>();
     private boolean zoomedIntoDistrict = false;
     private DistrictUtil districtUtil;
     private boolean mouseWasDragged = false;
+    private ScatterPlotAbstract scatterPlot;
 
     public static void main(String[] args) {
         PApplet.main(InnsbruckEducationApp.class.getName());
     }
 
-    private void initDistrictUtil(){districtUtil=new DistrictUtil(allDistrictsList); }
+    private void initDistrictUtil() {
+        districtUtil = new DistrictUtil(allDistrictsList);
+    }
 
     private void loadDistrictsData() {
         Table districtData = loadTable(PathConfig.BEVOELKERUNG_CSV_DATA_PATH, "header");
@@ -54,7 +67,15 @@ public class InnsbruckEducationApp extends PApplet {
             UrbanDistrict tmpDistrict = UrbanDistrict.buildDefaultDistrict(this, row);
             districtUtil.setDistrictInhabitantsInformation(tmpDistrict);
         }
-        districtUtil.setDistrictColorsBasedOnPopulation(this);
+        setDistrictColorsBasedOnPopulation();
+    }
+
+    public void setDistrictColorsBasedOnPopulation() {
+        for (UrbanDistrict district : allDistrictsList) {
+            district.calculateTotalInhabitants();
+            district.setColor(DistrictColorCalcUtil.calcDistrictColor(district, this));
+            district.createPolygonMarker();
+        }
     }
 
     private void loadSchoolCategoryFromCSV(String path, SchoolBasedCategory schoolBasedCategory) {
@@ -105,12 +126,9 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
 
-
-
-
     private void applyMapSettings() {
         map = new UnfoldingMap(this, "MAIN_MAP", FormConfig.MAP_X_WINDOW_OFFSET, FormConfig.MAP_Y_WINDOW_OFFSET,
-                FormConfig.WINDOW_WIDTH - FormConfig.MAP_X_WINDOW_OFFSET, FormConfig.WINDOW_HEIGHT - FormConfig.MAP_Y_WINDOW_OFFSET,
+                FormConfig.WINDOW_WIDTH - FormConfig.MAP_X_WINDOW_OFFSET - 700, FormConfig.WINDOW_HEIGHT - FormConfig.MAP_Y_WINDOW_OFFSET,
                 false, false, new OpenStreetMap.PositronMapProvider());
         MapUtils.createDefaultEventDispatcher(this, map);
         // map.setTweening(true);
@@ -121,7 +139,37 @@ public class InnsbruckEducationApp extends PApplet {
         applyMapSettings();
         processData();
         resetView();
+
+        this.scatterPlot=new ScatterPlotAll();
+        createScatterPlot();
     }
+
+    public void createScatterPlot(){
+        JFreeChart scatterPlot = ChartFactory.createScatterPlot(
+                "Bevölkerung und Bildungseinrichtungen pro (Stadteil)", // chart title
+                getScatterPlotAgeBand(), // x axis label
+                getScatterPlotEducationType(), // y axis label
+                getScatterPlotData(), // data
+                PlotOrientation.VERTICAL,
+                true, // include legend
+                true, // tooltips
+                false // urls
+        );
+        chartImage = new PImage(scatterPlot.createBufferedImage(450,300));
+    }
+
+    public XYSeriesCollection getScatterPlotData(){
+        return this.scatterPlot.createDataset(allDistrictsList);
+    }
+
+    public String getScatterPlotEducationType(){
+        return this.scatterPlot.getEducationType();
+    }
+
+    public String getScatterPlotAgeBand(){
+        return this.scatterPlot.getAgeBand();
+    }
+
 
     public void keyPressed() {
         // Kill the app if ESC is pressed
@@ -175,7 +223,13 @@ public class InnsbruckEducationApp extends PApplet {
         mouseWasDragged = true;
     }
 
+
     public void draw() {
+
         map.draw();
+        //      x       y    width  height
+        rect(908, 0, 500, 730);
+        //generates the Scatterplot
+        image(chartImage, 909, 245);
     }
 }
