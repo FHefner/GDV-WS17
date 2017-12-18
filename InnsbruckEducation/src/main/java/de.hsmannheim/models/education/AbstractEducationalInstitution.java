@@ -16,7 +16,7 @@ public abstract class AbstractEducationalInstitution implements ColorMarker{
     public final static String LOCATION_X_HEADER_FIELD = "Lat";
     public final static String LOCATION_Y_HEADER_FIELD = "Lon";
     protected Integer color;
-    ICategory category;
+    public ICategory category;
     private String name;
     private String address;
     private String website;

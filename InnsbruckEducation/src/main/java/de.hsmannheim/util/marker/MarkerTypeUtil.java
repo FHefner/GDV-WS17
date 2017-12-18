@@ -1,9 +1,11 @@
 package de.hsmannheim.util.marker;
 
+import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.hsmannheim.InnsbruckEducationApp;
 import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.markers.MarkerType;
+import de.hsmannheim.models.UrbanDistrict;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,11 +18,16 @@ import java.util.Map;
  */
 public class MarkerTypeUtil {
 
+    private static List<MarkerType> markerTypesToShowInDistrict = new ArrayList<MarkerType>() {{
+        add(MarkerType.UNIVERSITY_MARKER);
+        add(MarkerType.SCHOOL_MARKER);
+    }};
+
 
     public static Map<MarkerType, List<Marker>> getAllMarkersForAllMarkerType(InnsbruckEducationApp app) {
         Map<MarkerType, List<Marker>> markers = new HashMap<>();
 
-        for(MarkerType type : MarkerType.values())
+        for (MarkerType type : MarkerType.values())
             markers.put(type, getMarkerForMarkerType(app, type));
 
         return markers;
@@ -40,11 +47,25 @@ public class MarkerTypeUtil {
     }
 
     public static void resetEducationMarkers(Map<MarkerType, List<Marker>> markers) {
-        for (Marker marker : markers.get(MarkerType.UNIVERSITY_MARKER)) {
-            marker.setHidden(false);
+        for (Map.Entry<MarkerType, List<Marker>> mapEntry : markers.entrySet()) {
+            for (Marker marker : mapEntry.getValue()) {
+                marker.setHidden(true);
+            }
         }
-        for (Marker marker : markers.get(MarkerType.SCHOOL_MARKER)) {
-            marker.setHidden(false);
+    }
+
+    public static void showEducationalInstitutionsInSelectedDistrict(Map<MarkerType, List<Marker>> markers, UnfoldingMap map, UrbanDistrict selectedDistrict) {
+        for (MarkerType markerType : markerTypesToShowInDistrict)
+            enableMarkersInSelectedDistrict(markerType, markers, map, selectedDistrict);
+    }
+
+    private static void enableMarkersInSelectedDistrict(MarkerType markerType, Map<MarkerType, List<Marker>> markers, UnfoldingMap map, UrbanDistrict selectedDistrict) {
+        for (Marker marker : markers.get(markerType)) {
+            float markerXPosition = MarkerScreenLocationUtil.getScreenXPositionFromMarker(map, marker);
+            float markerYPosition = MarkerScreenLocationUtil.getScreenYPositionFromMarker(map, marker);
+            if (selectedDistrict.getMarker().isInside(map, markerXPosition, markerYPosition)) {
+                marker.setHidden(false);
+            }
         }
     }
 }

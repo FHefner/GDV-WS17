@@ -7,14 +7,8 @@ import processing.core.PApplet;
 
 public class SchoolBasedEducationalInstitution extends AbstractEducationalInstitution {
 
-    private SchoolBasedCategory category;
-
     protected final String GET_MARKER_IMAGE_PATH() {
         return PathConfig.HIGHER_EDUCATION_MARKER_IMAGE_PATH;
-    }
-
-    public SchoolBasedCategory getCategory() {
-        return category;
     }
 
     @Override
@@ -43,6 +37,7 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
         marker.setStrokeColor(90);
         marker.setStrokeWeight(5);
         marker.setHidden(true);
+        marker.setDiameter(50);
         setMarker(marker);
     }
 }

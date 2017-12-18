@@ -3,6 +3,7 @@ package de.hsmannheim;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
+import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
@@ -18,6 +19,7 @@ import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.innsbruckEducation.InnsbruckEducationAppUtil;
 import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import de.hsmannheim.util.marker.MarkerTypeUtil;
+import de.hsmannheim.util.marker.SimplePointMarkerUtil;
 import de.hsmannheim.util.unfoldingMap.UnfoldingMapUtil;
 import processing.core.PApplet;
 import processing.data.Table;
@@ -121,6 +123,19 @@ public class InnsbruckEducationApp extends PApplet {
         applyMapSettings();
         processData();
         resetView();
+        mapDistrictWithSchools();
+        drawBigMarkers();
+    }
+
+    private void mapDistrictWithSchools() {
+        DistrictUtil.mapDistrictWithEducation(allDistrictsList, schools, universities, map);
+    }
+
+    private void drawBigMarkers() {
+
+        List<Marker> a = SimplePointMarkerUtil.generateMarkerWithDiameter(allDistrictsList, this);
+        map.addMarkers(a);
+
     }
 
     public void keyPressed() {
@@ -144,28 +159,15 @@ public class InnsbruckEducationApp extends PApplet {
         mouseWasDragged = false;
     }
 
-    private void enableMarkersInSelectedDistrict(MarkerType markerType) {
-        for (Marker marker : markers.get(markerType)) {
-            float markerXPosition = MarkerScreenLocationUtil.getScreenXPositionFromMarker(map, marker);
-            float markerYPosition = MarkerScreenLocationUtil.getScreenYPositionFromMarker(map, marker);
-            if (selectedDistrict.getMarker().isInside(map, markerXPosition, markerYPosition)) {
-                marker.setHidden(false);
-            }
-        }
-    }
 
-    private void showEducationalInstitutionsInSelectedDistrict() {
-        enableMarkersInSelectedDistrict(MarkerType.UNIVERSITY_MARKER);
-        enableMarkersInSelectedDistrict(MarkerType.SCHOOL_MARKER);
-    }
 
     private void changeColorOfSelectedDistrict(UrbanDistrict district) {
         if (district.getIsSelected()) {
             selectedDistrict = district;
             map.zoomAndPanToFit(district.getLocationsFromJSONArray());
             zoomedIntoDistrict = true;
-            showEducationalInstitutionsInSelectedDistrict();
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
+            MarkerTypeUtil.showEducationalInstitutionsInSelectedDistrict(markers, map, selectedDistrict);
         } else {
             district.getMarker().setPolygonColor(color(90, 90, 90));
         }

@@ -4,6 +4,8 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.markers.ColoredPolygonMarker;
+import de.hsmannheim.models.education.AbstractEducationalInstitution;
+import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
 import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.location.LocationUtil;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSpengelMapUtil;
@@ -22,9 +24,19 @@ public class UrbanDistrict implements ColorMarker {
     private int regionNumber = -1;
     private String name = "undefined";
     private List<Location> locations;
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
     private ColoredPolygonMarker marker;
+
+    private List<AbstractEducationalInstitution> schools = new ArrayList<>();
+    private List<AbstractEducationalInstitution> universities = new ArrayList<>();
+
     private boolean isSelected;
     private Integer color;
+    private AbstractEducationalInstitution toEducationalInstitutionList;
 
     private UrbanDistrict() {
 
@@ -40,6 +52,7 @@ public class UrbanDistrict implements ColorMarker {
                     put("amountInhabitants15To19", "15_19");
                     put("amountInhabitants20To24", "20_24");
                     put("amountInhabitants25To29", "25_29");
+                    //put("year", "timestamp");
                 }}, row)
                 .withZaehlerSprengelToRegionNumberAndName()
                 .withLocations(applet);
@@ -148,5 +161,28 @@ public class UrbanDistrict implements ColorMarker {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<AbstractEducationalInstitution> getSchools() {
+        return schools;
+    }
+
+    public void setSchools(List<AbstractEducationalInstitution> schools) {
+        this.schools = schools;
+    }
+
+    public List<AbstractEducationalInstitution> getUniversities() {
+        return universities;
+    }
+
+    public void setUniversities(List<AbstractEducationalInstitution> universities) {
+        this.universities = universities;
+    }
+
+    public void setToEducationalInstitutionList(AbstractEducationalInstitution institution) {
+        if (institution instanceof UniversityBasedEducationalInstitution)
+            universities.add(institution);
+        else
+            schools.add(institution);
     }
 }

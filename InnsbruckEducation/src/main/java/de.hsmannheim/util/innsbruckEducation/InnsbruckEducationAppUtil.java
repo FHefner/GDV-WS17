@@ -12,6 +12,7 @@ import java.util.Map;
 public class InnsbruckEducationAppUtil {
 
 
+
     public static void setStartingDistrictsAndMarkers(Map<MarkerType, List<Marker>> markers, List<UrbanDistrict> allDistrictsList) {
         DistrictUtil.resetDistrictColors(allDistrictsList);
         MarkerTypeUtil.resetEducationMarkers(markers);

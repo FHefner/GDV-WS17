@@ -3,8 +3,12 @@ package de.hsmannheim.util.district;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.models.UrbanDistrict;
+import de.hsmannheim.models.education.AbstractEducationalInstitution;
+import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
+import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import processing.core.PApplet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +54,31 @@ public class DistrictUtil {
     public static void resetDistrictColors(List<UrbanDistrict> allDistrictsList) {
         for (UrbanDistrict district : allDistrictsList)
             district.getMarker().resetColor();
+    }
+
+    public static void mapDistrictWithEducation(List<UrbanDistrict> allDistrictsList, List<AbstractEducationalInstitution> schools, List<AbstractEducationalInstitution> universities, UnfoldingMap map) {
+
+        List<AbstractEducationalInstitution> combinedEducationList = new ArrayList<>(schools);
+        combinedEducationList.addAll(universities);
+
+
+        for (UrbanDistrict district : allDistrictsList) {
+            ColoredPolygonMarker marker = district.getMarker();
+            for (AbstractEducationalInstitution institution : combinedEducationList) {
+                if (markerIsInside(map, marker, institution))
+                    district.setToEducationalInstitutionList(institution);
+            }
+        }
+
+
+
+    }
+
+    protected static boolean markerIsInside(UnfoldingMap map, ColoredPolygonMarker marker, AbstractEducationalInstitution institution) {
+        return marker.isInside(map,
+                MarkerScreenLocationUtil.getScreenXPositionFromMarker(map, institution.getMarker()),
+                MarkerScreenLocationUtil.getScreenYPositionFromMarker(map, institution.getMarker())
+        );
     }
 
     public boolean isDistrictSelected() {
