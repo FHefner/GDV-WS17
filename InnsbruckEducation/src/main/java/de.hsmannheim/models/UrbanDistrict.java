@@ -5,9 +5,7 @@ import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
-import de.hsmannheim.models.education.school.SchoolBasedCategory;
 import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
-import de.hsmannheim.models.education.university.UniversityBasedCategory;
 import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
 import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.location.LocationUtil;
@@ -24,6 +22,7 @@ public class UrbanDistrict implements ColorMarker {
     protected Map<String, Integer> inhabitantsBetween6And29 = new HashMap<>();
     protected Map<String, Integer> inhabitantsBetween6And19 = new HashMap<>();
     protected Map<String, Integer> inhabitantsBetween20And29 = new HashMap<>();
+
     private PApplet applet;
     private int zaehlerSprengel = -1;
     private int regionNumber = -1;
@@ -35,20 +34,24 @@ public class UrbanDistrict implements ColorMarker {
     private boolean isSelected;
     private Integer color;
 
-    public void addSchool(SchoolBasedEducationalInstitution school) {
-        this.schools.add(school);
-    }
-
-    public void addUniversity(UniversityBasedEducationalInstitution university) {
-        this.universities.add(university);
-    }
-
     public List<Location> getLocations() {
         return locations;
     }
 
     public List<AbstractEducationalInstitution> getSchools() {
         return schools;
+    }
+
+    public int getSumSchools() {
+        return schools.size();
+    }
+
+    public int getSumUniversities() {
+        return universities.size();
+    }
+
+    public int getSumEducationalInstitutions() {
+        return getSumSchools() + getSumUniversities();
     }
 
     public List<AbstractEducationalInstitution> getUniversities() {
@@ -97,12 +100,12 @@ public class UrbanDistrict implements ColorMarker {
         return this;
     }
 
-    public void addToInhabitantsMap(Map.Entry<String, String> entry, TableRow row){
+    public void addToInhabitantsMap(Map.Entry<String, String> entry, TableRow row) {
         this.inhabitantsBetween6And29.put(entry.getKey(), row.getInt(entry.getValue()));
-        if(!entry.getKey().equals("amountInhabitants20To24") &&
-                !entry.getKey().equals("amountInhabitants25To29")){
+        if (!entry.getKey().equals("amountInhabitants20To24") &&
+                !entry.getKey().equals("amountInhabitants25To29")) {
             this.inhabitantsBetween6And19.put(entry.getKey(), row.getInt(entry.getValue()));
-        }else{
+        } else {
             this.inhabitantsBetween20And29.put(entry.getKey(), row.getInt(entry.getValue()));
         }
     }
@@ -118,8 +121,17 @@ public class UrbanDistrict implements ColorMarker {
 
     public void calculateTotalInhabitants() {
         this.inhabitantsBetween6And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum6to29(this));
+        calculateTotalInhabitantsBetween6And19();
+        calculateTotalInhabitantsBetween20And29();
     }
 
+    public void calculateTotalInhabitantsBetween6And19() {
+        this.inhabitantsBetween6And19.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum6to19(this));
+    }
+
+    public void calculateTotalInhabitantsBetween20And29() {
+        this.inhabitantsBetween20And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum20to29(this));
+    }
 
     @Override
     public String toString() {

@@ -38,10 +38,6 @@ public class DistrictUtil {
         return key.contains("amountInhabitants");
     }
 
-    public static Integer calculateInhabitantsSum(UrbanDistrict urbanDistrict) {
-        return sumAll(urbanDistrict.getInhabitantsBetween6And29().values());
-    }
-
     protected static int sumAll(Collection<Integer> values) {
         int result = 0;
         for (Integer value : values) {
@@ -96,7 +92,7 @@ public class DistrictUtil {
             allDistrictsList.add(tmpDistrict);
     }
 
-    public void setDistrictColorsBasedOnPopulation(PApplet papplet) {
+    public void setDistrictColorsBasedOnPopulation() {
         for (UrbanDistrict district : allDistrictsList) {
             district.calculateTotalInhabitants();
             district.setColor(DistrictColorCalcUtil.calcDistrictColor(district));
@@ -104,20 +100,15 @@ public class DistrictUtil {
         }
     }
 
-    public static Integer calculateInhabitantsSum6to29(UrbanDistrict district) {
-        int sum = 0;
-        for (String key : district.getInhabitantsBetween6And29().keySet()) {
-            sum += district.getInhabitantsBetween6And29().get(key);
-        }
-        return sum;
+    public static Integer calculateInhabitantsSum6to29(UrbanDistrict urbanDistrict) {
+        return sumAll(urbanDistrict.getInhabitantsBetween6And29().values());
     }
 
-    public static Object calculateInhabitantsSum6to19(UrbanDistrict district) {
-        int sum = 0;
-        for (String key : district.getInhabitantsBetween6And19().keySet()) {
-            sum += district.getInhabitantsBetween6And19().get(key);
-        }
-        return sum;
+    public static Integer calculateInhabitantsSum6to19(UrbanDistrict urbanDistrict) {
+        return sumAll(urbanDistrict.getInhabitantsBetween6And19().values());
+    }
+    public static Integer calculateInhabitantsSum20to29(UrbanDistrict urbanDistrict) {
+        return sumAll(urbanDistrict.getInhabitantsBetween20And29().values());
     }
 
     private static List<AbstractEducationalInstitution> getDistrictEdus(UnfoldingMap map, UrbanDistrict district, List<AbstractEducationalInstitution> institutions) {
@@ -137,7 +128,8 @@ public class DistrictUtil {
         schoolsAndUniversities.addAll(universities);
         List<UrbanDistrict> modifiedDistricts = new ArrayList<>();
         for (UrbanDistrict district : allDistrictsList) {
-            district.getSchools().addAll(getDistrictEdus(map, district, schoolsAndUniversities));
+            district.getUniversities().addAll(getDistrictEdus(map, district, universities));
+            district.getSchools().addAll(getDistrictEdus(map, district, schools));
             modifiedDistricts.add(district);
         }
         return modifiedDistricts;
