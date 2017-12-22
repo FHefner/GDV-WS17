@@ -14,19 +14,19 @@ import de.hsmannheim.models.education.school.SchoolBasedCategory;
 import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
 import de.hsmannheim.models.education.university.UniversityBasedCategory;
 import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
+import de.hsmannheim.ui.CardsUI;
 import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.innsbruckEducation.InnsbruckEducationAppUtil;
 import de.hsmannheim.util.marker.MarkerTypeUtil;
 import de.hsmannheim.util.plots.ScatterPlotAbstract;
 import de.hsmannheim.util.plots.Strategies.ScatterPlotAll;
-import de.hsmannheim.util.plots.Strategies.ScatterPlotSchools;
 import de.hsmannheim.util.unfoldingMap.UnfoldingMapUtil;
 import org.gicentre.utils.colour.ColourTable;
+import org.gicentre.utils.stat.XYChart;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.data.Table;
 import processing.data.TableRow;
-import org.gicentre.utils.stat.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,8 +48,12 @@ public class InnsbruckEducationApp extends PApplet {
     private Location currentMapLocation;
     private boolean mouseWasDragged = false;
     private boolean executedAfterFirstDraw = false;
-    XYChart scatterplotChart;
-
+    private XYChart scatterplotChart;
+    private CardsUI cardsUI;
+    private boolean showSchools = true;
+    private boolean showUniversities = true;
+    private int currentYearToShow = 2017;
+    private int oldYearToShow = -1;
 
     public static void main(String[] args) {
         PApplet.main(InnsbruckEducationApp.class.getName());
@@ -130,6 +134,7 @@ public class InnsbruckEducationApp extends PApplet {
         UnfoldingMapUtil.setPropertiesToMap(map);
         zoomedIntoDistrict = false;
         InnsbruckEducationAppUtil.setStartingDistrictsAndMarkers(markers, allDistrictsList);
+        // this.controlFrame.activateAllCheckboxes();
     }
 
     private void applyMapSettings() {
@@ -145,6 +150,7 @@ public class InnsbruckEducationApp extends PApplet {
         applyMapSettings();
         processData();
         resetView();
+        this.cardsUI = new CardsUI(this);
     }
 
     public void keyPressed() {
@@ -158,7 +164,16 @@ public class InnsbruckEducationApp extends PApplet {
         }
     }
 
+    public void mouseReleased() {
+        cardsUI.mouseReleased();
+        if (currentYearToShow != oldYearToShow) {
+            System.out.println("Now selected the year " + currentYearToShow);
+        }
+    }
+
     public void mouseClicked() {
+        cardsUI.mousePressed();
+        oldYearToShow = currentYearToShow;
         districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
         if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
             for (UrbanDistrict district : allDistrictsList) {
@@ -197,11 +212,18 @@ public class InnsbruckEducationApp extends PApplet {
         currentMapLocation = map.getLocation(mouseX, mouseY);
         //Generate White Box for the Background where the scatterplot will be displayed
         rect(800, -1, 500, 730);
+        cardsUI.beginCard("InnsbruckEducation", 800, 0, width - 800, height);
         if (executedAfterFirstDraw) {
             //generates the Scatterplot
-            scatterplotChart.draw(810, 195, width - 850, height - 300);
+            scatterplotChart.draw(810, 50, width - 850, height - 300);
         } else {
             executeAfterFirstDraw();
         }
+        cardsUI.Label("Anzuzeigende Bildungseinrichtungen:", 810, 520);
+        showSchools = cardsUI.Toggle("Schulen:", showSchools, 810, 540);
+        showUniversities = cardsUI.Toggle("Unis/Hochschulen:", showUniversities, 1000, 540);
+        currentYearToShow = cardsUI.Slider("Anzuzeigendes Jahr: " , 2013, 2017, currentYearToShow, 810, 580, 450, 30);
+        cardsUI.Label(String.valueOf(currentYearToShow), 1050, 630);
+        cardsUI.endCard();
     }
 }

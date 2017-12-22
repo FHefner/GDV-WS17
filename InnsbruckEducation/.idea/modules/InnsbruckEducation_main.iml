@@ -30,16 +30,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../libs/ant.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../libs/jna-platform.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../libs/Unfolding.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -57,7 +48,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../libs/Unfolding.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../libs/ant.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -67,6 +58,15 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../libs/ant-launcher.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../libs/controlP5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -85,6 +85,15 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../libs/json4processing.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../libs/jna-platform.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

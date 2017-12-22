@@ -37,7 +37,6 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
         marker.setStrokeColor(90);
         marker.setStrokeWeight(5);
         marker.setHidden(true);
-        marker.setDiameter(50);
         setMarker(marker);
     }
 }

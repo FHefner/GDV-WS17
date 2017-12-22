@@ -18,8 +18,9 @@ public class UnfoldingMapUtil {
 
 
     public static UnfoldingMap addMarkersToUnfoldingMap(UnfoldingMap map, Map<MarkerType, List<Marker>> markers) {
-        for (Map.Entry<MarkerType, List<Marker>> markerTypeListEntry : markers.entrySet())
-            map.addMarkers(markerTypeListEntry.getValue());
+        map.addMarkers(markers.get(MarkerType.DISTRICT_MARKER));
+        map.addMarkers(markers.get(MarkerType.SCHOOL_MARKER));
+        map.addMarkers(markers.get(MarkerType.UNIVERSITY_MARKER));
         return map;
     }
 
