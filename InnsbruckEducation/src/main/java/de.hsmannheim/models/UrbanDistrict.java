@@ -1,6 +1,7 @@
 package de.hsmannheim.models;
 
 import de.fhpotsdam.unfolding.geo.Location;
+import de.fhpotsdam.unfolding.marker.Marker;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.markers.ColoredPolygonMarker;
@@ -131,6 +132,22 @@ public class UrbanDistrict implements ColorMarker {
 
     public void calculateTotalInhabitantsBetween20And29() {
         this.inhabitantsBetween20And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum20to29(this));
+    }
+
+    public List<Marker> getSchoolMarkers() {
+        List<Marker> schoolMarkers = new ArrayList<>();
+        for (AbstractEducationalInstitution school : this.schools) {
+            schoolMarkers.add(school.getMarker());
+        }
+        return schoolMarkers;
+    }
+
+    public List<Marker> getUniversityMarkers() {
+        List<Marker> universityMarkers = new ArrayList<>();
+        for (AbstractEducationalInstitution university : this.universities) {
+            universityMarkers.add(university.getMarker());
+        }
+        return universityMarkers;
     }
 
     @Override

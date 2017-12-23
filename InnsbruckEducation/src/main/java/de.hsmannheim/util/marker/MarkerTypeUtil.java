@@ -24,7 +24,21 @@ public class MarkerTypeUtil {
     }};
 
 
-    public static Map<MarkerType, List<Marker>> getAllMarkersForAllMarkerType(InnsbruckEducationApp app) {
+    public static void hideEducationMarkersInGivenDistrict(UrbanDistrict district) {
+        List<Marker> educationMarkers = new ArrayList<>(district.getSchoolMarkers());
+        educationMarkers.addAll(district.getUniversityMarkers());
+        for (Marker marker : educationMarkers) {
+            marker.setHidden(true);
+        }
+    }
+
+    public static void hideEducationMarkersInGivenDistricts(List<UrbanDistrict> districts) {
+        for (UrbanDistrict district: districts) {
+            hideEducationMarkersInGivenDistrict(district);
+        }
+    }
+
+    public static Map<MarkerType, List<Marker>> getAllMarkersForAllMarkerTypes(InnsbruckEducationApp app) {
         Map<MarkerType, List<Marker>> markers = new HashMap<>();
 
         for (MarkerType type : MarkerType.values())
@@ -54,7 +68,8 @@ public class MarkerTypeUtil {
         }
     }
 
-    public static void showEducationalInstitutionsInSelectedDistrict(Map<MarkerType, List<Marker>> markers, UnfoldingMap map, UrbanDistrict selectedDistrict) {
+    public static void showEducationalInstitutionsInSelectedDistrict(Map<MarkerType, List<Marker>> markers,
+                                                                     UnfoldingMap map, UrbanDistrict selectedDistrict) {
         for (MarkerType markerType : markerTypesToShowInDistrict)
             enableMarkersInSelectedDistrict(markerType, markers, map, selectedDistrict);
     }

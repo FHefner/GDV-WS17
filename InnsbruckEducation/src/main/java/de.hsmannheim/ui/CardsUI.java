@@ -1,7 +1,6 @@
 package de.hsmannheim.ui;
 
 import processing.core.PApplet;
-import processing.core.PImage;
 
 public class CardsUI {
 
@@ -26,8 +25,8 @@ public class CardsUI {
     private boolean canClick = true;
 
     //For text Input/Edit
-    String bufferText = null;
-    boolean doneText = false;
+    private String bufferText = null;
+    private boolean doneText = false;
 
     //Default sizes
     private int s_big = 200;
@@ -179,31 +178,6 @@ public class CardsUI {
         canClick  = true;
     }
 
-    public void keyPressed() {
-        if (this.applet.keyCode == this.applet.BACKSPACE) {
-            if (bufferText.length() > 0) {
-                bufferText = bufferText.substring(0, bufferText.length()-1);
-            }
-        } else if (this.applet.keyCode == this.applet.DELETE) {
-            bufferText = "";
-        } else if (this.applet.keyCode != this.applet.SHIFT && this.applet.keyCode != this.applet.ENTER) {
-            bufferText = bufferText + this.applet.key;
-        }
-
-        if (this.applet.keyCode == ' ') {
-            bufferText = bufferText.substring(0, bufferText.length()-1);
-            bufferText = bufferText + ' ';
-        }
-
-
-        if (this.applet.keyCode == this.applet.ENTER) {
-            //input = myText;
-            //bufferText = "";
-            doneText = true;
-        }
-    }
-
-
     private void Edittext(String txt) {
         bufferText = txt;
     }
@@ -262,7 +236,8 @@ public class CardsUI {
         if (value)
             pos = w-h;
         //Hover
-        if (this.applet.mouseX >= x && this.applet.mouseX <= x+w && this.applet.mouseY >= y && this.applet.mouseY <= y+h)
+        if (this.applet.mouseX >= x && this.applet.mouseX <= x+w
+                && this.applet.mouseY >= y && this.applet.mouseY <= y+h && this.applet.mousePressed)
         {
 
             this.applet.noStroke();
@@ -345,10 +320,6 @@ public class CardsUI {
         int pos_x = (int)this.applet.textWidth(text);
         return Toggle(value, x+10+pos_x, y, 60, 30);
     }
-
-  /*--- Slider ---
-   v1.0
-   */
 
     //Basic Slider from 0f to 1f
     public float Slider(float min, float max, float value, int x, int y, int w, int h) {
@@ -466,38 +437,5 @@ public class CardsUI {
         this.applet.text(label, x, y, tw, h);
         w2 = (int)(w-tw-15);
         return Slider(min, max, value, (int)(tw+x+15), y, w2, h, tooltip);
-    }
-
-    //Minimal Slider
-    public float Slider(float value, int x, int y) {
-        return Slider(0f, 1f, value, x, y, s_big, s_height);
-    }
-
-    public float Slider(float value, int x, int y, char t) {
-        return Slider(0f, 1f, value, x, y, s_big, s_height, t);
-    }
-
-    public float Slider(String label, float value, int x, int y) {
-        return Slider(label, 0f, 1f, value, x, y, s_big, s_height);
-    }
-
-    public float Slider(String label, float value, int x, int y, char t) {
-        return Slider(label, 0f, 1f, value, x, y, s_big, s_height, t);
-    }
-
-    public float Slider(String label, float value, int x, int y, int w, int h) {
-        return Slider(label, 0f, 1f, value, x, y, w, h);
-    }
-
-    public float Slider(float value, int x, int y, int w, int h) {
-        return Slider(0f, 1f, value, x, y, w, h);
-    }
-
-    public float Slider(float value, int x, int y, int w, int h, char t) {
-        return Slider(0f, 1f, value, x, y, w, h, t);
-    }
-
-    public float Slider(float min, int max, int value, int x, int y, int w, int h) {
-        return Slider((float) min, (float) max, value, x, y, w, h);
     }
 }

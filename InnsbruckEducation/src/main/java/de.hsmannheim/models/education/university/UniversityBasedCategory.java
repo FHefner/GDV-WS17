@@ -19,7 +19,7 @@ public enum UniversityBasedCategory implements ICategory {
 
     protected static Map<String, int[]> schoolCategoryNameToColor = new HashMap<String, int[]>() {{
         put(UNIVERSITY.name(), new int[]{56, 121, 226});
-        put(UAS.name(), new int[]{204, 255, 204});
+        put(UAS.name(), new int[]{117, 157, 221});
     }};
 
     @Override

@@ -50,10 +50,10 @@ public class InnsbruckEducationApp extends PApplet {
     private boolean executedAfterFirstDraw = false;
     private XYChart scatterplotChart;
     private CardsUI cardsUI;
-    private boolean showSchools = true;
-    private boolean showUniversities = true;
-    private int currentYearToShow = 2017;
-    private int oldYearToShow = -1;
+    private boolean[] showSchools = {true, true};
+    private boolean[] showUniversities = {true, true};
+    private int[] yearToShow = {2017, 2017};
+    private boolean sliderMoved = false;
 
     public static void main(String[] args) {
         PApplet.main(InnsbruckEducationApp.class.getName());
@@ -103,7 +103,7 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private void addMarkersToMap() {
-        markers = MarkerTypeUtil.getAllMarkersForAllMarkerType(this);
+        markers = MarkerTypeUtil.getAllMarkersForAllMarkerTypes(this);
         map = UnfoldingMapUtil.addMarkersToUnfoldingMap(map, markers);
     }
 
@@ -134,13 +134,12 @@ public class InnsbruckEducationApp extends PApplet {
         UnfoldingMapUtil.setPropertiesToMap(map);
         zoomedIntoDistrict = false;
         InnsbruckEducationAppUtil.setStartingDistrictsAndMarkers(markers, allDistrictsList);
-        // this.controlFrame.activateAllCheckboxes();
     }
 
     private void applyMapSettings() {
         map = new UnfoldingMap(this, "MAIN_MAP", FormConfig.MAP_X_WINDOW_OFFSET, FormConfig.MAP_Y_WINDOW_OFFSET,
-                FormConfig.WINDOW_WIDTH - FormConfig.MAP_X_WINDOW_OFFSET - FormConfig.SIDE_PANEL_WIDTH,
-                FormConfig.WINDOW_HEIGHT - FormConfig.MAP_Y_WINDOW_OFFSET,
+                FormConfig.MAP_WIDTH,
+                FormConfig.MAP_HEIGHT,
                 false, false, new OpenStreetMap.PositronMapProvider());
         MapUtils.createDefaultEventDispatcher(this, map);
     }
@@ -164,23 +163,57 @@ public class InnsbruckEducationApp extends PApplet {
         }
     }
 
-    public void mouseReleased() {
-        cardsUI.mouseReleased();
-        if (currentYearToShow != oldYearToShow) {
-            System.out.println("Now selected the year " + currentYearToShow);
+    private void handleYearSlider(int oldValue, int newValue) {
+        if (oldValue != newValue) {
+            sliderMoved = true;
+            // TODO: Update district data and recalculate colors of the districts
+            System.out.println("Now selected the year " + newValue);
         }
     }
 
+    private void handleToggle(boolean oldValue, boolean newValue, MarkerType markerType) {
+        if (oldValue != newValue) {
+            showOrHideMarkers(markerType, newValue);
+        }
+    }
+
+    private void saveOldUiElementValues() {
+        yearToShow[0] = yearToShow[1];
+        showSchools[0] = showSchools[1];
+        showUniversities[0] = showUniversities[1];
+    }
+
+    public void mouseReleased() {
+        if (InnsbruckEducationAppUtil.isMouseInsideSidepanel(mouseX, mouseY)) {
+            cardsUI.mouseReleased();
+            handleYearSlider(yearToShow[0], yearToShow[1]);
+            if (!sliderMoved) {
+                handleToggle(showSchools[0], showSchools[1], MarkerType.SCHOOL_MARKER);
+                handleToggle(showUniversities[0], showUniversities[1], MarkerType.UNIVERSITY_MARKER);
+            }
+        }
+        sliderMoved = false;
+    }
+
     public void mouseClicked() {
-        cardsUI.mousePressed();
-        oldYearToShow = currentYearToShow;
-        districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
-        if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
-            for (UrbanDistrict district : allDistrictsList) {
-                changeColorOfSelectedDistrict(district);
+        if (InnsbruckEducationAppUtil.isMouseInsideSidepanel(mouseX, mouseY)) {
+            cardsUI.mousePressed();
+            saveOldUiElementValues();
+        }
+        if (InnsbruckEducationAppUtil.isMouseInsideUnfoldingMap(mouseX, mouseY)) {
+            districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
+            if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
+                for (UrbanDistrict district : allDistrictsList) {
+                    changeColorOfSelectedDistrict(district);
+                }
             }
         }
         mouseWasDragged = false;
+    }
+
+    private void highlightSelectedDistrict() {
+        showOrHideMarkers(MarkerType.SCHOOL_MARKER, showSchools[1]);
+        showOrHideMarkers(MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
     }
 
     private void changeColorOfSelectedDistrict(UrbanDistrict district) {
@@ -188,10 +221,30 @@ public class InnsbruckEducationApp extends PApplet {
             selectedDistrict = district;
             map.zoomAndPanToFit(district.getLocationsFromJSONArray());
             zoomedIntoDistrict = true;
-            MarkerTypeUtil.showEducationalInstitutionsInSelectedDistrict(markers, map, selectedDistrict);
+            highlightSelectedDistrict();
+
+            // MarkerTypeUtil.showEducationalInstitutionsInSelectedDistrict(markers, map, selectedDistrict);
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
         } else {
+            if (zoomedIntoDistrict) {
+                MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
+            }
             district.getMarker().setPolygonColor(color(90, 90, 90));
+        }
+    }
+
+    private void showOrHideMarkers(MarkerType markerType, boolean showMarkers) {
+        if (zoomedIntoDistrict) {
+            if (markerType == MarkerType.SCHOOL_MARKER) {
+                for (Marker marker : selectedDistrict.getSchoolMarkers()) {
+                    marker.setHidden(!showMarkers);
+                }
+            }
+            if (markerType == MarkerType.UNIVERSITY_MARKER) {
+                for (Marker marker : selectedDistrict.getUniversityMarkers()) {
+                    marker.setHidden(!showMarkers);
+                }
+            }
         }
     }
 
@@ -211,19 +264,19 @@ public class InnsbruckEducationApp extends PApplet {
         // Just for debugging current location
         currentMapLocation = map.getLocation(mouseX, mouseY);
         //Generate White Box for the Background where the scatterplot will be displayed
-        rect(800, -1, 500, 730);
-        cardsUI.beginCard("InnsbruckEducation", 800, 0, width - 800, height);
+        rect(860, 0, width - 860, height);
+        cardsUI.beginCard("InnsbruckEducation", 860, 0, FormConfig.SIDE_PANEL_WIDTH, FormConfig.SIDE_PANEL_HEIGHT);
         if (executedAfterFirstDraw) {
             //generates the Scatterplot
-            scatterplotChart.draw(810, 50, width - 850, height - 300);
+            scatterplotChart.draw(870, 50, 380, 380);
         } else {
             executeAfterFirstDraw();
         }
-        cardsUI.Label("Anzuzeigende Bildungseinrichtungen:", 810, 520);
-        showSchools = cardsUI.Toggle("Schulen:", showSchools, 810, 540);
-        showUniversities = cardsUI.Toggle("Unis/Hochschulen:", showUniversities, 1000, 540);
-        currentYearToShow = cardsUI.Slider("Anzuzeigendes Jahr: " , 2013, 2017, currentYearToShow, 810, 580, 450, 30);
-        cardsUI.Label(String.valueOf(currentYearToShow), 1050, 630);
+        cardsUI.Label("Anzuzeigende Bildungseinrichtungen:", FormConfig.SIDE_PANEL_WIDTH, FormConfig.SIDE_PANEL_HEIGHT);
+        showSchools[1] = cardsUI.Toggle("Schulen:", showSchools[1], 870, 540);
+        showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1050, 540);
+        yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: " , 2013, 2017, yearToShow[1], 870, 580, 400, 30);
+        cardsUI.Label(String.valueOf(yearToShow[1]), 1110, 630);
         cardsUI.endCard();
     }
 }
