@@ -38,10 +38,10 @@ public abstract class ScatterPlotAbstract {
    //     this.educationalInstitutions=educationalInstitutions;
     }
 
-    public List<PVector> createDataset(List<UrbanDistrict> allDistrictsList) {
+    public List<PVector> createDataset(List<UrbanDistrict> allDistrictsList, int year) {
         colorDataList = new ArrayList<>();
         for(UrbanDistrict district: allDistrictsList){
-          addDistrictToPlot(district);
+          addDistrictToPlot(district, year);
         }
         return colorDataList;
     }
@@ -51,6 +51,6 @@ public abstract class ScatterPlotAbstract {
     //Example: District with the most Inhabitants (University) 1000 --> 1000/20= 50 --> district.amountTotalInhabitants/50
     protected abstract void addToColorDataList(int totalAmountInhabitants);
 
-    protected abstract void addDistrictToPlot(UrbanDistrict district);
+    protected abstract void addDistrictToPlot(UrbanDistrict district, Integer year);
 
 }

@@ -2,6 +2,7 @@ package de.hsmannheim.util.plots.Strategies;
 
 
 import de.hsmannheim.models.UrbanDistrict;
+import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.plots.ScatterPlotAbstract;
 import processing.core.PVector;
 
@@ -13,9 +14,9 @@ public class ScatterPlotUniversities extends ScatterPlotAbstract {
 
 
     @Override
-    public void addDistrictToPlot(UrbanDistrict district) {
-        int totalAmountInhabitants = district.getInhabitantsBetween20And29().get("totalAmountInhabitants");
-        colorDataList.add(new PVector(district.getSumUniversities(), district.getInhabitantsBetween20And29().get("totalAmountInhabitants")));
+    public void addDistrictToPlot(UrbanDistrict district, Integer year) {
+        int totalAmountInhabitants = DistrictUtil.getTotalInhabitants20To29(district, year);
+        colorDataList.add(new PVector(district.getSumUniversities(), totalAmountInhabitants));
         addToColorDataList(totalAmountInhabitants);
     }
 

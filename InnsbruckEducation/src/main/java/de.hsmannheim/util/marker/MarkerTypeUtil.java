@@ -32,12 +32,6 @@ public class MarkerTypeUtil {
         }
     }
 
-    public static void hideEducationMarkersInGivenDistricts(List<UrbanDistrict> districts) {
-        for (UrbanDistrict district: districts) {
-            hideEducationMarkersInGivenDistrict(district);
-        }
-    }
-
     public static Map<MarkerType, List<Marker>> getAllMarkersForAllMarkerTypes(InnsbruckEducationApp app) {
         Map<MarkerType, List<Marker>> markers = new HashMap<>();
 

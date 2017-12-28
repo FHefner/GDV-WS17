@@ -255,7 +255,10 @@ public class CardsUI {
         }
         //Normal
         else {
-            this.applet.fill(c_light);
+            if (value)
+                this.applet.fill(c_hover);
+            else
+                this.applet.fill(c_light);
             this.applet.stroke(c_light);
             this.applet.ellipse(x+h/2+pos, y+h/2, h-8, h-8);
         }

@@ -66,11 +66,13 @@ public class InnsbruckEducationApp extends PApplet {
     private void loadDistrictsData() {
         Table districtData = loadTable(PathConfig.BEVOELKERUNG_CSV_DATA_PATH, "header");
         initDistrictUtil();
-        for (TableRow row : districtData.rows()) {
-            UrbanDistrict tmpDistrict = UrbanDistrict.buildDefaultDistrict(this, row);
-            districtUtil.setDistrictInhabitantsInformation(tmpDistrict);
+
+        for (int i = 0; i < 1000; i++) {
+            UrbanDistrict newDistrict = UrbanDistrict.buildDefaultDistrict(this, districtData, i);
+            if (newDistrict != null)
+                districtUtil.setDistrictInhabitantsInformation(newDistrict, districtData, i);
         }
-        districtUtil.setDistrictColorsBasedOnPopulation();
+        districtUtil.setDistrictColorsBasedOnPopulation(yearToShow[1]);
     }
 
     private void loadSchoolCategoryFromCSV(String path, SchoolBasedCategory schoolBasedCategory) {
@@ -107,9 +109,9 @@ public class InnsbruckEducationApp extends PApplet {
         map = UnfoldingMapUtil.addMarkersToUnfoldingMap(map, markers);
     }
 
-    private void createScatterPlot() {
+    private void createScatterPlot(int year) {
         this.scatterplotChart = new XYChart(this);
-        List<PVector> scatterplotChartData = scatterplotStrategy.createDataset(allDistrictsList);
+        List<PVector> scatterplotChartData = scatterplotStrategy.createDataset(allDistrictsList, year);
         scatterplotChart.setData(scatterplotChartData);
         scatterplotChart.showXAxis(true);
         scatterplotChart.showYAxis(true);
@@ -166,8 +168,12 @@ public class InnsbruckEducationApp extends PApplet {
     private void handleYearSlider(int oldValue, int newValue) {
         if (oldValue != newValue) {
             sliderMoved = true;
-            // TODO: Update district data and recalculate colors of the districts
-            System.out.println("Now selected the year " + newValue);
+            districtUtil.setDistrictColorsBasedOnPopulation(newValue);
+            addMarkersToMap();
+            if (zoomedIntoDistrict)
+                for (UrbanDistrict district : allDistrictsList) {
+                    changeColorOfSelectedDistrict(district);
+                }
         }
     }
 
@@ -219,11 +225,10 @@ public class InnsbruckEducationApp extends PApplet {
     private void changeColorOfSelectedDistrict(UrbanDistrict district) {
         if (district.getIsSelected()) {
             selectedDistrict = district;
+            System.out.println(selectedDistrict);
             map.zoomAndPanToFit(district.getLocationsFromJSONArray());
             zoomedIntoDistrict = true;
             highlightSelectedDistrict();
-
-            // MarkerTypeUtil.showEducationalInstitutionsInSelectedDistrict(markers, map, selectedDistrict);
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
         } else {
             if (zoomedIntoDistrict) {
@@ -249,9 +254,9 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private void executeAfterFirstDraw() {
-        allDistrictsList = DistrictUtil.addEducationalInstitutionsToDistricts(map, schools, universities, allDistrictsList);
+        allDistrictsList = DistrictUtil.addEducationalInstitutionsToDistricts(map, schools, universities, allDistrictsList, yearToShow[1]);
         this.scatterplotStrategy = new ScatterPlotAll();
-        createScatterPlot();
+        createScatterPlot(yearToShow[1]);
         executedAfterFirstDraw = true;
     }
 
@@ -275,7 +280,7 @@ public class InnsbruckEducationApp extends PApplet {
         cardsUI.Label("Anzuzeigende Bildungseinrichtungen:", FormConfig.SIDE_PANEL_WIDTH, FormConfig.SIDE_PANEL_HEIGHT);
         showSchools[1] = cardsUI.Toggle("Schulen:", showSchools[1], 870, 540);
         showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1050, 540);
-        yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: " , 2013, 2017, yearToShow[1], 870, 580, 400, 30);
+        yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: ", 2013, 2017, yearToShow[1], 870, 580, 380, 30);
         cardsUI.Label(String.valueOf(yearToShow[1]), 1110, 630);
         cardsUI.endCard();
     }

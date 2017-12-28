@@ -6,13 +6,13 @@ import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
-import de.hsmannheim.models.education.school.SchoolBasedEducationalInstitution;
-import de.hsmannheim.models.education.university.UniversityBasedEducationalInstitution;
 import de.hsmannheim.util.district.DistrictUtil;
+import de.hsmannheim.util.file.FileUtil;
 import de.hsmannheim.util.location.LocationUtil;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSpengelMapUtil;
 import de.hsmannheim.util.map.zaehlersprengel.ZaehlerSprengelBasedStrategy;
 import processing.core.PApplet;
+import processing.data.Table;
 import processing.data.TableRow;
 
 import java.util.*;
@@ -20,9 +20,7 @@ import java.util.*;
 public class UrbanDistrict implements ColorMarker {
 
 
-    protected Map<String, Integer> inhabitantsBetween6And29 = new HashMap<>();
-    protected Map<String, Integer> inhabitantsBetween6And19 = new HashMap<>();
-    protected Map<String, Integer> inhabitantsBetween20And29 = new HashMap<>();
+    protected Map<Integer, Map<String, Integer>> inhabitantsBetween6And29 = new HashMap<>();
 
     private PApplet applet;
     private int zaehlerSprengel = -1;
@@ -35,8 +33,63 @@ public class UrbanDistrict implements ColorMarker {
     private boolean isSelected;
     private Integer color;
 
+    private UrbanDistrict() {
+
+    }
+
+    public static UrbanDistrict buildDefaultDistrict(PApplet applet, Table rows, Integer rowCount) {
+
+        Map<Integer, Map<String, Integer>> inhabitantsMap = getCompleteInhabitantsForDistrict(rows, rowCount);
+
+        if (inhabitantsMap.isEmpty()) {
+            return null;
+        }
+
+        return new UrbanDistrict()
+                .withApplet(applet)
+                .withZaehlerSprengel(rowCount)
+                .withInhabitantsMap(inhabitantsMap)
+                .withZaehlerSprengelToRegionNumberAndName()
+                .withLocations(applet);
+
+    }
+
+    private static Map<Integer, Map<String, Integer>> getCompleteInhabitantsForDistrict(Table table, Integer rowCount) {
+        Map<Integer, Map<String, Integer>> inhabitantsMap = new HashMap<>();
+        for (TableRow row : table.rows()) {
+            if (row.getInt("ZSPR") == rowCount) {
+                inhabitantsMap.put(row.getInt("year"), withKeyValuePairs(row,
+                        new LinkedHashMap<String, String>() {{
+                            put("amountInhabitants6To9", "6_9");
+                            put("amountInhabitants10To14", "10_14");
+                            put("amountInhabitants15To19", "15_19");
+                            put("amountInhabitants20To24", "20_24");
+                            put("amountInhabitants25To29", "25_29");
+                        }}));
+            }
+        }
+        return inhabitantsMap;
+    }
+
+    private static Map<String, Integer> withKeyValuePairs(TableRow row, LinkedHashMap<String, String> inhabitantsAmountsMap) {
+        Map<String, Integer> specificInhabitantsMap = new HashMap<>();
+        for (Map.Entry<String, String> entries : inhabitantsAmountsMap.entrySet()) {
+            specificInhabitantsMap.put(entries.getKey(), row.getInt(entries.getValue()));
+        }
+        return specificInhabitantsMap;
+    }
+
+    private UrbanDistrict withInhabitantsMap(Map<Integer, Map<String, Integer>> inhabitantsMap) {
+        this.inhabitantsBetween6And29 = inhabitantsMap;
+        return this;
+    }
+
     public List<Location> getLocations() {
         return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 
     public List<AbstractEducationalInstitution> getSchools() {
@@ -57,26 +110,6 @@ public class UrbanDistrict implements ColorMarker {
 
     public List<AbstractEducationalInstitution> getUniversities() {
         return universities;
-    }
-
-    private UrbanDistrict() {
-
-    }
-
-    public static UrbanDistrict buildDefaultDistrict(PApplet applet, TableRow row) {
-        return new UrbanDistrict()
-                .withApplet(applet)
-                .withZaehlerSprengel(row.getInt("ZSPR"))
-                .withKeyValuePairs(new LinkedHashMap<String, String>() {{
-                    put("amountInhabitants6To9", "6_9");
-                    put("amountInhabitants10To14", "10_14");
-                    put("amountInhabitants15To19", "15_19");
-                    put("amountInhabitants20To24", "20_24");
-                    put("amountInhabitants25To29", "25_29");
-                }}, row)
-                .withZaehlerSprengelToRegionNumberAndName()
-                .withLocations(applet);
-
     }
 
     private UrbanDistrict withZaehlerSprengel(int zspr) {
@@ -102,12 +135,12 @@ public class UrbanDistrict implements ColorMarker {
     }
 
     public void addToInhabitantsMap(Map.Entry<String, String> entry, TableRow row) {
-        this.inhabitantsBetween6And29.put(entry.getKey(), row.getInt(entry.getValue()));
-        if (!entry.getKey().equals("amountInhabitants20To24") &&
-                !entry.getKey().equals("amountInhabitants25To29")) {
-            this.inhabitantsBetween6And19.put(entry.getKey(), row.getInt(entry.getValue()));
+        Integer year = FileUtil.getYearFromRow(row);
+        if (DistrictUtil.isYearInMap(this.inhabitantsBetween6And29, year)) {
+            this.inhabitantsBetween6And29.get(year).put(entry.getKey(), row.getInt(entry.getValue()));
         } else {
-            this.inhabitantsBetween20And29.put(entry.getKey(), row.getInt(entry.getValue()));
+            this.inhabitantsBetween6And29.put(year, new HashMap<String, Integer>());
+            this.inhabitantsBetween6And29.get(year).put(entry.getKey(), row.getInt(entry.getValue()));
         }
     }
 
@@ -120,19 +153,11 @@ public class UrbanDistrict implements ColorMarker {
         this.marker = new ColoredPolygonMarker(this.applet, this.locations, this.color);
     }
 
-    public void calculateTotalInhabitants() {
-        this.inhabitantsBetween6And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum6to29(this));
-        calculateTotalInhabitantsBetween6And19();
-        calculateTotalInhabitantsBetween20And29();
+    public void calculateTotalInhabitantsForGivenYear(Integer year) {
+        if (!this.getInhabitantsBetween6And29().get(year).keySet().contains("totalAmountInhabitants"))
+            this.inhabitantsBetween6And29.get(year).put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum6to29(this, year));
     }
 
-    public void calculateTotalInhabitantsBetween6And19() {
-        this.inhabitantsBetween6And19.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum6to19(this));
-    }
-
-    public void calculateTotalInhabitantsBetween20And29() {
-        this.inhabitantsBetween20And29.put("totalAmountInhabitants", DistrictUtil.calculateInhabitantsSum20to29(this));
-    }
 
     public List<Marker> getSchoolMarkers() {
         List<Marker> schoolMarkers = new ArrayList<>();
@@ -152,26 +177,25 @@ public class UrbanDistrict implements ColorMarker {
 
     @Override
     public String toString() {
-        return String.valueOf(this.zaehlerSprengel) +
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<Integer, Map<String, Integer>> entry : this.inhabitantsBetween6And29.entrySet()) {
+            builder.append(entry.getKey() + " - " + entry.getValue().get("totalAmountInhabitants"));
+        }
+        return builder.toString();
+        /*return String.valueOf(this.zaehlerSprengel) +
+
                 " " + this.name + "\n" +
-                "Einwohner 6-9: " + String.valueOf(inhabitantsBetween6And29.get("amountInhabitants6To9")) + "\n" +
-                "Einwohner 10-14: " + String.valueOf(inhabitantsBetween6And29.get("amountInhabitants10To14")) + "\n" +
-                "Einwohner 15-19: " + String.valueOf(inhabitantsBetween6And29.get("amountInhabitants15To19")) + "\n" +
-                "Einwohner 20-24: " + String.valueOf(inhabitantsBetween6And29.get("amountInhabitants20To24")) + "\n" +
-                "Einwohner 25-29: " + String.valueOf(inhabitantsBetween6And29.get("amountInhabitants25To29")) + "\n" +
-                "Gesamteinwohner: " + String.valueOf(inhabitantsBetween6And29.get("totalAmountInhabitants")) + "\n";
+                "Einwohner 6-9: " + String.valueOf(inhabitantsBetween6And29.get(2017).get("amountInhabitants6To9")) + "\n" +
+                "Einwohner 10-14: " + String.valueOf(inhabitantsBetween6And29.get(2017).get("amountInhabitants10To14")) + "\n" +
+                "Einwohner 15-19: " + String.valueOf(inhabitantsBetween6And29.get(2017).get("amountInhabitants15To19")) + "\n" +
+                "Einwohner 20-24: " + String.valueOf(inhabitantsBetween6And29.get(2017).get("amountInhabitants20To24")) + "\n" +
+                "Einwohner 25-29: " + String.valueOf(inhabitantsBetween6And29.get(2017).get("amountInhabitants25To29")) + "\n" +
+                "Gesamteinwohner: " + String.valueOf(inhabitantsBetween6And29.get(2017).get("totalAmountInhabitants")) + "\n";*/
+
     }
 
-    public Map<String, Integer> getInhabitantsBetween6And29() {
+    public Map<Integer, Map<String, Integer>> getInhabitantsBetween6And29() {
         return this.inhabitantsBetween6And29;
-    }
-
-    public Map<String, Integer> getInhabitantsBetween6And19() {
-        return this.inhabitantsBetween6And19;
-    }
-
-    public Map<String, Integer> getInhabitantsBetween20And29() {
-        return this.inhabitantsBetween20And29;
     }
 
     public boolean getIsSelected() {
@@ -196,10 +220,6 @@ public class UrbanDistrict implements ColorMarker {
 
     public List<Location> getLocationsFromJSONArray() {
         return locations;
-    }
-
-    public void setLocations(List<Location> locations) {
-        this.locations = locations;
     }
 
     public int getRegionNumber() {

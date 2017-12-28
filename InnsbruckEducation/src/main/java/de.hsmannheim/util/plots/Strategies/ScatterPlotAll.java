@@ -12,8 +12,8 @@ public class ScatterPlotAll extends ScatterPlotAbstract {
     }
 
     @Override
-    protected void addDistrictToPlot(UrbanDistrict district) {
-        int totalAmountInhabitants = district.getInhabitantsBetween6And29().get("totalAmountInhabitants");
+    protected void addDistrictToPlot(UrbanDistrict district, Integer year) {
+        int totalAmountInhabitants = district.getInhabitantsBetween6And29().get(year).get("totalAmountInhabitants");
         colorDataList.add(new PVector(district.getSumEducationalInstitutions(), totalAmountInhabitants));
         addToColorDataList(totalAmountInhabitants);
     }
