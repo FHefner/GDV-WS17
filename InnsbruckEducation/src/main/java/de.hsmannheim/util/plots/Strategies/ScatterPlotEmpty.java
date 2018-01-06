@@ -1,4 +1,21 @@
 package de.hsmannheim.util.plots.Strategies;
 
-public class ScatterPlotEmpty {
+import de.hsmannheim.models.UrbanDistrict;
+import de.hsmannheim.util.plots.ScatterPlotAbstract;
+import processing.core.PVector;
+
+public class ScatterPlotEmpty extends ScatterPlotAbstract {
+    public ScatterPlotEmpty() {
+        super("Schulen", "Einwohner");
+    }
+
+    @Override
+    public void addDistrictToPlot(UrbanDistrict district, Integer year) {
+
+    }
+
+    @Override
+    protected void addToColorDataList(int totalAmountInhabitants, UrbanDistrict district) {
+
+    }
 }

@@ -203,7 +203,7 @@ public class UrbanDistrict implements ColorMarker {
     }
 
     public Integer getColor() {
-        return color;
+        return this.color;
     }
 
     public void setColor(Integer color) {
