@@ -329,7 +329,7 @@ public class InnsbruckEducationApp extends PApplet {
         }
         cardsUI.Label("Anzuzeigende Bildungseinrichtungen:", FormConfig.SIDE_PANEL_WIDTH, FormConfig.SIDE_PANEL_HEIGHT);
         showSchools[1] = cardsUI.Toggle("Schulen:", showSchools[1], 870, 540);
-        showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1050, 540);
+        showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1045, 540);
         yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: ", 2013, 2017, yearToShow[1], 870, 580, 380, 30);
         cardsUI.Label(String.valueOf(yearToShow[1]), 1110, 630);
         cardsUI.endCard();

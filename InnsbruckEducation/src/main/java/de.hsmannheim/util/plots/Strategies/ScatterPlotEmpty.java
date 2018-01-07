@@ -6,7 +6,7 @@ import processing.core.PVector;
 
 public class ScatterPlotEmpty extends ScatterPlotAbstract {
     public ScatterPlotEmpty() {
-        super("Schulen", "Einwohner");
+        super("Keine Bildungseinrichtungen ausgewählt!", "Keine Daten zu zeigen!");
     }
 
     @Override
