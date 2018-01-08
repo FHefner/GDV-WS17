@@ -3,10 +3,12 @@ package de.hsmannheim;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
+import de.fhpotsdam.unfolding.marker.SimplePolygonMarker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
+import de.hsmannheim.markers.LabeledMarker;
 import de.hsmannheim.markers.MarkerType;
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
@@ -159,11 +161,23 @@ public class InnsbruckEducationApp extends PApplet {
         addMarkersToMap();
     }
 
+    private void hideEducationLabels() {
+        List<Marker> educationMarkers = new ArrayList<>(selectedDistrict.getSchoolMarkers());
+        educationMarkers.addAll(selectedDistrict.getUniversityMarkers());
+        for (Marker marker : educationMarkers) {
+            LabeledMarker labeledMarker = (LabeledMarker) marker;
+            labeledMarker.setShowLabel(false);
+        }
+
+    }
+
     private void resetView() {
         UnfoldingMapUtil.setPropertiesToMap(map);
         zoomedIntoDistrict = false;
         InnsbruckEducationAppUtil.setStartingDistrictsAndMarkers(markers, allDistrictsList);
-
+        if (executedAfterFirstDraw) {
+            hideEducationLabels();
+        }
     }
 
     private void applyMapSettings() {
@@ -171,7 +185,6 @@ public class InnsbruckEducationApp extends PApplet {
                 FormConfig.MAP_WIDTH,
                 FormConfig.MAP_HEIGHT,
                 false, false, new OpenStreetMap.PositronMapProvider());
-        //map.setTweening(true);
         MapUtils.createDefaultEventDispatcher(this, map);
     }
 
@@ -181,9 +194,6 @@ public class InnsbruckEducationApp extends PApplet {
         processData();
         resetView();
         this.cardsUI = new CardsUI(this);
-        colorImage = loadImage(PathConfig.colorImage, "png");
-        redImage = loadImage(PathConfig.redImage, "jpg");
-        whiteImage = loadImage(PathConfig.whiteImage, "jpg");
     }
 
     public void keyPressed() {
@@ -249,7 +259,36 @@ public class InnsbruckEducationApp extends PApplet {
                 }
             }
         }
+        markerInPlotClicked();
         mouseWasDragged = false;
+    }
+
+    private void markerInPlotClicked() {
+        float[][] plotMarkersPixelCoordinates = new ScatterPlotUtil().getMarkerPixelCoordinates(scatterPlotChart, 7000, 20);
+        float[] scatterPlotHovered = InnsbruckEducationAppUtil.getHoveredScatterPlotMarker(mouseX, mouseY, plotMarkersPixelCoordinates);
+        if (scatterPlotHovered[0] != -1) {
+            try {
+                highlightDistrictInScatterPlot(whichDistrictClickedInPlot(ScatterPlotUtil.getMarkersAxisCoordinates(scatterPlotHovered[0], scatterPlotHovered[1])));
+            } catch (NullPointerException e) {
+                System.err.println("District that has been selected couldnt be matched with the Coordinates in the Plot");
+            }
+        }
+
+    }
+
+    private UrbanDistrict whichDistrictClickedInPlot(int[] markersAxisCoordinates) {
+        UrbanDistrict targetDistrict=null;
+        for (UrbanDistrict district : allDistrictsList) {
+            int totalInhabitantsDistrict = district.getInhabitantsBetween6And29().get(yearToShow[1]).get("totalAmountInhabitants");
+            int totalEducationalInstitutionsDistrict = district.getSumEducationalInstitutions();
+            if (totalEducationalInstitutionsDistrict == markersAxisCoordinates[0] &&
+                    totalInhabitantsDistrict == markersAxisCoordinates[1]) {
+                district.setSelected(true);
+                targetDistrict=district;
+            }
+            changeColorOfSelectedDistrict(district);
+        }
+        return targetDistrict;
     }
 
     private void highlightSelectedDistrict() {
@@ -257,7 +296,7 @@ public class InnsbruckEducationApp extends PApplet {
         showOrHideMarkers(MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
     }
 
-    private int[] extractRGB(UrbanDistrict district) {
+   private int[] extractRGB(UrbanDistrict district) {
         int[] rgb = new int[3];
         rgb[0] = (int) red(district.getColor());
         rgb[1] = (int) green(district.getColor());
@@ -265,18 +304,6 @@ public class InnsbruckEducationApp extends PApplet {
         return rgb;
     }
 
-
-    /*  public void hideEducationMarkersInGivenDistrict(UrbanDistrict district) {
-          List<Marker> schoolMarkers = new ArrayList<>(district.getSchoolMarkers());
-          List<Marker> universityMarkers = new ArrayList<>(district.getUniversityMarkers());
-          for (Marker marker : schoolMarkers) {
-           //TODO Marker Transparent machen
-              //nicht hiden, gibt leider kein getColor für Marker muss also irgendwoher wissen welcher Typ Marker das ist
-              // nicht nur schule sondern welcher SchulTyp brauch also mehrere get für die jeweiligen Schulen getSchoolMarkersElementary etc.
-
-          }
-      }
-  */
     private void changeColorOfSelectedDistrict(UrbanDistrict district) {
         if (district.getIsSelected()) {
             highlightDistrictInScatterPlot(district);
@@ -288,7 +315,7 @@ public class InnsbruckEducationApp extends PApplet {
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
         } else {
             if (zoomedIntoDistrict) {
-                MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
+               MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
             }
             int rgb[] = extractRGB(district);
             district.getMarker().setPolygonColor(color(rgb[0], rgb[1], rgb[2], 50));
@@ -322,6 +349,29 @@ public class InnsbruckEducationApp extends PApplet {
         mouseWasDragged = true;
     }
 
+    private void checkIfEducationalInstitutionIsHovered() {
+        List<Marker> educationMarkers = new ArrayList<>(selectedDistrict.getSchoolMarkers());
+        educationMarkers.addAll(selectedDistrict.getUniversityMarkers());
+        hideEducationLabels();
+        for (Marker marker : educationMarkers) {
+            LabeledMarker labeledMarker = (LabeledMarker) marker;
+            labeledMarker.setShowLabel(labeledMarker.isInside(map, mouseX, mouseY));
+        }
+    }
+
+    private void drawElementOnProcessing(int[] fillColor, int[] strokeColor, int x, int y, float width, int height, String geometryString, float strokeWidth) {
+        fill(fillColor[0], fillColor[1], fillColor[2]);
+        strokeWeight(strokeWidth);
+        stroke(strokeColor[0], strokeColor[1], strokeColor[2]);
+
+        try {
+            Method method = this.getClass().getMethod(geometryString, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE);
+            method.invoke(this, x, y, width, height);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void draw() {
         map.draw();
         // Just for debugging current location
@@ -336,11 +386,10 @@ public class InnsbruckEducationApp extends PApplet {
             executeAfterFirstDraw();
         }
         cardsUI.Label("Anzuzeigende Bildungseinrichtungen:", FormConfig.SIDE_PANEL_WIDTH, FormConfig.SIDE_PANEL_HEIGHT);
-        showSchools[1] = cardsUI.Toggle("Schulen:", showSchools[1], 870, 615);
-        showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1045, 615);
-        yearToShow[1] = cardsUI.Slider("Jahr: ", 2013, 2017, yearToShow[1], 870, 655, 380, 30);
-        cardsUI.Label(String.valueOf(yearToShow[1]), (int) (860 + (FormConfig.SIDE_PANEL_WIDTH / 2) - textWidth(String.valueOf(yearToShow[1]))), 705);
-
+        showSchools[1] = cardsUI.Toggle("Schulen:", showSchools[1], 870, 540);
+        showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1045, 540);
+        yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: ", 2013, 2017, yearToShow[1], 870, 580, 380, 30);
+        cardsUI.Label(String.valueOf(yearToShow[1]), 1110, 630);
 
         drawElementOnProcessing(new int[]{51, 64, 80}, new int[]{233, 233, 233}, 870, 450, (float) (FormConfig.SIDE_PANEL_WIDTH * 0.95), 145, "rect", 3);
         drawElementOnProcessing(new int[]{115, 134, 52}, new int[]{90, 90, 90}, 890, 470, 20, 20, "ellipse", 4);
@@ -367,18 +416,8 @@ public class InnsbruckEducationApp extends PApplet {
 
 
         cardsUI.endCard();
-    }
-
-    private void drawElementOnProcessing(int[] fillColor, int[] strokeColor, int x, int y, float width, int height, String geometryString, float strokeWidth) {
-        fill(fillColor[0], fillColor[1], fillColor[2]);
-        strokeWeight(strokeWidth);
-        stroke(strokeColor[0], strokeColor[1], strokeColor[2]);
-
-        try {
-            Method method = this.getClass().getMethod(geometryString, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE);
-            method.invoke(this, x, y, width, height);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+        if (zoomedIntoDistrict) {
+            checkIfEducationalInstitutionIsHovered();
         }
     }
 }

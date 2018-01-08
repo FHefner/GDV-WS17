@@ -5,11 +5,17 @@ import de.hsmannheim.util.plots.Strategies.ScatterPlotEmpty;
 import de.hsmannheim.util.plots.Strategies.ScatterPlotSchools;
 import de.hsmannheim.util.plots.Strategies.ScatterPlotUniversities;
 import org.gicentre.utils.colour.ColourTable;
+import org.gicentre.utils.stat.XYChart;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ScatterPlotUtil {
     public static ColourTable colorTable=ColourTable.getPresetColourTable(ColourTable.PU_RD, 0, 10);
     public static float[] colorDataWithHighlightedDistrict;
     public static boolean districtIsHighlightedInScatterPlot = false;
+    private static List<Float[]> markerAxisAndPixelCoordinates=new ArrayList<>(4);
 
 
     public static void resetColorTable(){
@@ -49,6 +55,46 @@ public class ScatterPlotUtil {
         colourTableNew.addContinuousColourRule(10, 103, 0, 31, 70);
         colourTableNew.addContinuousColourRule(-1, 255, 0, 0, 255);
         return colourTableNew;
+    }
+
+    public float[][] getMarkerPixelCoordinates(final XYChart scatterPlotChart, final int maxPopulation, final int maxEducationalInstitutions){
+        float[][] markerPixelCoordinates = new float[21][2];
+        float[][] markerAxisCoordinates = initializeMarkerAxisCoordinates(scatterPlotChart.getXData(), scatterPlotChart.getYData());
+        float[] pixelPerUnitXY=getPixelsPerUnitXY( maxEducationalInstitutions, maxPopulation);
+        for(int i = 0; i<markerPixelCoordinates.length; i++){
+            markerPixelCoordinates[i][0]=935+pixelPerUnitXY[0]*markerAxisCoordinates[i][0];
+            markerPixelCoordinates[i][1]=395-pixelPerUnitXY[1]*markerAxisCoordinates[i][1];
+            markerAxisAndPixelCoordinates.add(new Float[]{markerPixelCoordinates[i][0], markerPixelCoordinates[i][1], markerAxisCoordinates[i][0], markerAxisCoordinates[i][1],});
+        }
+        return markerPixelCoordinates;
+    }
+
+
+    public static int[] getMarkersAxisCoordinates(float xCoordinates, float yCoordinates){
+        for (int i = 0; i < markerAxisAndPixelCoordinates.size(); i++) {
+            if(xCoordinates==markerAxisAndPixelCoordinates.get(i)[0] && yCoordinates==markerAxisAndPixelCoordinates.get(i)[1])
+                return new int[] {markerAxisAndPixelCoordinates.get(i)[2].intValue(),markerAxisAndPixelCoordinates.get(i)[3].intValue()};
+        }
+        return new int[]{-1,-1};
+    }
+
+    private float[][] initializeMarkerAxisCoordinates(final float[] xData, final float[] yData){
+        float[][] markerAxisCoordinates= new float[21][2];
+        for(int i=0; i<21; i++){
+            markerAxisCoordinates[i][0]=xData[i];
+            markerAxisCoordinates[i][1]=yData[i];
+        }
+        return markerAxisCoordinates;
+    }
+
+    private float[] getPixelsPerUnitXY(int maxEducationalInstitutions, int maxPopulation){
+        int[] coordinatePointZero={942, 400};
+        int[] coordinatesMaxYAxis={935, 65};
+        int[] coordinatesMaxXAxis={1245, 395};
+        float pixelPerUnitX= (float) (coordinatesMaxXAxis[0]-coordinatePointZero[0])/maxEducationalInstitutions;
+        float pixelPerUnitY= (float) (coordinatePointZero[1]-coordinatesMaxYAxis[1])/maxPopulation;
+
+        return new float[] {pixelPerUnitX, pixelPerUnitY};
     }
 
 }

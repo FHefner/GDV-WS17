@@ -198,6 +198,10 @@ public class UrbanDistrict implements ColorMarker {
         return this.inhabitantsBetween6And29;
     }
 
+    public void setSelectedTrue(boolean selected){
+        this.isSelected=selected;
+    }
+
     public boolean getIsSelected() {
         return isSelected;
     }
