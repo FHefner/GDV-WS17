@@ -20,4 +20,8 @@ public class PathConfig {
     public final static String UNIVERSITY_CSV_DATA_PATH = "src/main/resources/data/universitaet_standorte.csv";
     public final static String UAS_CSV_DATA_PATH = "src/main/resources/data/hochschulen.csv";
 
+    public final static String colorImage = "src/main/resources/img/color_range_districts.png";
+    public final static String redImage = "src/main/resources/img/red.jpg";
+    public final static String whiteImage = "src/main/resources/img/white.jpg";
+
 }

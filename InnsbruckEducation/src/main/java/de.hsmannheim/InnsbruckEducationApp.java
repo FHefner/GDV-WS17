@@ -25,10 +25,13 @@ import de.hsmannheim.util.plots.Strategies.ScatterPlotAll;
 import de.hsmannheim.util.unfoldingMap.UnfoldingMapUtil;
 import org.gicentre.utils.stat.XYChart;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 import processing.data.Table;
 import processing.data.TableRow;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +58,9 @@ public class InnsbruckEducationApp extends PApplet {
     private boolean[] showUniversities = {true, true};
     private int[] yearToShow = {2017, 2017};
     private boolean sliderMoved = false;
+    private PImage colorImage;
+    private PImage redImage;
+    private PImage whiteImage;
 
     public static void main(String[] args) {
         PApplet.main(InnsbruckEducationApp.class.getName());
@@ -127,7 +133,6 @@ public class InnsbruckEducationApp extends PApplet {
         scatterPlotChart.setPointSize(10);
     }
 
-    //1121x103
     private void changeScatterPlot() {
         this.scatterPlotStrategy = ScatterPlotUtil.changeScatterPlotStrategy(showSchools[1], showUniversities[1]);
         createScatterPlot(yearToShow[1]);
@@ -139,6 +144,7 @@ public class InnsbruckEducationApp extends PApplet {
         ScatterPlotUtil.setSpecificColorTable();
         ScatterPlotUtil.colorDataWithHighlightedDistrict = scatterPlotStrategy.createDataSetWithHighlightedDistrict(district);
         scatterPlotChart.setPointColour(ScatterPlotUtil.colorDataWithHighlightedDistrict, ScatterPlotUtil.colorTable);
+
     }
 
     private void resetScatterPlot() {
@@ -187,6 +193,9 @@ public class InnsbruckEducationApp extends PApplet {
         processData();
         resetView();
         this.cardsUI = new CardsUI(this);
+        colorImage = loadImage(PathConfig.colorImage, "png");
+        redImage = loadImage(PathConfig.redImage, "jpg");
+        whiteImage = loadImage(PathConfig.whiteImage, "jpg");
     }
 
     public void keyPressed() {
@@ -254,7 +263,6 @@ public class InnsbruckEducationApp extends PApplet {
         }
         if(showUniversities[1] || showSchools[1])
         markerInPlotClicked();
-
         mouseWasDragged = false;
     }
 
@@ -356,6 +364,19 @@ public class InnsbruckEducationApp extends PApplet {
         }
     }
 
+    private void drawElementOnProcessing(int[] fillColor, int[] strokeColor, int x, int y, float width, int height, String geometryString, float strokeWidth) {
+        fill(fillColor[0], fillColor[1], fillColor[2]);
+        strokeWeight(strokeWidth);
+        stroke(strokeColor[0], strokeColor[1], strokeColor[2]);
+
+        try {
+            Method method = this.getClass().getMethod(geometryString, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE);
+            method.invoke(this, x, y, width, height);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void draw() {
         map.draw();
         // Just for debugging current location
@@ -374,6 +395,31 @@ public class InnsbruckEducationApp extends PApplet {
         showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1045, 540);
         yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: ", 2013, 2017, yearToShow[1], 870, 580, 380, 30);
         cardsUI.Label(String.valueOf(yearToShow[1]), 1110, 630);
+
+        drawElementOnProcessing(new int[]{51, 64, 80}, new int[]{233, 233, 233}, 870, 450, (float) (FormConfig.SIDE_PANEL_WIDTH * 0.95), 145, "rect", 3);
+        drawElementOnProcessing(new int[]{115, 134, 52}, new int[]{90, 90, 90}, 890, 470, 20, 20, "ellipse", 4);
+        drawElementOnProcessing(new int[]{156, 194, 34}, new int[]{90, 90, 90}, 890, 500, 20, 20, "ellipse", 4);
+        drawElementOnProcessing(new int[]{192, 247, 12}, new int[]{90, 90, 90}, 890, 530, 20, 20, "ellipse", 4);
+
+        drawElementOnProcessing(new int[]{56, 121, 226}, new int[]{90, 90, 90}, 1145, 470, 20, 20, "ellipse", 4);
+        drawElementOnProcessing(new int[]{117, 157, 221}, new int[]{90, 90, 90}, 1145, 500, 20, 20, "ellipse", 4);
+
+        cardsUI.Label(SchoolBasedCategory.HIGHER_EDUCATION.toString(), 912, 470);
+        cardsUI.Label(SchoolBasedCategory.PRIMARY.toString(), 912, 500);
+        cardsUI.Label(SchoolBasedCategory.SPECIAL.toString(), 912, 530);
+        cardsUI.Label(UniversityBasedCategory.UNIVERSITY.toString(), 1170, 470);
+        cardsUI.Label(UniversityBasedCategory.UAS.toString(), 1170, 500);
+
+
+        image(colorImage, 883, 552, colorImage.width * 0.80f, colorImage.height * 0.80f);
+
+        cardsUI.Label("# Bewohner (6-29 Jahre)", 1085, 552);
+        cardsUI.Label("wenig", 1105, 573);
+        image(whiteImage, 1085, 565, redImage.width * 0.15f, redImage.height * 0.15f);
+        cardsUI.Label("viel", 1190, 573);
+        image(redImage, 1165, 565, redImage.width * 0.15f, redImage.height * 0.15f);
+
+
         cardsUI.endCard();
         if (zoomedIntoDistrict) {
             checkIfEducationalInstitutionIsHovered();
