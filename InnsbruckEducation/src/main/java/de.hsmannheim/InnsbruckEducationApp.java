@@ -460,8 +460,5 @@ public class InnsbruckEducationApp extends PApplet {
         if (zoomedIntoDistrict) {
             showLabelOnHoveredEducationalInstitution();
         }
-        ellipse(928, 380,4, 4);
-        ellipse(935, 65,4, 4);
-        ellipse(1235, 380,4, 4);
     }
 }

@@ -11,11 +11,13 @@ public class ScatterPlotEmpty extends ScatterPlotAbstract {
 
     @Override
     public void addDistrictToPlot(UrbanDistrict district, Integer year) {
-
+        int totalAmountInhabitants = district.getInhabitantsBetween6And29().get(year).get("totalAmountInhabitants");
+        addToColorDataList(totalAmountInhabitants, district);
     }
 
     @Override
     protected void addToColorDataList(int totalAmountInhabitants, UrbanDistrict district) {
-
+        inhabitantsForColor.add((float) totalAmountInhabitants / 300);
+        inhabitantsForColorWithName.put( district.getName() , (float) totalAmountInhabitants / 300);
     }
 }

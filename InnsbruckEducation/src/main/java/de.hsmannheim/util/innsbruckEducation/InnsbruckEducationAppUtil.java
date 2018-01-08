@@ -38,7 +38,7 @@ public class InnsbruckEducationAppUtil {
     public static boolean isInsidePlotMarker(int markerIndex, float[][] plotMarkersCoordinates, int mouseX, int mouseY) {
         int plotMarkerXArea;
         for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < 5; j++) {
                 if (i == 0) {
                     plotMarkerXArea = (int) (plotMarkersCoordinates[markerIndex][0] + j);
                 } else {
@@ -55,7 +55,7 @@ public class InnsbruckEducationAppUtil {
                                                   int mouseY, int plotMarkerXArea) {
         int plotMarkerYArea;
         for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < 5; j++) {
                 if (i == 0) {
                     plotMarkerYArea = (int) (plotMarkersCoordinates[markerIndex][1] + j);
                 } else {

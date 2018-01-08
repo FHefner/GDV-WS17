@@ -46,7 +46,6 @@ public abstract class ScatterPlotAbstract {
     }
 
     public float[] createDataSetWithHighlightedDistrict(UrbanDistrict district){
-        System.out.println(district.getName());
         float colorOfHighlightedDistrict = inhabitantsForColorWithName.get(district.getName());
         float[] colorData=new float[inhabitantsForColor.size()];
         int i=0;

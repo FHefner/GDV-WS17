@@ -11,14 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScatterPlotUtil {
-    public static ColourTable colorTable = ColourTable.getPresetColourTable(ColourTable.PU_RD, 0, 10);
+    public static ColourTable colorTable = ColourTable.getPresetColourTable(ColourTable.REDS, 0, 10);
     public static float[] colorDataWithHighlightedDistrict;
     public static boolean districtIsHighlightedInScatterPlot = false;
     private static List<Float[]> markerAxisAndPixelCoordinates = new ArrayList<>(4);
-
+    int[] coordinatePointZero = {935, 383};
+    int[] coordinatesMaxXAxis = {1237, 383};
+    int[] coordinatesMaxYAxis = {935, 70};
 
     public static void resetColorTable() {
-        colorTable = ColourTable.getPresetColourTable(ColourTable.PU_RD, 0, 10);
+        colorTable = ColourTable.getPresetColourTable(ColourTable.REDS, 0, 10);
     }
 
     public static void setSpecificColorTable() {
@@ -41,17 +43,17 @@ public class ScatterPlotUtil {
 
     public static ColourTable createSpecificColorTable() {
         ColourTable colourTableNew = new ColourTable();
-        colourTableNew.addContinuousColourRule(0, 247, 244, 249, 70);
-        colourTableNew.addContinuousColourRule(1, 247, 244, 249, 70);
-        colourTableNew.addContinuousColourRule(2, 231, 225, 239, 70);
-        colourTableNew.addContinuousColourRule(3, 212, 185, 218, 70);
-        colourTableNew.addContinuousColourRule(4, 201, 148, 199, 70);
-        colourTableNew.addContinuousColourRule(5, 223, 101, 176, 70);
-        colourTableNew.addContinuousColourRule(6, 231, 41, 138, 70);
-        colourTableNew.addContinuousColourRule(7, 206, 18, 86, 70);
-        colourTableNew.addContinuousColourRule(8, 152, 0, 67, 70);
-        colourTableNew.addContinuousColourRule(9, 103, 0, 31, 70);
-        colourTableNew.addContinuousColourRule(10, 103, 0, 31, 70);
+        colourTableNew.addContinuousColourRule(0, 255, 240, 240, 70);
+        colourTableNew.addContinuousColourRule(1, 255, 240, 240, 70);
+        colourTableNew.addContinuousColourRule(2, 254, 224, 210, 70);
+        colourTableNew.addContinuousColourRule(3, 252, 187, 167, 70);
+        colourTableNew.addContinuousColourRule(4, 252, 146, 114, 70);
+        colourTableNew.addContinuousColourRule(5, 251, 106, 74, 70);
+        colourTableNew.addContinuousColourRule(6, 239, 41, 138, 70);
+        colourTableNew.addContinuousColourRule(7, 206, 59, 44, 70);
+        colourTableNew.addContinuousColourRule(8, 165, 15, 21, 70);
+        colourTableNew.addContinuousColourRule(9, 103, 0, 13, 70);
+        colourTableNew.addContinuousColourRule(10, 103, 0, 13, 70);
         colourTableNew.addContinuousColourRule(-1, 255, 0, 0, 255);
         return colourTableNew;
     }
@@ -61,8 +63,8 @@ public class ScatterPlotUtil {
         float[][] markerAxisCoordinates = initializeMarkerAxisCoordinates(scatterPlotChart.getXData(), scatterPlotChart.getYData());
         float[] pixelPerUnitXY = getPixelsPerUnitXY(maxEducationalInstitutions, maxPopulation);
         for (int i = 0; i < markerPixelCoordinates.length; i++) {
-            markerPixelCoordinates[i][0] = 935 + pixelPerUnitXY[0] * markerAxisCoordinates[i][0];
-            markerPixelCoordinates[i][1] = 395 - pixelPerUnitXY[1] * markerAxisCoordinates[i][1];
+            markerPixelCoordinates[i][0] = coordinatePointZero[0] + pixelPerUnitXY[0] * markerAxisCoordinates[i][0];
+            markerPixelCoordinates[i][1] = coordinatePointZero[1] - pixelPerUnitXY[1] * markerAxisCoordinates[i][1];
             markerAxisAndPixelCoordinates.add(new Float[]{markerPixelCoordinates[i][0], markerPixelCoordinates[i][1], markerAxisCoordinates[i][0], markerAxisCoordinates[i][1],});
         }
         return markerPixelCoordinates;
@@ -87,9 +89,6 @@ public class ScatterPlotUtil {
     }
 
     private float[] getPixelsPerUnitXY(int maxEducationalInstitutions, int maxPopulation) {
-        int[] coordinatePointZero = {928, 380};
-        int[] coordinatesMaxYAxis = {935, 65};
-        int[] coordinatesMaxXAxis = {1245, 395};
         float pixelPerUnitX = (float) (coordinatesMaxXAxis[0] - coordinatePointZero[0]) / maxEducationalInstitutions;
         float pixelPerUnitY = (float) (coordinatePointZero[1] - coordinatesMaxYAxis[1]) / maxPopulation;
 
