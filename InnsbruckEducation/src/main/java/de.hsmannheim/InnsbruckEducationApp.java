@@ -5,10 +5,12 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.SimplePolygonMarker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
+import de.fhpotsdam.unfolding.utils.DebugDisplay;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.ColorMarker;
+import de.hsmannheim.markers.LabeledMarker;
 import de.hsmannheim.markers.MarkerType;
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
@@ -19,6 +21,7 @@ import de.hsmannheim.models.education.university.UniversityBasedEducationalInsti
 import de.hsmannheim.ui.CardsUI;
 import de.hsmannheim.util.district.DistrictUtil;
 import de.hsmannheim.util.innsbruckEducation.InnsbruckEducationAppUtil;
+import de.hsmannheim.util.marker.MarkerScreenLocationUtil;
 import de.hsmannheim.util.marker.MarkerTypeUtil;
 import de.hsmannheim.util.plots.ScatterPlotAbstract;
 import de.hsmannheim.util.plots.ScatterPlotUtil;
@@ -155,11 +158,23 @@ public class InnsbruckEducationApp extends PApplet {
         addMarkersToMap();
     }
 
+    private void hideEducationLabels() {
+        List<Marker> educationMarkers = new ArrayList<>(selectedDistrict.getSchoolMarkers());
+        educationMarkers.addAll(selectedDistrict.getUniversityMarkers());
+        for (Marker marker : educationMarkers) {
+            LabeledMarker labeledMarker = (LabeledMarker) marker;
+            labeledMarker.setShowLabel(false);
+        }
+
+    }
+
     private void resetView() {
         UnfoldingMapUtil.setPropertiesToMap(map);
         zoomedIntoDistrict = false;
         InnsbruckEducationAppUtil.setStartingDistrictsAndMarkers(markers, allDistrictsList);
-
+        if (executedAfterFirstDraw) {
+            hideEducationLabels();
+        }
     }
 
     private void applyMapSettings() {
@@ -314,6 +329,16 @@ public class InnsbruckEducationApp extends PApplet {
         mouseWasDragged = true;
     }
 
+    private void checkIfEducationalInstitutionIsHovered() {
+        List<Marker> educationMarkers = new ArrayList<>(selectedDistrict.getSchoolMarkers());
+        educationMarkers.addAll(selectedDistrict.getUniversityMarkers());
+        hideEducationLabels();
+        for (Marker marker : educationMarkers) {
+            LabeledMarker labeledMarker = (LabeledMarker) marker;
+            labeledMarker.setShowLabel(labeledMarker.isInside(map, mouseX, mouseY));
+        }
+    }
+
     public void draw() {
         map.draw();
         // Just for debugging current location
@@ -333,5 +358,8 @@ public class InnsbruckEducationApp extends PApplet {
         yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: ", 2013, 2017, yearToShow[1], 870, 580, 380, 30);
         cardsUI.Label(String.valueOf(yearToShow[1]), 1110, 630);
         cardsUI.endCard();
+        if (zoomedIntoDistrict) {
+            checkIfEducationalInstitutionIsHovered();
+        }
     }
 }

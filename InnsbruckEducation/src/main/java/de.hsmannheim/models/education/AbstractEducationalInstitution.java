@@ -25,7 +25,7 @@ public abstract class AbstractEducationalInstitution implements ColorMarker{
     private int capacity = -1;
     private int currentPeopleAmount = -1;
     private PImage markerImage;
-    private PApplet applet;
+    protected PApplet applet;
 
 
     public abstract void createMarker();
