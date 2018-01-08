@@ -3,7 +3,6 @@ package de.hsmannheim;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
-import de.fhpotsdam.unfolding.marker.SimplePolygonMarker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
@@ -194,6 +193,9 @@ public class InnsbruckEducationApp extends PApplet {
         processData();
         resetView();
         this.cardsUI = new CardsUI(this);
+        colorImage = loadImage(PathConfig.colorImage, "png");
+        redImage = loadImage(PathConfig.redImage, "jpg");
+        whiteImage = loadImage(PathConfig.whiteImage, "jpg");
     }
 
     public void keyPressed() {
@@ -277,14 +279,14 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private UrbanDistrict whichDistrictClickedInPlot(int[] markersAxisCoordinates) {
-        UrbanDistrict targetDistrict=null;
+        UrbanDistrict targetDistrict = null;
         for (UrbanDistrict district : allDistrictsList) {
             int totalInhabitantsDistrict = district.getInhabitantsBetween6And29().get(yearToShow[1]).get("totalAmountInhabitants");
             int totalEducationalInstitutionsDistrict = district.getSumEducationalInstitutions();
             if (totalEducationalInstitutionsDistrict == markersAxisCoordinates[0] &&
                     totalInhabitantsDistrict == markersAxisCoordinates[1]) {
                 district.setSelected(true);
-                targetDistrict=district;
+                targetDistrict = district;
             }
             changeColorOfSelectedDistrict(district);
         }
@@ -296,7 +298,7 @@ public class InnsbruckEducationApp extends PApplet {
         showOrHideMarkers(MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
     }
 
-   private int[] extractRGB(UrbanDistrict district) {
+    private int[] extractRGB(UrbanDistrict district) {
         int[] rgb = new int[3];
         rgb[0] = (int) red(district.getColor());
         rgb[1] = (int) green(district.getColor());
@@ -315,7 +317,7 @@ public class InnsbruckEducationApp extends PApplet {
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
         } else {
             if (zoomedIntoDistrict) {
-               MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
+                MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
             }
             int rgb[] = extractRGB(district);
             district.getMarker().setPolygonColor(color(rgb[0], rgb[1], rgb[2], 50));
