@@ -77,21 +77,12 @@ public class DistrictUtil {
         for (UrbanDistrict district : allDistrictsList) {
             district.getUniversities().addAll(getDistrictEdus(map, district, universities));
             district.getSchools().addAll(getDistrictEdus(map, district, schools));
-            modifiedDistricts.add(district);
+            if(district.getRegionNumber()!=-1)
+                modifiedDistricts.add(district);
         }
         return modifiedDistricts;
     }
 
-    public static int getTotalInhabitants20To29(UrbanDistrict district, Integer year) {
-        return district.getInhabitantsBetween6And29().get(year).get("amountInhabitants20To24") +
-                district.getInhabitantsBetween6And29().get(year).get("amountInhabitants25To29");
-    }
-
-    public static int getTotalInhabitants6To19(UrbanDistrict district, Integer year) {
-        return district.getInhabitantsBetween6And29().get(year).get("amountInhabitants6To9") +
-                district.getInhabitantsBetween6And29().get(year).get("amountInhabitants10To14") +
-                district.getInhabitantsBetween6And29().get(year).get("amountInhabitants15To19");
-    }
 
     public static boolean isYearInMap(Map<Integer, Map<String, Integer>> inhabitantsBetween6And29, Integer year) {
         boolean result = false;
@@ -158,6 +149,17 @@ public class DistrictUtil {
         }
     }
 
+    public static int getDistrictEduInstitutionsToggleListener(UrbanDistrict district, boolean showUniversity, boolean showSchool){
+        int sumEdu=0;
+        if (showUniversity && showSchool){
+            sumEdu = district.getSumEducationalInstitutions();
+        }else if(showUniversity){
+            sumEdu = district.getSumUniversities();
+        }else{
+            sumEdu = district.getSumSchools();
+        }
+        return sumEdu;
+    }
 
 
 }

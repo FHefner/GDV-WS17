@@ -66,6 +66,4 @@ public abstract class ScatterPlotAbstract {
 
     protected abstract void addDistrictToPlot(UrbanDistrict district, Integer year);
 
-    public static void highlightMarkerInScatterPlot(int[] markersAxisCoordinates) {
-    }
 }
