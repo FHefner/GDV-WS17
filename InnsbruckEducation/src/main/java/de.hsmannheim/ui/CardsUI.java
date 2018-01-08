@@ -411,7 +411,6 @@ public class CardsUI {
 
     public void Label(String label, int x, int y) {
         this.applet.textSize(15);
-        float tw = this.applet.textWidth(label);
         this.applet.textSize(15);
         this.applet.fill(255);
         this.applet.textAlign(this.applet.LEFT, this.applet.CENTER);

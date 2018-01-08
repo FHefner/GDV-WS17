@@ -28,4 +28,9 @@ public enum UniversityBasedCategory implements ICategory {
     }
 
     public Map<String, int[]> getSchoolCategoryNameToColor(){return schoolCategoryNameToColor;}
+
+    @Override
+    public String toString() {
+        return universityCategoryNameToString.get(this.name());
+    }
 }
