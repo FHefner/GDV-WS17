@@ -7,6 +7,7 @@ import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
+import de.hsmannheim.markers.LabeledMarker;
 import de.hsmannheim.markers.MarkerType;
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
@@ -28,7 +29,10 @@ import processing.core.PVector;
 import processing.data.Table;
 import processing.data.TableRow;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InnsbruckEducationApp extends PApplet {
 
@@ -149,11 +153,23 @@ public class InnsbruckEducationApp extends PApplet {
         addMarkersToMap();
     }
 
+    private void hideEducationLabels() {
+        List<Marker> educationMarkers = new ArrayList<>(selectedDistrict.getSchoolMarkers());
+        educationMarkers.addAll(selectedDistrict.getUniversityMarkers());
+        for (Marker marker : educationMarkers) {
+            LabeledMarker labeledMarker = (LabeledMarker) marker;
+            labeledMarker.setShowLabel(false);
+        }
+
+    }
+
     private void resetView() {
         UnfoldingMapUtil.setPropertiesToMap(map);
         zoomedIntoDistrict = false;
         InnsbruckEducationAppUtil.setStartingDistrictsAndMarkers(markers, allDistrictsList);
-
+        if (executedAfterFirstDraw) {
+            hideEducationLabels();
+        }
     }
 
     private void applyMapSettings() {
@@ -326,6 +342,16 @@ public class InnsbruckEducationApp extends PApplet {
         mouseWasDragged = true;
     }
 
+    private void checkIfEducationalInstitutionIsHovered() {
+        List<Marker> educationMarkers = new ArrayList<>(selectedDistrict.getSchoolMarkers());
+        educationMarkers.addAll(selectedDistrict.getUniversityMarkers());
+        hideEducationLabels();
+        for (Marker marker : educationMarkers) {
+            LabeledMarker labeledMarker = (LabeledMarker) marker;
+            labeledMarker.setShowLabel(labeledMarker.isInside(map, mouseX, mouseY));
+        }
+    }
+
     public void draw() {
         map.draw();
         // Just for debugging current location
@@ -345,5 +371,8 @@ public class InnsbruckEducationApp extends PApplet {
         yearToShow[1] = cardsUI.Slider("Anzuzeigendes Jahr: ", 2013, 2017, yearToShow[1], 870, 580, 380, 30);
         cardsUI.Label(String.valueOf(yearToShow[1]), 1110, 630);
         cardsUI.endCard();
+        if (zoomedIntoDistrict) {
+            checkIfEducationalInstitutionIsHovered();
+        }
     }
 }
