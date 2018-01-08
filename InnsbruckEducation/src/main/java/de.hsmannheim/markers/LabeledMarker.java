@@ -12,7 +12,7 @@ public class LabeledMarker extends SimplePointMarker {
 
     protected AbstractEducationalInstitution educationalInstitution;
     private String name;
-    protected float size = 15;
+    protected float markerSize = 15;
     protected int space = 6;
     private boolean showLabel = false;
 
@@ -46,29 +46,27 @@ public class LabeledMarker extends SimplePointMarker {
     }
 
     private PFont font;
-    private float fontSize = 12;
+    private float fontSize = 13;
 
     /**
      * Basic constructor. Used in MarkerFactory when created on data loading, label will be set afterwards.
      */
     public LabeledMarker(Location location) {
-        this(location, null, null, 0);
+        this(location, null, null, 0, 12);
     }
 
     public LabeledMarker(AbstractEducationalInstitution educationalInstitution) {
-        this(educationalInstitution.getLocation(), educationalInstitution, null, 0);
+        this(educationalInstitution.getLocation(), educationalInstitution, null, 0, 12);
     }
 
-    public LabeledMarker(Location location, AbstractEducationalInstitution educationalInstitution, PFont font, float size) {
+    public LabeledMarker(Location location, AbstractEducationalInstitution educationalInstitution, PFont font, float markerSize, float fontSize) {
         this.location = location;
         this.educationalInstitution = educationalInstitution;
         this.name = educationalInstitution.getName();
-        this.size = size;
+        this.markerSize = markerSize;
 
         this.font = font;
-        if (font != null) {
-            this.fontSize = font.getSize();
-        }
+        this.fontSize = fontSize;
     }
 
     private float calculateTextWidth(PGraphics pg, String labelText) {
@@ -94,7 +92,7 @@ public class LabeledMarker extends SimplePointMarker {
             pg.stroke(strokeColor);
         }
         if (!hidden) {
-            pg.ellipse(x, y, size, size);
+            pg.ellipse(x, y, markerSize, markerSize);
         }
 
 
@@ -111,7 +109,7 @@ public class LabeledMarker extends SimplePointMarker {
             int lines = StringUtil.countOccurrencesOfCharInString(labelText, '\n') + 1;
             boxXStartPosition = x + strokeWeight / 2;
             boxYStartPosition = y - fontSize + strokeWeight / 2 - space -30f;
-            boxWidth = calculateTextWidth(pg, labelText) + space * 1.5f;
+            boxWidth = (calculateTextWidth(pg, labelText) + space * 1.5f) / 3;
             int xEndPosition = (int) boxXStartPosition + (int) boxWidth;
             boxHeight = (fontSize + space) * lines + 30f;
             // Label would be out of the map and hidden by the sidepanel
@@ -120,7 +118,8 @@ public class LabeledMarker extends SimplePointMarker {
             }
             pg.rect(boxXStartPosition, boxYStartPosition,
                     boxWidth, boxHeight);
-            pg.fill(255, 255, 255);
+            pg.fill(0, 0, 0);
+            pg.textSize(fontSize);
             if (xEndPosition > FormConfig.MAP_WIDTH) {
                 pg.text(labelText, Math.round(x + space * 0.75f + strokeWeight / 2) - 150f,
                         Math.round(y + strokeWeight / 2 - space * 0.75f));
