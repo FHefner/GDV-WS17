@@ -62,8 +62,6 @@ public class InnsbruckEducationApp extends PApplet {
     private PImage colorImage;
     private PImage redImage;
     private PImage whiteImage;
-    private boolean labelsCurrentlyShown = false;
-
     public static void main(String[] args) {
         PApplet.main(InnsbruckEducationApp.class.getName());
     }
@@ -259,6 +257,7 @@ public class InnsbruckEducationApp extends PApplet {
             cardsUI.mousePressed();
             saveOldUiElementValues();
         }
+
         if (InnsbruckEducationAppUtil.isMouseInsideUnfoldingMap(mouseX, mouseY)) {
             districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
             if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
@@ -267,9 +266,11 @@ public class InnsbruckEducationApp extends PApplet {
                 }
             }
         }
+
         if (showUniversities[1] || showSchools[1]) {
             markerInPlotClicked();
         }
+
         mouseWasDragged = false;
     }
 
@@ -383,7 +384,8 @@ public class InnsbruckEducationApp extends PApplet {
                 marker.setHidden(true);
             }
             if (activeMarker == null) {
-                marker.setHidden(false);
+                showOrHideMarkers(MarkerType.SCHOOL_MARKER, showSchools[1]);
+                showOrHideMarkers(MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
             }
         }
     }
