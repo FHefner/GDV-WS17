@@ -258,7 +258,6 @@ public class InnsbruckEducationApp extends PApplet {
         if (InnsbruckEducationAppUtil.isMouseInsideSidepanel(mouseX, mouseY)) {
             cardsUI.mousePressed();
             saveOldUiElementValues();
-            markerInPlotClicked();
         }
         if (InnsbruckEducationAppUtil.isMouseInsideUnfoldingMap(mouseX, mouseY)) {
             districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
@@ -455,18 +454,12 @@ public class InnsbruckEducationApp extends PApplet {
         showUniversities[1] = cardsUI.Toggle("Unis/Hochschulen:", showUniversities[1], 1045, 615);
         yearToShow[1] = cardsUI.Slider("Jahr: ", 2013, 2017, yearToShow[1], 870, 655, 380, 30);
         cardsUI.Label(String.valueOf(yearToShow[1]), (int) (860 + (FormConfig.SIDE_PANEL_WIDTH / 2) - (textWidth(String.valueOf(yearToShow[1])) / 2)), 700);
-
-
-
-
-
-
-
-
-
         cardsUI.endCard();
         if (zoomedIntoDistrict) {
             showLabelOnHoveredEducationalInstitution();
         }
+        ellipse(928, 380,4, 4);
+        ellipse(935, 65,4, 4);
+        ellipse(1235, 380,4, 4);
     }
 }

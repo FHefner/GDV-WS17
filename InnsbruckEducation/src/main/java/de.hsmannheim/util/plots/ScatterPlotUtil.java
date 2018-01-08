@@ -87,7 +87,7 @@ public class ScatterPlotUtil {
     }
 
     private float[] getPixelsPerUnitXY(int maxEducationalInstitutions, int maxPopulation) {
-        int[] coordinatePointZero = {942, 400};
+        int[] coordinatePointZero = {928, 380};
         int[] coordinatesMaxYAxis = {935, 65};
         int[] coordinatesMaxXAxis = {1245, 395};
         float pixelPerUnitX = (float) (coordinatesMaxXAxis[0] - coordinatePointZero[0]) / maxEducationalInstitutions;
@@ -100,9 +100,9 @@ public class ScatterPlotUtil {
         float[][] plotMarkersPixelCoordinates;
         int maxPopulation = this.getPopulationMaxForAxis(year);
         if (showSchool && showUniversity) {
-            plotMarkersPixelCoordinates = new ScatterPlotUtil().getMarkerPixelCoordinates(scatterPlotChart, maxPopulation, 20);
+            plotMarkersPixelCoordinates = getMarkerPixelCoordinates(scatterPlotChart, maxPopulation, 20);
         } else {
-            plotMarkersPixelCoordinates = new ScatterPlotUtil().getMarkerPixelCoordinates(scatterPlotChart, maxPopulation, 10);
+            plotMarkersPixelCoordinates = getMarkerPixelCoordinates(scatterPlotChart, maxPopulation, 10);
         }
         return plotMarkersPixelCoordinates;
     }
