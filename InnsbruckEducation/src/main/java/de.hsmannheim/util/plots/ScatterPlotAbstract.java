@@ -62,16 +62,10 @@ public abstract class ScatterPlotAbstract {
         return colorData;
         }
 
-    //To calculate color divide the district with the most Inhabitants by 20 this result is taken
-    //to divide ALL totalAmountInhabitants of the different districts to get a color rating of 10 different colors.
-    //Example: District with the most Inhabitants (University) 1000 --> 1000/20= 50 --> district.amountTotalInhabitants/50
    protected abstract void addToColorDataList(int totalAmountInhabitants, UrbanDistrict district);
-
-/* protected  void addToColorDataList(int totalAmountInhabitants){
-        inhabitantsForColor.add((float) totalAmountInhabitants / 300);
-    }*/
-
 
     protected abstract void addDistrictToPlot(UrbanDistrict district, Integer year);
 
+    public static void highlightMarkerInScatterPlot(int[] markersAxisCoordinates) {
+    }
 }

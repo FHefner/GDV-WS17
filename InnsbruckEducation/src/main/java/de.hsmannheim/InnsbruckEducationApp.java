@@ -3,12 +3,10 @@ package de.hsmannheim;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
-import de.fhpotsdam.unfolding.marker.SimplePolygonMarker;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.hsmannheim.config.FormConfig;
 import de.hsmannheim.config.PathConfig;
-import de.hsmannheim.markers.ColorMarker;
 import de.hsmannheim.markers.MarkerType;
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
@@ -30,10 +28,7 @@ import processing.core.PVector;
 import processing.data.Table;
 import processing.data.TableRow;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InnsbruckEducationApp extends PApplet {
 
@@ -124,10 +119,10 @@ public class InnsbruckEducationApp extends PApplet {
         } else {
             scatterPlotChart.setPointColour(ScatterPlotUtil.colorDataWithHighlightedDistrict, ScatterPlotUtil.colorTable);
         }
-
         scatterPlotChart.setPointSize(8);
     }
 
+    //1121x103
     private void changeScatterPlot() {
         this.scatterPlotStrategy = ScatterPlotUtil.changeScatterPlotStrategy(showSchools[1], showUniversities[1]);
         createScatterPlot(yearToShow[1]);
@@ -139,7 +134,6 @@ public class InnsbruckEducationApp extends PApplet {
         ScatterPlotUtil.setSpecificColorTable();
         ScatterPlotUtil.colorDataWithHighlightedDistrict = scatterPlotStrategy.createDataSetWithHighlightedDistrict(district);
         scatterPlotChart.setPointColour(ScatterPlotUtil.colorDataWithHighlightedDistrict, ScatterPlotUtil.colorTable);
-
     }
 
     private void resetScatterPlot() {
@@ -241,7 +235,37 @@ public class InnsbruckEducationApp extends PApplet {
                 }
             }
         }
+        markerInPlotClicked();
+
         mouseWasDragged = false;
+    }
+
+    private void markerInPlotClicked() {
+        float[][] plotMarkersPixelCoordinates = new ScatterPlotUtil().getMarkerPixelCoordinates(scatterPlotChart, 7000, 20);
+        float[] scatterPlotHovered = InnsbruckEducationAppUtil.getHoveredScatterPlotMarker(mouseX, mouseY, plotMarkersPixelCoordinates);
+        if (scatterPlotHovered[0] != -1) {
+            try {
+                highlightDistrictInScatterPlot(whichDistrictClickedInPlot(ScatterPlotUtil.getMarkersAxisCoordinates(scatterPlotHovered[0], scatterPlotHovered[1])));
+            } catch (NullPointerException e) {
+                System.err.println("District that has been selected couldnt be matched with the Coordinates in the Plot");
+            }
+        }
+
+    }
+
+    private UrbanDistrict whichDistrictClickedInPlot(int[] markersAxisCoordinates) {
+        UrbanDistrict targetDistrict=null;
+        for (UrbanDistrict district : allDistrictsList) {
+            int totalInhabitantsDistrict = district.getInhabitantsBetween6And29().get(yearToShow[1]).get("totalAmountInhabitants");
+            int totalEducationalInstitutionsDistrict = district.getSumEducationalInstitutions();
+            if (totalEducationalInstitutionsDistrict == markersAxisCoordinates[0] &&
+                    totalInhabitantsDistrict == markersAxisCoordinates[1]) {
+                district.setSelected(true);
+                targetDistrict=district;
+            }
+            changeColorOfSelectedDistrict(district);
+        }
+        return targetDistrict;
     }
 
     private void highlightSelectedDistrict() {
@@ -249,7 +273,7 @@ public class InnsbruckEducationApp extends PApplet {
         showOrHideMarkers(MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
     }
 
-   private int[] extractRGB(UrbanDistrict district) {
+    private int[] extractRGB(UrbanDistrict district) {
         int[] rgb = new int[3];
         rgb[0] = (int) red(district.getColor());
         rgb[1] = (int) green(district.getColor());
@@ -257,18 +281,6 @@ public class InnsbruckEducationApp extends PApplet {
         return rgb;
     }
 
-
-  /*  public void hideEducationMarkersInGivenDistrict(UrbanDistrict district) {
-        List<Marker> schoolMarkers = new ArrayList<>(district.getSchoolMarkers());
-        List<Marker> universityMarkers = new ArrayList<>(district.getUniversityMarkers());
-        for (Marker marker : schoolMarkers) {
-         //TODO Marker Transparent machen
-            //nicht hiden, gibt leider kein getColor für Marker muss also irgendwoher wissen welcher Typ Marker das ist
-            // nicht nur schule sondern welcher SchulTyp brauch also mehrere get für die jeweiligen Schulen getSchoolMarkersElementary etc.
-
-        }
-    }
-*/
     private void changeColorOfSelectedDistrict(UrbanDistrict district) {
         if (district.getIsSelected()) {
             highlightDistrictInScatterPlot(district);
@@ -280,7 +292,7 @@ public class InnsbruckEducationApp extends PApplet {
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
         } else {
             if (zoomedIntoDistrict) {
-               MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
+                MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
             }
             int rgb[] = extractRGB(district);
             district.getMarker().setPolygonColor(color(rgb[0], rgb[1], rgb[2], 50));
