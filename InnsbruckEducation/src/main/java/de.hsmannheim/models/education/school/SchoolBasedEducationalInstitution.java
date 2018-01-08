@@ -1,10 +1,8 @@
 package de.hsmannheim.models.education.school;
 
-import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.hsmannheim.config.PathConfig;
 import de.hsmannheim.markers.LabeledMarker;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
-import processing.core.PApplet;
 import processing.core.PFont;
 
 public class SchoolBasedEducationalInstitution extends AbstractEducationalInstitution {
@@ -34,16 +32,8 @@ public class SchoolBasedEducationalInstitution extends AbstractEducationalInstit
 
     @Override
     public void createMarker() {
-        /*
-        SimplePointMarker marker = new SimplePointMarker(this.getLocation());
-        marker.setColor(this.color);
-        marker.setStrokeColor(90);
-        marker.setStrokeWeight(5);
-        marker.setHidden(true);
-        setMarker(marker);
-        */
-        PFont font = applet.loadFont("src/main/resources/fonts/OpenSans-12.vlw");
-        LabeledMarker marker = new LabeledMarker(this.getLocation(), this, font, 15);
+        PFont font = applet.loadFont("src/main/resources/fonts/Dosis-Bold.vlw");
+        LabeledMarker marker = new LabeledMarker(this.getLocation(), this, font, 15, 14);
         marker.setColor(this.color);
         marker.setHighlightColor(this.color);
         marker.setStrokeColor(90);
