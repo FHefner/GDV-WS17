@@ -48,6 +48,7 @@ public class InnsbruckEducationApp extends PApplet {
     private Map<MarkerType, List<Marker>> markers = new HashMap<>();
     private boolean zoomedIntoDistrict = false;
     private DistrictUtil districtUtil;
+    private ScatterPlotUtil scatterPlotUtil= new ScatterPlotUtil();
     private ScatterPlotAbstract scatterPlotStrategy;
     private Location currentMapLocation;
     private boolean mouseWasDragged = false;
@@ -133,8 +134,7 @@ public class InnsbruckEducationApp extends PApplet {
         } else {
             scatterPlotChart.setPointColour(ScatterPlotUtil.colorDataWithHighlightedDistrict, ScatterPlotUtil.colorTable);
         }
-
-        scatterPlotChart.setPointSize(8);
+        scatterPlotChart.setPointSize(10);
     }
 
     private void changeScatterPlot() {
@@ -268,15 +268,18 @@ public class InnsbruckEducationApp extends PApplet {
                 }
             }
         }
+        if (showUniversities[1] || showSchools[1]) {
+            markerInPlotClicked();
+        }
         mouseWasDragged = false;
     }
 
     private void markerInPlotClicked() {
-        float[][] plotMarkersPixelCoordinates = new ScatterPlotUtil().getMarkerPixelCoordinates(scatterPlotChart, 7000, 20);
+        float[][] plotMarkersPixelCoordinates= scatterPlotUtil.getPlotMarkersPixelCoordinates(scatterPlotChart, showSchools[1], showUniversities[1], yearToShow[0]);
         float[] scatterPlotHovered = InnsbruckEducationAppUtil.getHoveredScatterPlotMarker(mouseX, mouseY, plotMarkersPixelCoordinates);
         if (scatterPlotHovered[0] != -1) {
             try {
-                highlightDistrictInScatterPlot(whichDistrictClickedInPlot(ScatterPlotUtil.getMarkersAxisCoordinates(scatterPlotHovered[0], scatterPlotHovered[1])));
+                highlightDistrictInScatterPlot(whichDistrictClickedInPlot(scatterPlotUtil.getMarkersAxisCoordinates(scatterPlotHovered[0], scatterPlotHovered[1])));
             } catch (NullPointerException e) {
                 System.err.println("District that has been selected couldnt be matched with the Coordinates in the Plot");
             }
@@ -288,11 +291,13 @@ public class InnsbruckEducationApp extends PApplet {
         UrbanDistrict targetDistrict = null;
         for (UrbanDistrict district : allDistrictsList) {
             int totalInhabitantsDistrict = district.getInhabitantsBetween6And29().get(yearToShow[1]).get("totalAmountInhabitants");
-            int totalEducationalInstitutionsDistrict = district.getSumEducationalInstitutions();
+            int totalEducationalInstitutionsDistrict = DistrictUtil.getDistrictEduInstitutionsToggleListener(district, showUniversities[1], showSchools[1]);
             if (totalEducationalInstitutionsDistrict == markersAxisCoordinates[0] &&
                     totalInhabitantsDistrict == markersAxisCoordinates[1]) {
                 district.setSelected(true);
                 targetDistrict = district;
+            } else {
+                district.setSelected(false);
             }
             changeColorOfSelectedDistrict(district);
         }
