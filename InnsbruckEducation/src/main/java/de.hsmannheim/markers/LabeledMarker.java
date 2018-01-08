@@ -16,6 +16,27 @@ public class LabeledMarker extends SimplePointMarker {
     protected int space = 6;
     private boolean showLabel = false;
 
+    private float boxXStartPosition = -1f;
+    private float boxYStartPosition = -1f;
+    private float boxWidth = -1f;
+    private float boxHeight = -1f;
+
+    public float getBoxXStartPosition() {
+        return boxXStartPosition;
+    }
+
+    public float getBoxYStartPosition() {
+        return boxYStartPosition;
+    }
+
+    public float getBoxWidth() {
+        return boxWidth;
+    }
+
+    public float getBoxHeight() {
+        return boxHeight;
+    }
+
     public boolean isShowLabel() {
         return showLabel;
     }
@@ -88,23 +109,26 @@ public class LabeledMarker extends SimplePointMarker {
             pg.strokeWeight(3);
             pg.stroke(highlightStrokeColor);
             int lines = StringUtil.countOccurrencesOfCharInString(labelText, '\n') + 1;
-            float boxWidth = (x + strokeWeight / 2 + calculateTextWidth(pg, labelText) + space * 1.5f);
-            int xEndPosition = (int) boxWidth;
+            boxXStartPosition = x + strokeWeight / 2;
+            boxYStartPosition = y - fontSize + strokeWeight / 2 - space -30f;
+            boxWidth = calculateTextWidth(pg, labelText) + space * 1.5f;
+            int xEndPosition = (int) boxXStartPosition + (int) boxWidth;
+            boxHeight = (fontSize + space) * lines + 30f;
+            // Label would be out of the map and hidden by the sidepanel
             if (xEndPosition > FormConfig.MAP_WIDTH) {
-                pg.rect(x + strokeWeight / 2 - 150f, y - fontSize + strokeWeight / 2 - space -30f,
-                        calculateTextWidth(pg, labelText) + space * 1.5f,
-                        (fontSize + space) * lines + 30f);
-                pg.fill(255, 255, 255);
+                boxXStartPosition -= 150f;
+            }
+            pg.rect(boxXStartPosition, boxYStartPosition,
+                    boxWidth, boxHeight);
+            pg.fill(255, 255, 255);
+            if (xEndPosition > FormConfig.MAP_WIDTH) {
                 pg.text(labelText, Math.round(x + space * 0.75f + strokeWeight / 2) - 150f,
                         Math.round(y + strokeWeight / 2 - space * 0.75f));
             } else {
-                pg.rect(x + strokeWeight / 2, y - fontSize + strokeWeight / 2 - space -30f,
-                        calculateTextWidth(pg, labelText) + space * 1.5f,
-                        (fontSize + space) * lines + 30f);
-                pg.fill(255, 255, 255);
                 pg.text(labelText, Math.round(x + space * 0.75f + strokeWeight / 2),
                         Math.round(y + strokeWeight / 2 - space * 0.75f));
             }
+
         }
         pg.popMatrix();
         pg.popStyle();

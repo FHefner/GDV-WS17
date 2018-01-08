@@ -192,7 +192,7 @@ public class CardsUI {
         this.applet.rect(x+5, y+5, w, h);
         this.applet.fill(c_light);
         this.applet.rect(x, y, w, 40, 2, 2, 0, 0);
-        this.applet.textSize(15);
+        this.applet.textSize(17);
         this.applet.textAlign(this.applet.CENTER, this.applet.CENTER);
         this.applet.fill(c_text_color);
         this.applet.text(card_title, x, y, w, 40);
