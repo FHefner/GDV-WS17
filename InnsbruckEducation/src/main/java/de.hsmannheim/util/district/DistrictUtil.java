@@ -1,6 +1,7 @@
 package de.hsmannheim.util.district;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
+import de.fhpotsdam.unfolding.marker.Marker;
 import de.hsmannheim.markers.ColoredPolygonMarker;
 import de.hsmannheim.models.UrbanDistrict;
 import de.hsmannheim.models.education.AbstractEducationalInstitution;
@@ -46,6 +47,23 @@ public class DistrictUtil {
             result += value;
         }
         return result;
+    }
+
+    public static UrbanDistrict getHoveredDistrict(List<UrbanDistrict> districtList, UnfoldingMap map, int mouseX, int mouseY) {
+        for (UrbanDistrict district : districtList) {
+            if (district.getMarker().isInside(map, mouseX, mouseY)) {
+                return district;
+            }
+        }
+        return null;
+    }
+
+    public static void hideAllMarkersInDistrict(UrbanDistrict district) {
+        List<Marker> districtMarkers = new ArrayList<>(district.getSchoolMarkers());
+        districtMarkers.addAll(district.getUniversityMarkers());
+        for (Marker marker : districtMarkers) {
+            marker.setHidden(true);
+        }
     }
 
     public static void resetDistrictColors(List<UrbanDistrict> allDistrictsList) {

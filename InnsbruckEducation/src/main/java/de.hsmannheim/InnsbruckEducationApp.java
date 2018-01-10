@@ -44,7 +44,7 @@ public class InnsbruckEducationApp extends PApplet {
     public List<AbstractEducationalInstitution> universities;
     public List<UrbanDistrict> allDistrictsList = new ArrayList<>();
     private UnfoldingMap map;
-    private UrbanDistrict selectedDistrict;
+    private UrbanDistrict selectedDistrict, hoveredDistrict;
     private Map<MarkerType, List<Marker>> markers = new HashMap<>();
     private boolean zoomedIntoDistrict = false;
     private DistrictUtil districtUtil;
@@ -198,8 +198,8 @@ public class InnsbruckEducationApp extends PApplet {
         resetView();
         this.cardsUI = new CardsUI(this);
         colorImage = loadImage(PathConfig.colorImage, "png");
-        redImage = loadImage(PathConfig.redImage, "jpg");
-        whiteImage = loadImage(PathConfig.whiteImage, "jpg");
+        redImage = loadImage(PathConfig.redImage, "png");
+        whiteImage = loadImage(PathConfig.whiteImage, "png");
     }
 
     public void keyPressed() {
@@ -230,7 +230,7 @@ public class InnsbruckEducationApp extends PApplet {
     private void handleToggle(boolean oldValue, boolean newValue, MarkerType markerType) {
         if (oldValue != newValue) {
             changeScatterPlot();
-            showOrHideMarkers(markerType, newValue);
+            showOrHideMarkersInDistrict(selectedDistrict, markerType, newValue);
         }
     }
 
@@ -305,8 +305,8 @@ public class InnsbruckEducationApp extends PApplet {
     }
 
     private void highlightSelectedDistrict() {
-        showOrHideMarkers(MarkerType.SCHOOL_MARKER, showSchools[1]);
-        showOrHideMarkers(MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
+        showOrHideMarkersInDistrict(selectedDistrict, MarkerType.SCHOOL_MARKER, showSchools[1]);
+        showOrHideMarkersInDistrict(selectedDistrict, MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
     }
 
     private int[] extractRGB(UrbanDistrict district) {
@@ -335,15 +335,15 @@ public class InnsbruckEducationApp extends PApplet {
         }
     }
 
-    private void showOrHideMarkers(MarkerType markerType, boolean showMarkers) {
+    private void showOrHideMarkersInDistrict(UrbanDistrict district, MarkerType markerType, boolean showMarkers) {
         if (zoomedIntoDistrict) {
             if (markerType == MarkerType.SCHOOL_MARKER) {
-                for (Marker marker : selectedDistrict.getSchoolMarkers()) {
+                for (Marker marker : district.getSchoolMarkers()) {
                     marker.setHidden(!showMarkers);
                 }
             }
             if (markerType == MarkerType.UNIVERSITY_MARKER) {
-                for (Marker marker : selectedDistrict.getUniversityMarkers()) {
+                for (Marker marker : district.getUniversityMarkers()) {
                     marker.setHidden(!showMarkers);
                 }
             }
@@ -384,8 +384,8 @@ public class InnsbruckEducationApp extends PApplet {
                 marker.setHidden(true);
             }
             if (activeMarker == null) {
-                showOrHideMarkers(MarkerType.SCHOOL_MARKER, showSchools[1]);
-                showOrHideMarkers(MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
+                showOrHideMarkersInDistrict(selectedDistrict, MarkerType.SCHOOL_MARKER, showSchools[1]);
+                showOrHideMarkersInDistrict(selectedDistrict, MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
             }
         }
     }
@@ -401,6 +401,18 @@ public class InnsbruckEducationApp extends PApplet {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showEducationalInstitutionsInHoveredDistrict() {
+        UrbanDistrict newlyHoveredDistrict = DistrictUtil.getHoveredDistrict(allDistrictsList, map, mouseX, mouseY);
+        if (newlyHoveredDistrict != hoveredDistrict && hoveredDistrict != null && hoveredDistrict != selectedDistrict) {
+            DistrictUtil.hideAllMarkersInDistrict(hoveredDistrict);
+        }
+        if (newlyHoveredDistrict != null && selectedDistrict != null && newlyHoveredDistrict != selectedDistrict) {
+            showOrHideMarkersInDistrict(newlyHoveredDistrict, MarkerType.SCHOOL_MARKER, showSchools[1]);
+            showOrHideMarkersInDistrict(newlyHoveredDistrict, MarkerType.UNIVERSITY_MARKER, showUniversities[1]);
+        }
+        hoveredDistrict = newlyHoveredDistrict;
     }
 
     private void drawLegend() {
@@ -429,9 +441,9 @@ public class InnsbruckEducationApp extends PApplet {
 
         image(colorImage, 883, 552, colorImage.width * 0.80f, colorImage.height * 0.80f);
         cardsUI.Label("#Bewohner (6-29 Jahre)", 1085, 552);
-        image(whiteImage, 1085, 565, redImage.width * 0.15f, redImage.height * 0.15f);
+        image(whiteImage, 1085, 565, redImage.width * 0.5f, redImage.height * 0.5f);
         cardsUI.Label("wenig", 1105, 573);
-        image(redImage, 1165, 565, redImage.width * 0.15f, redImage.height * 0.15f);
+        image(redImage, 1165, 565, redImage.width * 0.5f, redImage.height * 0.5f);
         cardsUI.Label("viel", 1185, 573);
     }
 
@@ -449,7 +461,6 @@ public class InnsbruckEducationApp extends PApplet {
             executeAfterFirstDraw();
         }
         drawLegend();
-
         // Interactive UI elements
         cardsUI.Label("Anzuzeigende Bildungseinrichtungen:", FormConfig.SIDE_PANEL_WIDTH, FormConfig.SIDE_PANEL_HEIGHT);
         showSchools[1] = cardsUI.Toggle("Schulen:", showSchools[1], 870, 615);
@@ -459,6 +470,9 @@ public class InnsbruckEducationApp extends PApplet {
         cardsUI.endCard();
         if (zoomedIntoDistrict) {
             showLabelOnHoveredEducationalInstitution();
+            if (InnsbruckEducationAppUtil.isMouseInsideUnfoldingMap(mouseX, mouseY)) {
+                showEducationalInstitutionsInHoveredDistrict();
+            }
         }
     }
 }
