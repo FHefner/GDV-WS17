@@ -17,6 +17,7 @@ public class ColoredPolygonMarker extends SimplePolygonMarker {
     private PApplet applet;
     private Integer polygonColor;
     private Integer initialColor;
+    private int strokeWeight=2;
 
     public Integer getInitialColor() {
         return initialColor;
@@ -53,10 +54,14 @@ public class ColoredPolygonMarker extends SimplePolygonMarker {
         polygonColor = applet.color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
     }
 
+    public void setStrokeWeight(int strokeWeight){
+        this.strokeWeight=strokeWeight;
+    }
+
     public void draw(PGraphics pg, List<MapPosition> mapPositions) {
         pg.pushStyle();
 
-        pg.strokeWeight(2);
+        pg.strokeWeight(strokeWeight);
         pg.stroke(0, 200);
         pg.beginShape();
         for (MapPosition mapPosition : mapPositions) {

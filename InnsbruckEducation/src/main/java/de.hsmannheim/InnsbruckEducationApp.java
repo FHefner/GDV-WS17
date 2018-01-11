@@ -178,8 +178,15 @@ public class InnsbruckEducationApp extends PApplet {
         UnfoldingMapUtil.setPropertiesToMap(map);
         zoomedIntoDistrict = false;
         InnsbruckEducationAppUtil.setStartingDistrictsAndMarkers(markers, allDistrictsList);
+        resetDistrictStrokeWeight();
         if (executedAfterFirstDraw) {
             hideEducationLabels();
+        }
+    }
+
+    private void resetDistrictStrokeWeight(){
+        for(UrbanDistrict district: allDistrictsList){
+            district.getMarker().setStrokeWeight(2);
         }
     }
 
@@ -324,14 +331,15 @@ public class InnsbruckEducationApp extends PApplet {
             map.zoomAndPanToFit(district.getLocationsFromJSONArray());
             zoomedIntoDistrict = true;
             highlightSelectedDistrict();
-
             district.getMarker().setPolygonColor(district.getMarker().getInitialColor());
+            district.getMarker().setStrokeWeight(5);
         } else {
             if (zoomedIntoDistrict) {
                 MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
             }
             int rgb[] = extractRGB(district);
-            district.getMarker().setPolygonColor(color(rgb[0], rgb[1], rgb[2], 50));
+            district.getMarker().setPolygonColor(color(rgb[0], rgb[1], rgb[2], 100));            district.getMarker().setStrokeWeight(5);
+            district.getMarker().setStrokeWeight(2);
         }
     }
 
