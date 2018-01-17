@@ -30,6 +30,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.data.Table;
 import processing.data.TableRow;
+import processing.event.MouseEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -58,6 +59,7 @@ public class InnsbruckEducationApp extends PApplet {
     private boolean[] showSchools = {true, true};
     private boolean[] showUniversities = {true, true};
     private int[] yearToShow = {2017, 2017};
+    private int lastMouseButtonPressed = -1;
     private boolean sliderMoved = false;
     private PImage colorImage;
     private PImage redImage;
@@ -171,7 +173,6 @@ public class InnsbruckEducationApp extends PApplet {
                 labeledMarker.setShowLabel(false);
             }
         }
-
     }
 
     private void resetView() {
@@ -259,26 +260,34 @@ public class InnsbruckEducationApp extends PApplet {
         sliderMoved = false;
     }
 
-    public void mouseClicked() {
-        if (InnsbruckEducationAppUtil.isMouseInsideSidepanel(mouseX, mouseY)) {
-            cardsUI.mousePressed();
-            saveOldUiElementValues();
-        }
+    public void mousePressed() {
+        this.lastMouseButtonPressed = mouseButton;
+    }
 
-        if (InnsbruckEducationAppUtil.isMouseInsideUnfoldingMap(mouseX, mouseY)) {
-            districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
-            if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
-                for (UrbanDistrict district : allDistrictsList) {
-                    changeColorOfSelectedDistrict(district);
+    public void mouseClicked() {
+        if (this.lastMouseButtonPressed == LEFT) {
+            if (InnsbruckEducationAppUtil.isMouseInsideSidepanel(mouseX, mouseY)) {
+                cardsUI.mousePressed();
+                saveOldUiElementValues();
+            }
+            if (InnsbruckEducationAppUtil.isMouseInsideUnfoldingMap(mouseX, mouseY)) {
+                districtUtil.checkIfDistrictIsSelected(map, mouseX, mouseY);
+                if (districtUtil.isDistrictSelected() && !mouseWasDragged) {
+                    for (UrbanDistrict district : allDistrictsList) {
+                        changeColorOfSelectedDistrict(district);
+                    }
                 }
             }
+            if (showUniversities[1] || showSchools[1]) {
+                markerInPlotClicked();
+            }
+            mouseWasDragged = false;
+        }
+        if (this.lastMouseButtonPressed == RIGHT) {
+            resetView();
+            resetScatterPlot();
         }
 
-        if (showUniversities[1] || showSchools[1]) {
-            markerInPlotClicked();
-        }
-
-        mouseWasDragged = false;
     }
 
     private void markerInPlotClicked() {
@@ -338,7 +347,7 @@ public class InnsbruckEducationApp extends PApplet {
                 MarkerTypeUtil.hideEducationMarkersInGivenDistrict(district);
             }
             int rgb[] = extractRGB(district);
-            district.getMarker().setPolygonColor(color(rgb[0], rgb[1], rgb[2], 100));            district.getMarker().setStrokeWeight(5);
+            district.getMarker().setPolygonColor(color(rgb[0], rgb[1], rgb[2], 100));
             district.getMarker().setStrokeWeight(2);
         }
     }
